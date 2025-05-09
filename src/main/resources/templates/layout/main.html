@@ -474,6 +474,17 @@
                     if (mobileCartCount) {
                         mobileCartCount.textContent = count;
                     }
+
+                    // Also update the visibility of cart links based on count
+                    const desktopCartLink = document.getElementById('cartLink');
+                    const mobileCartLink = document.getElementById('mobileCartLink');
+
+                    if (desktopCartLink) {
+                        desktopCartLink.style.display = count > 0 ? 'inline-flex' : 'none';
+                    }
+                    if (mobileCartLink) {
+                        mobileCartLink.style.display = count > 0 ? 'block' : 'none';
+                    }
                 } catch (error) {
                     console.error('Error updating cart count:', error);
                 }
@@ -559,6 +570,13 @@
 
             // Check initial auth state
             checkInitialAuthState();
+
+            // Add event listener for cart updates
+            document.addEventListener('cartUpdated', function() {
+                if (isAuthenticated) {
+                    updateCartCount();
+                }
+            });
         });
     </script>
 </body>
