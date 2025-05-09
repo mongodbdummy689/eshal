@@ -445,6 +445,40 @@
                 }
             };
 
+            // Synchronize cart count between mobile and desktop views
+            const updateCartCount = async () => {
+                try {
+                    const response = await fetch('/api/cart/count', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        credentials: 'include'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch cart count');
+                    }
+
+                    const data = await response.json();
+                    const count = data.count || 0;
+
+                    // Update both desktop and mobile cart counts
+                    const desktopCartCount = document.getElementById('cartCount');
+                    const mobileCartCount = document.getElementById('mobileCartCount');
+
+                    if (desktopCartCount) {
+                        desktopCartCount.textContent = count;
+                    }
+                    if (mobileCartCount) {
+                        mobileCartCount.textContent = count;
+                    }
+                } catch (error) {
+                    console.error('Error updating cart count:', error);
+                }
+            };
+
             // Add mobile logout handler
             const mobileLogoutLink = document.getElementById('mobileLogoutLink');
             if (mobileLogoutLink) {
@@ -484,7 +518,15 @@
                     originalUpdateUI(isAuthenticated);
                 }
                 updateMobileMenu(isAuthenticated);
+                if (isAuthenticated) {
+                    updateCartCount();
+                }
             };
+
+            // Initial cart count update if authenticated
+            if (window.getAuthState && window.getAuthState()) {
+                updateCartCount();
+            }
         });
     </script>
 </body>
