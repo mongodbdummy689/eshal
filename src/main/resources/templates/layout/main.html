@@ -141,28 +141,64 @@
     <nav th:fragment="nav" class="bg-primary shadow-lg fixed w-full z-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between h-16">
-                <div class="flex">
-                    <div class="flex-shrink-0 flex items-center">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
                         <a href="/">
                             <img src="/img/logo.jpg" alt="Hajj & Umrah Logo" class="h-12 w-auto">
                         </a>
                     </div>
-                    <div class="ml-6 flex space-x-8">
+                    <!-- Desktop Navigation -->
+                    <div class="hidden md:ml-6 md:flex md:space-x-8">
                         <a href="/" class="nav-link">Home</a>
                         <a href="/mens-kit" class="nav-link">Men's Kit</a>
                         <a href="/womens-kit" class="nav-link">Women's Kit</a>
                         <a href="/individual" class="nav-link">Individual</a>
                         <a href="/about" class="nav-link">About Us</a>
-                        <a href="/cart" class="nav-link hidden" id="cartLink">
-                            <svg class="cart-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
-                            </svg>
-                            <span id="cartCount" class="cart-count">0</span>
-                        </a>
-                        <a href="#" id="loginRegisterLink" class="nav-link">Login/Register</a>
-                        <a href="#" id="logoutLink" class="nav-link hidden">Logout</a>
                     </div>
                 </div>
+                
+                <!-- Right side navigation items -->
+                <div class="hidden md:flex md:items-center md:space-x-4">
+                    <a href="/cart" class="nav-link hidden" id="cartLink">
+                        <svg class="cart-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                        </svg>
+                        <span id="cartCount" class="cart-count">0</span>
+                    </a>
+                    <a href="#" id="loginRegisterLink" class="nav-link">Login/Register</a>
+                    <a href="#" id="logoutLink" class="nav-link hidden">Logout</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-white hover:text-accent hover:bg-primary-light focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <!-- Icon when menu is closed -->
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <!-- Icon when menu is open -->
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu, show/hide based on menu state -->
+        <div class="hidden md:hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Home</a>
+                <a href="/mens-kit" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Men's Kit</a>
+                <a href="/womens-kit" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Women's Kit</a>
+                <a href="/individual" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Individual</a>
+                <a href="/about" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">About Us</a>
+                <a href="/cart" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light hidden" id="mobileCartLink">
+                    Cart <span id="mobileCartCount" class="cart-count">0</span>
+                </a>
+                <a href="#" id="mobileLoginRegisterLink" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Login/Register</a>
+                <a href="#" id="mobileLogoutLink" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light hidden">Logout</a>
             </div>
         </div>
     </nav>
@@ -375,6 +411,81 @@
         window.getAuthState = function() {
             return isAuthenticated;
         };
+
+        // Add this to your existing script section
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+                    mobileMenuButton.setAttribute('aria-expanded', !expanded);
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenuButton.querySelector('svg.block').classList.toggle('hidden');
+                    mobileMenuButton.querySelector('svg.hidden').classList.toggle('hidden');
+                });
+            }
+
+            // Update mobile menu items when auth state changes
+            const updateMobileMenu = (isAuthenticated) => {
+                const mobileCartLink = document.getElementById('mobileCartLink');
+                const mobileLoginRegisterLink = document.getElementById('mobileLoginRegisterLink');
+                const mobileLogoutLink = document.getElementById('mobileLogoutLink');
+
+                if (isAuthenticated) {
+                    mobileCartLink.classList.remove('hidden');
+                    mobileLoginRegisterLink.classList.add('hidden');
+                    mobileLogoutLink.classList.remove('hidden');
+                } else {
+                    mobileCartLink.classList.add('hidden');
+                    mobileLoginRegisterLink.classList.remove('hidden');
+                    mobileLogoutLink.classList.add('hidden');
+                }
+            };
+
+            // Add mobile logout handler
+            const mobileLogoutLink = document.getElementById('mobileLogoutLink');
+            if (mobileLogoutLink) {
+                mobileLogoutLink.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    try {
+                        const response = await fetch('/api/auth/logout', {
+                            method: 'POST',
+                            credentials: 'include'
+                        });
+                        if (response.ok) {
+                            isAuthenticated = false;
+                            window.location.reload();
+                        }
+                    } catch (error) {
+                        console.error('Logout error:', error);
+                    }
+                });
+            }
+
+            // Add mobile login/register handler
+            const mobileLoginRegisterLink = document.getElementById('mobileLoginRegisterLink');
+            if (mobileLoginRegisterLink) {
+                mobileLoginRegisterLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const loginModal = document.getElementById('loginModal');
+                    if (loginModal) {
+                        showModal(loginModal);
+                    }
+                });
+            }
+
+            // Update mobile menu when auth state changes
+            const originalUpdateUI = window.updateUI;
+            window.updateUI = function(isAuthenticated) {
+                if (originalUpdateUI) {
+                    originalUpdateUI(isAuthenticated);
+                }
+                updateMobileMenu(isAuthenticated);
+            };
+        });
     </script>
 </body>
 </html> 
