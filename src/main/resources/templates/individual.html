@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Individual Package - Hajj & Umrah</title>
+    <style>
+        .add-to-cart {
+            position: relative;
+            z-index: 10;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        .bg-white.rounded-lg {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body th:replace="~{layout/main :: body}">
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <div class="pt-16">
+            <div class="relative h-96">
+                <img src="/img/individual.JPG" alt="Individual Package" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-primary-dark bg-opacity-70 flex items-center justify-center">
+                    <div class="text-center text-white">
+                        <h1 class="text-5xl font-bold mb-4 tracking-tight">Individual Package</h1>
+                        <p class="text-2xl font-light mb-6">Customize Your Spiritual Journey</p>
+                        <p class="text-lg max-w-2xl mx-auto">Select the items you need for your Hajj & Umrah journey</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Package Contents -->
+        <div class="max-w-7xl mx-auto px-4 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Common Items -->
+                <div class="card bg-white overflow-hidden" data-product-id="common1" data-price="19.99">
+                    <div class="relative h-48">
+                        <img src="/img/common1.JPG" alt="Common Item 1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Common Item 1</h3>
+                        <p class="text-text-secondary mb-2">$19.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="common2" data-price="24.99">
+                    <div class="relative h-48">
+                        <img src="/img/common2.JPG" alt="Common Item 2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Common Item 2</h3>
+                        <p class="text-text-secondary mb-2">$24.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="common3" data-price="29.99">
+                    <div class="relative h-48">
+                        <img src="/img/common3.JPG" alt="Common Item 3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Common Item 3</h3>
+                        <p class="text-text-secondary mb-2">$29.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="common4" data-price="34.99">
+                    <div class="relative h-48">
+                        <img src="/img/common4.JPG" alt="Common Item 4" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Common Item 4</h3>
+                        <p class="text-text-secondary mb-2">$34.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Men's Items -->
+                <div class="card bg-white overflow-hidden" data-product-id="men1" data-price="39.99">
+                    <div class="relative h-48">
+                        <img src="/img/men1.JPG" alt="Men's Item 1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Men's Item 1</h3>
+                        <p class="text-text-secondary mb-2">$39.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="men2" data-price="44.99">
+                    <div class="relative h-48">
+                        <img src="/img/men2.JPG" alt="Men's Item 2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Men's Item 2</h3>
+                        <p class="text-text-secondary mb-2">$44.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="men3" data-price="54.99">
+                    <div class="relative h-48">
+                        <img src="/img/men3.JPG" alt="Men's Item 3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Men's Item 3</h3>
+                        <p class="text-text-secondary mb-2">$54.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="men4.1" data-price="59.99">
+                    <div class="relative h-48">
+                        <img src="/img/men4.1.JPG" alt="Men's Item 4.1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Men's Item 4.1</h3>
+                        <p class="text-text-secondary mb-2">$59.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="men4.2" data-price="64.99">
+                    <div class="relative h-48">
+                        <img src="/img/men4.2.JPG" alt="Men's Item 4.2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Men's Item 4.2</h3>
+                        <p class="text-text-secondary mb-2">$64.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="men4.3" data-price="69.99">
+                    <div class="relative h-48">
+                        <img src="/img/men4.3.JPG" alt="Men's Item 4.3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Men's Item 4.3</h3>
+                        <p class="text-text-secondary mb-2">$69.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="men5" data-price="74.99">
+                    <div class="relative h-48">
+                        <img src="/img/men5.JPG" alt="Men's Item 5" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Men's Item 5</h3>
+                        <p class="text-text-secondary mb-2">$74.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="men6" data-price="79.99">
+                    <div class="relative h-48">
+                        <img src="/img/men6.JPG" alt="Men's Item 6" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Men's Item 6</h3>
+                        <p class="text-text-secondary mb-2">$79.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="men7.1" data-price="84.99">
+                    <div class="relative h-48">
+                        <img src="/img/men7.1.JPG" alt="Men's Item 7.1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Men's Item 7.1</h3>
+                        <p class="text-text-secondary mb-2">$84.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="men7.2" data-price="89.99">
+                    <div class="relative h-48">
+                        <img src="/img/men7.2.JPG" alt="Men's Item 7.2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Men's Item 7.2</h3>
+                        <p class="text-text-secondary mb-2">$89.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="men8.1" data-price="94.99">
+                    <div class="relative h-48">
+                        <img src="/img/men8.1.JPG" alt="Men's Item 8.1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Men's Item 8.1</h3>
+                        <p class="text-text-secondary mb-2">$94.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="men8.2" data-price="99.99">
+                    <div class="relative h-48">
+                        <img src="/img/men8.2.JPG" alt="Men's Item 8.2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Men's Item 8.2</h3>
+                        <p class="text-text-secondary mb-2">$99.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="men8.3" data-price="104.99">
+                    <div class="relative h-48">
+                        <img src="/img/men8.3.JPG" alt="Men's Item 8.3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Men's Item 8.3</h3>
+                        <p class="text-text-secondary mb-2">$104.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Women's Items -->
+                <div class="card bg-white overflow-hidden" data-product-id="women1" data-price="49.99">
+                    <div class="relative h-48">
+                        <img src="/img/women1.JPG" alt="Women's Item 1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Women's Item 1</h3>
+                        <p class="text-text-secondary mb-2">$49.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="women2" data-price="109.99">
+                    <div class="relative h-48">
+                        <img src="/img/women2.JPG" alt="Women's Item 2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Women's Item 2</h3>
+                        <p class="text-text-secondary mb-2">$109.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="women3" data-price="114.99">
+                    <div class="relative h-48">
+                        <img src="/img/women3.JPG" alt="Women's Item 3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Women's Item 3</h3>
+                        <p class="text-text-secondary mb-2">$114.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="women4.1" data-price="119.99">
+                    <div class="relative h-48">
+                        <img src="/img/women4.1.JPG" alt="Women's Item 4.1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Women's Item 4.1</h3>
+                        <p class="text-text-secondary mb-2">$119.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="women4.2" data-price="124.99">
+                    <div class="relative h-48">
+                        <img src="/img/women4.2.JPG" alt="Women's Item 4.2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Women's Item 4.2</h3>
+                        <p class="text-text-secondary mb-2">$124.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="women4.3" data-price="129.99">
+                    <div class="relative h-48">
+                        <img src="/img/women4.3.JPG" alt="Women's Item 4.3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Women's Item 4.3</h3>
+                        <p class="text-text-secondary mb-2">$129.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="women5" data-price="134.99">
+                    <div class="relative h-48">
+                        <img src="/img/women5.JPG" alt="Women's Item 5" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Women's Item 5</h3>
+                        <p class="text-text-secondary mb-2">$134.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="women6" data-price="139.99">
+                    <div class="relative h-48">
+                        <img src="/img/women6.JPG" alt="Women's Item 6" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Women's Item 6</h3>
+                        <p class="text-text-secondary mb-2">$139.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card bg-white overflow-hidden" data-product-id="women7" data-price="144.99">
+                    <div class="relative h-48">
+                        <img src="/img/women7.JPG" alt="Women's Item 7" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary">Women's Item 7</h3>
+                        <p class="text-text-secondary mb-2">$144.99</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full btn-primary py-2 rounded transition duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}"></head>
+<body th:replace="~{layout/main :: body}">
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <div class="pt-16">
+            <div class="relative h-96">
+                <img src="/img/AboutUsHeroUse.jpg" alt="About Us" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-primary-dark bg-opacity-70 flex items-center justify-center">
+                    <div class="text-center text-white">
+                        <h1 class="text-4xl font-bold mb-4">About Us</h1>
+                        <p class="text-xl">Your trusted partner in spiritual journeys</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Content -->
+        <div class="max-w-7xl mx-auto px-4 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Our Story -->
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-bold text-primary">Our Story</h2>
+                    <p class="text-text-secondary">
+                        Founded with a deep understanding of the spiritual significance of Hajj and Umrah, we have been serving pilgrims for over a decade. Our mission is to make your spiritual journey as comfortable and meaningful as possible.
+                    </p>
+                    <p class="text-text-secondary">
+                        We understand that every pilgrim's needs are unique, which is why we offer a range of packages and individual items to ensure you have everything you need for your journey.
+                    </p>
+                </div>
+
+                <!-- Our Values -->
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-bold text-primary">Our Values</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-primary">Quality</h3>
+                                <p class="text-text-secondary">We ensure the highest quality in all our products.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-primary">Service</h3>
+                                <p class="text-text-secondary">Dedicated to providing excellent customer service.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-primary">Trust</h3>
+                                <p class="text-text-secondary">Building long-lasting relationships with our customers.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Section -->
+            <div class="mt-16">
+                <h2 class="text-3xl font-bold text-center mb-12 text-primary">Our Team</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="card text-center p-6">
+                        <img src="/img/team-1.jpg" alt="Team Member 1" class="w-48 h-48 object-cover rounded-full mx-auto mb-4">
+                        <h3 class="text-xl font-semibold text-primary">John Doe</h3>
+                        <p class="text-text-secondary">Founder & CEO</p>
+                    </div>
+                    <div class="card text-center p-6">
+                        <img src="/img/team-2.jpg" alt="Team Member 2" class="w-48 h-48 object-cover rounded-full mx-auto mb-4">
+                        <h3 class="text-xl font-semibold text-primary">Jane Smith</h3>
+                        <p class="text-text-secondary">Customer Service Manager</p>
+                    </div>
+                    <div class="card text-center p-6">
+                        <img src="/img/team-3.jpg" alt="Team Member 3" class="w-48 h-48 object-cover rounded-full mx-auto mb-4">
+                        <h3 class="text-xl font-semibold text-primary">Mike Johnson</h3>
+                        <p class="text-text-secondary">Product Manager</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

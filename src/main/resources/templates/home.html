@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}"></head>
+<body th:replace="~{layout/main :: body}">
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <div class="pt-16">
+            <div class="relative h-96">
+                <img src="/img/home.jpg" alt="Home Hero" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-primary-dark bg-opacity-70 flex items-center justify-center">
+                    <div class="text-center text-white">
+                        <h1 class="text-5xl font-bold mb-4 tracking-tight">
+                            <span class="block xl:inline">Welcome to</span>
+                            <span class="block text-accent xl:inline">Eshal Hajj & Umrah Store</span>
+                        </h1>
+                        <p class="text-2xl font-light mb-6">Your trusted partner for a blessed journey</p>
+                        <p class="text-lg max-w-2xl mx-auto">We provide comprehensive packages for Hajj and Umrah pilgrims</p>
+                        <div class="mt-8">
+                            <a href="/mens-kit" class="btn-primary inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white md:py-4 md:text-lg md:px-10">
+                                Get Started
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Packages Section -->
+        <div class="bg-gray-50 py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-primary sm:text-4xl">
+                        Featured Packages
+                    </h2>
+                    <p class="mt-4 text-lg text-text-secondary">
+                        Choose from our carefully curated packages for your spiritual journey
+                    </p>
+                </div>
+
+                <div class="mt-10">
+                    <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                        <!-- Men's Kit Package -->
+                        <div class="card bg-white overflow-hidden">
+                            <div class="px-4 py-5 sm:p-6">
+                                <h3 class="text-lg font-medium text-primary">Men's Kit</h3>
+                                <p class="mt-1 text-sm text-text-secondary">
+                                    Complete package for male pilgrims including ihram, prayer mat, and essential items.
+                                </p>
+                                <div class="mt-4">
+                                    <a href="/mens-kit" class="text-accent hover:text-accent-light font-medium">
+                                        View Details →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Women's Kit Package -->
+                        <div class="card bg-white overflow-hidden">
+                            <div class="px-4 py-5 sm:p-6">
+                                <h3 class="text-lg font-medium text-primary">Women's Kit</h3>
+                                <p class="mt-1 text-sm text-text-secondary">
+                                    Specialized package for female pilgrims with all necessary items for a comfortable journey.
+                                </p>
+                                <div class="mt-4">
+                                    <a href="/womens-kit" class="text-accent hover:text-accent-light font-medium">
+                                        View Details →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Individual Items -->
+                        <div class="card bg-white overflow-hidden">
+                            <div class="px-4 py-5 sm:p-6">
+                                <h3 class="text-lg font-medium text-primary">Individual Items</h3>
+                                <p class="mt-1 text-sm text-text-secondary">
+                                    Purchase individual items separately to customize your pilgrimage experience.
+                                </p>
+                                <div class="mt-4">
+                                    <a href="/individual" class="text-accent hover:text-accent-light font-medium">
+                                        View Details →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
