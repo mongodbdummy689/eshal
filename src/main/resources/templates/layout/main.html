@@ -445,51 +445,6 @@
                 }
             };
 
-            // Synchronize cart count between mobile and desktop views
-            const updateCartCount = async () => {
-                try {
-                    const response = await fetch('/api/cart/count', {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        credentials: 'include'
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch cart count');
-                    }
-
-                    const data = await response.json();
-                    const count = data.count || 0;
-
-                    // Update both desktop and mobile cart counts
-                    const desktopCartCount = document.getElementById('cartCount');
-                    const mobileCartCount = document.getElementById('mobileCartCount');
-
-                    if (desktopCartCount) {
-                        desktopCartCount.textContent = count;
-                    }
-                    if (mobileCartCount) {
-                        mobileCartCount.textContent = count;
-                    }
-
-                    // Also update the visibility of cart links based on count
-                    const desktopCartLink = document.getElementById('cartLink');
-                    const mobileCartLink = document.getElementById('mobileCartLink');
-
-                    if (desktopCartLink) {
-                        desktopCartLink.style.display = count > 0 ? 'inline-flex' : 'none';
-                    }
-                    if (mobileCartLink) {
-                        mobileCartLink.style.display = count > 0 ? 'block' : 'none';
-                    }
-                } catch (error) {
-                    console.error('Error updating cart count:', error);
-                }
-            };
-
             // Add mobile logout handler
             const mobileLogoutLink = document.getElementById('mobileLogoutLink');
             if (mobileLogoutLink) {
@@ -537,8 +492,8 @@
                 // Update mobile menu
                 updateMobileMenu(isAuthenticated);
                 // Update cart count if authenticated
-                if (isAuthenticated) {
-                    updateCartCount();
+                if (isAuthenticated && typeof window.updateCartCount === 'function') {
+                    window.updateCartCount();
                 }
             };
 
@@ -573,8 +528,8 @@
 
             // Add event listener for cart updates
             document.addEventListener('cartUpdated', function() {
-                if (isAuthenticated) {
-                    updateCartCount();
+                if (isAuthenticated && typeof window.updateCartCount === 'function') {
+                    window.updateCartCount();
                 }
             });
         });
