@@ -67,6 +67,31 @@ async function getCurrentUser() {
     }
 }
 
+async function register(fullName, email, password) {
+    try {
+        const response = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'include',
+            body: JSON.stringify({ fullName, email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Registration failed');
+        }
+
+        return data;
+    } catch (error) {
+        console.error('Registration error:', error);
+        throw error;
+    }
+}
+
 // Login form handler
 async function handleLogin(event) {
     event.preventDefault();
@@ -176,6 +201,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const loginModal = document.getElementById('loginModal');
     const registerModal = document.getElementById('registerModal');
     const logoutLink = document.getElementById('logoutLink');
+    const registerBtn = document.getElementById('registerBtn');
 
     // Logout handler
     if (logoutLink) {
@@ -242,4 +268,32 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
     });
+
+    // Register button handler
+    if (registerBtn) {
+        registerBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            try {
+                await register(fullName, email, password);
+                // Registration successful
+                hideModal(registerModal);
+                showModal(loginModal);
+                // Clear the registration form
+                document.getElementById('fullName').value = '';
+                document.getElementById('registerEmail').value = '';
+                document.getElementById('registerPassword').value = '';
+            } catch (error) {
+                const errorElement = document.createElement('div');
+                errorElement.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4';
+                errorElement.textContent = error.message || 'An error occurred during registration. Please try again.';
+                const registerForm = registerBtn.closest('.space-y-4');
+                registerForm.insertBefore(errorElement, registerBtn);
+                setTimeout(() => errorElement.remove(), 5000);
+            }
+        });
+    }
 }); 
