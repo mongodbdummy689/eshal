@@ -20,9 +20,6 @@ import jakarta.annotation.PostConstruct;
 public class MongoConfig {
 
     @Autowired
-    private MongoTemplate mongoTemplate;
-
-    @Autowired
     private MongoMappingContext mongoMappingContext;
 
     @Bean
@@ -37,11 +34,12 @@ public class MongoConfig {
 
     @Bean
     public MongoTemplate mongoTemplate(MongoDatabaseFactory mongoDbFactory, MongoConverter converter) {
-        return new MongoTemplate(mongoDbFactory, converter);
+        MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactory, converter);
+        initIndices(mongoTemplate);
+        return mongoTemplate;
     }
 
-    @PostConstruct
-    public void initIndices() {
+    private void initIndices(MongoTemplate mongoTemplate) {
         try {
             // Create indexes for User collection
             IndexOperations indexOps = mongoTemplate.indexOps(User.class);
