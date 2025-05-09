@@ -384,9 +384,9 @@
                         
                         return `
                             <div class="product-card" data-item-id="${item.id}" style="border: 2px solid #FFD700;">
-                                <div class="p-6">
-                                    <div class="flex items-start space-x-6">
-                                        <div class="flex-shrink-0 w-40 h-40">
+                                <div class="p-4 sm:p-6">
+                                    <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-6">
+                                        <div class="flex-shrink-0 w-full sm:w-40 h-40 mb-4 sm:mb-0">
                                             <div class="image-container h-full">
                                                 <img src="${product.imageUrl || '/images/product-unavailable.jpg'}" 
                                                      alt="${product.name || 'Product'}" 
@@ -408,7 +408,7 @@
                                                     </svg>
                                                 </button>
                                             </div>
-                                            <div class="mt-4 flex items-center justify-between">
+                                            <div class="mt-4 flex flex-col sm:flex-row sm:items-center justify-between space-y-4 sm:space-y-0">
                                                 <div class="flex items-center space-x-4">
                                                     <button class="quantity-btn bg-gray-100 text-primary px-3 py-1 rounded-lg hover:bg-gray-200 transition duration-300" onclick="updateQuantity('${item.id}', -1)">-</button>
                                                     <span class="text-lg font-semibold text-primary">${item.quantity}</span>
@@ -422,7 +422,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>`;
+                            </div>`
                     }).join('');
 
                     cartTotal.textContent = `$${total.toFixed(2)}`;
@@ -434,4 +434,4 @@
         </script>
     </div>
 </body>
-</html> 
+</html>
