@@ -178,14 +178,39 @@ async function updateCartCount() {
 
         const cartItems = await getCart();
         const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-        const cartCountElement = document.getElementById('cartCount');
-        if (cartCountElement) {
-            cartCountElement.textContent = totalItems;
+        
+        // Update desktop cart count
+        const desktopCartCount = document.getElementById('cartCount');
+        if (desktopCartCount) {
+            desktopCartCount.textContent = totalItems;
         }
+
+        // Update mobile cart count
+        const mobileCartCount = document.getElementById('mobileCartCount');
+        if (mobileCartCount) {
+            mobileCartCount.textContent = totalItems;
+        }
+
+        // Update cart link visibility
+        const desktopCartLink = document.getElementById('cartLink');
+        const mobileCartLink = document.getElementById('mobileCartLink');
+
+        if (desktopCartLink) {
+            desktopCartLink.style.display = totalItems > 0 ? 'inline-flex' : 'none';
+        }
+        if (mobileCartLink) {
+            mobileCartLink.style.display = totalItems > 0 ? 'block' : 'none';
+        }
+
+        // Dispatch event for other components
+        document.dispatchEvent(new Event('cartCountUpdated'));
     } catch (error) {
         console.error('Error updating cart count:', error);
     }
 }
+
+// Make updateCartCount available globally
+window.updateCartCount = updateCartCount;
 
 // Get cart items from the API
 async function getCart() {
