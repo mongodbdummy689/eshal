@@ -435,13 +435,13 @@
                 const mobileLogoutLink = document.getElementById('mobileLogoutLink');
 
                 if (isAuthenticated) {
-                    mobileCartLink.classList.remove('hidden');
-                    mobileLoginRegisterLink.classList.add('hidden');
-                    mobileLogoutLink.classList.remove('hidden');
+                    if (mobileCartLink) mobileCartLink.classList.remove('hidden');
+                    if (mobileLoginRegisterLink) mobileLoginRegisterLink.classList.add('hidden');
+                    if (mobileLogoutLink) mobileLogoutLink.classList.remove('hidden');
                 } else {
-                    mobileCartLink.classList.add('hidden');
-                    mobileLoginRegisterLink.classList.remove('hidden');
-                    mobileLogoutLink.classList.add('hidden');
+                    if (mobileCartLink) mobileCartLink.classList.add('hidden');
+                    if (mobileLoginRegisterLink) mobileLoginRegisterLink.classList.remove('hidden');
+                    if (mobileLogoutLink) mobileLogoutLink.classList.add('hidden');
                 }
             };
 
@@ -491,6 +491,11 @@
                         });
                         if (response.ok) {
                             isAuthenticated = false;
+                            // Update both desktop and mobile UI
+                            updateMobileMenu(false);
+                            if (window.updateUI) {
+                                window.updateUI(false);
+                            }
                             window.location.reload();
                         }
                     } catch (error) {
@@ -511,22 +516,49 @@
                 });
             }
 
-            // Update mobile menu when auth state changes
+            // Override the global updateUI function to handle both desktop and mobile
             const originalUpdateUI = window.updateUI;
             window.updateUI = function(isAuthenticated) {
+                // Call original updateUI for desktop
                 if (originalUpdateUI) {
                     originalUpdateUI(isAuthenticated);
                 }
+                // Update mobile menu
                 updateMobileMenu(isAuthenticated);
+                // Update cart count if authenticated
                 if (isAuthenticated) {
                     updateCartCount();
                 }
             };
 
-            // Initial cart count update if authenticated
-            if (window.getAuthState && window.getAuthState()) {
-                updateCartCount();
-            }
+            // Initial state setup
+            const checkInitialAuthState = async () => {
+                try {
+                    const response = await fetch('/api/auth/check', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        credentials: 'include'
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        isAuthenticated = data.authenticated;
+                        // Update both desktop and mobile UI
+                        updateMobileMenu(isAuthenticated);
+                        if (window.updateUI) {
+                            window.updateUI(isAuthenticated);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error checking auth status:', error);
+                }
+            };
+
+            // Check initial auth state
+            checkInitialAuthState();
         });
     </script>
 </body>
