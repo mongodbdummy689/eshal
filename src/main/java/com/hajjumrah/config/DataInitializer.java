@@ -2,8 +2,11 @@ package com.hajjumrah.config;
 
 import com.hajjumrah.model.Product;
 import com.hajjumrah.repository.ProductRepository;
+import com.hajjumrah.model.User;
+import com.hajjumrah.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,6 +14,12 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
@@ -73,6 +82,16 @@ public class DataInitializer implements CommandLineRunner {
         initializeProduct("women5", "Women's Item 5", "Essential item for women during Hajj & Umrah", 134.99, "/img/women5.JPG", "Women's Items");
         initializeProduct("women6", "Women's Item 6", "Essential item for women during Hajj & Umrah", 139.99, "/img/women6.JPG", "Women's Items");
         initializeProduct("women7", "Women's Item 7", "Essential item for women during Hajj & Umrah", 144.99, "/img/women7.JPG", "Women's Items");
+
+        // Create admin user if it doesn't exist
+        if (!userRepository.existsByEmail("admin@hajjumrah.com")) {
+            User admin = new User();
+            admin.setEmail("admin@hajjumrah.com");
+            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setFullName("System Administrator");
+            admin.setRole("ADMIN");
+            userRepository.save(admin);
+        }
     }
 
     private void initializeProduct(String id, String name, String description, double price, String imageUrl, String category) {
