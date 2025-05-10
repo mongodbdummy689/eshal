@@ -67,6 +67,7 @@ public class AuthController {
         String email = request.get("email");
         String password = request.get("password");
         String fullName = request.get("fullName");
+        String mobileNumber = request.get("mobileNumber");
 
         // Validate input
         if (email == null || email.trim().isEmpty()) {
@@ -81,10 +82,24 @@ public class AuthController {
             response.put("error", "Full name is required");
             return ResponseEntity.badRequest().body(response);
         }
+        if (mobileNumber == null || mobileNumber.trim().isEmpty()) {
+            response.put("error", "Mobile number is required");
+            return ResponseEntity.badRequest().body(response);
+        }
+        if (!mobileNumber.matches("^[0-9]{10}$")) {
+            response.put("error", "Invalid mobile number format. Please enter a 10-digit number.");
+            return ResponseEntity.badRequest().body(response);
+        }
 
         // Check if email already exists
         if (userRepository.existsByEmail(email)) {
             response.put("error", "Email already exists");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        // Check if mobile number already exists
+        if (userRepository.existsByMobileNumber(mobileNumber)) {
+            response.put("error", "Mobile number already exists");
             return ResponseEntity.badRequest().body(response);
         }
 
@@ -94,6 +109,7 @@ public class AuthController {
             user.setEmail(email.trim());
             user.setPassword(passwordEncoder.encode(password));
             user.setFullName(fullName.trim());
+            user.setMobileNumber(mobileNumber.trim());
             user.setRole("USER");
 
             // Save user to database
