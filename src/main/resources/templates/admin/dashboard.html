@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Admin Dashboard - Hajj & Umrah</title>
+    <style>
+        .user-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid #e5e7eb;
+        }
+        .user-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .user-header:hover {
+            background: var(--primary-color-dark);
+        }
+        .user-header * {
+            pointer-events: none;
+        }
+        .cart-items {
+            padding: 1rem;
+            display: none !important;
+            transition: all 0.3s ease;
+        }
+        .cart-items.show {
+            display: block !important;
+        }
+        .cart-item {
+            background: #f9fafb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e5e7eb;
+        }
+        .cart-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .stats-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+        .stats-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        .stats-label {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        .text-center {
+            padding-top: 5rem;
+        }
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        .toggle-icon.expanded {
+            transform: rotate(180deg);
+        }
+        .cart-item-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        .cart-item-details {
+            flex: 1;
+        }
+        .cart-item-total {
+            min-width: 120px;
+            text-align: right;
+        }
+        .cart-summary {
+            background: #f3f4f6;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e5e7eb;
+        }
+        .cart-summary-total {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body th:replace="~{layout/main :: body}">
+    <div th:fragment="content">
+        <div class="max-w-7xl mx-auto px-4 py-12">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-extrabold text-primary sm:text-5xl mb-4 mt-16">Admin Dashboard</h1>
+                <p class="text-lg text-text-secondary">Manage and monitor user cart items</p>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="stats-card">
+                    <div class="stats-number" th:text="${users.size()}">0</div>
+                    <div class="stats-label">Total Users</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-number" th:text="${userCartItems.size()}">0</div>
+                    <div class="stats-label">Users with Cart Items</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-number" th:text="${#aggregates.sum(userCartItems.values().![size()])}">0</div>
+                    <div class="stats-label">Total Cart Items</div>
+                </div>
+            </div>
+
+            <!-- User Cart Items -->
+            <div class="space-y-8">
+                <div th:each="user : ${users}" class="user-card" th:unless="${user.email == 'admin@hajjumrah.com'}">
+                    <div class="user-header" th:data-user-id="${user.id}">
+                        <div class="flex items-center justify-between w-full">
+                            <div>
+                                <h2 class="text-xl font-semibold" th:text="${user.fullName}">User Name</h2>
+                                <p class="text-sm opacity-75" th:text="${user.email}">user@email.com</p>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="text-right">
+                                    <p class="text-sm opacity-75">Total Cart Value:</p>
+                                    <p class="font-semibold" th:if="${userCartItems.containsKey(user.id)}">$<span th:text="${#numbers.formatDecimal(#aggregates.sum(userCartItems.get(user.id).![price * quantity]), 1, 2)}">0.00</span></p>
+                                    <p class="font-semibold" th:unless="${userCartItems.containsKey(user.id)}">$0.00</p>
+                                </div>
+                                <svg class="toggle-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cart-items" th:id="'cart-items-' + ${user.id}" style="display: none;">
+                        <div th:if="${userCartItems.containsKey(user.id)}">
+                            <div th:each="cartItem : ${userCartItems.get(user.id)}" class="cart-item">
+                                <div class="cart-item-content">
+                                    <div class="cart-item-details">
+                                        <h3 class="font-semibold" th:text="${cartItem.productId}">Product ID</h3>
+                                        <p class="text-sm text-gray-600">Quantity: <span th:text="${cartItem.quantity}">1</span></p>
+                                        <p class="text-sm text-gray-600">Price: $<span th:text="${#numbers.formatDecimal(cartItem.price, 1, 2)}">0.00</span></p>
+                                    </div>
+                                    <div class="cart-item-total">
+                                        <p class="font-semibold">Total: $<span th:text="${#numbers.formatDecimal(cartItem.price * cartItem.quantity, 1, 2)}">0.00</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:unless="${userCartItems.containsKey(user.id)}" class="text-center py-4 text-gray-500">
+                            No cart items
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script th:inline="javascript">
+            window.onload = function() {
+                console.log('Page loaded, initializing toggle functionality');
+                
+                // First, ensure all cart items are hidden
+                document.querySelectorAll('.cart-items').forEach(cart => {
+                    cart.style.display = 'none';
+                });
+                
+                const headers = document.getElementsByClassName('user-header');
+                console.log('Found headers:', headers.length);
+                
+                Array.from(headers).forEach(header => {
+                    header.onclick = function() {
+                        console.log('Header clicked');
+                        const userId = this.getAttribute('data-user-id');
+                        console.log('User ID:', userId);
+                        
+                        const cartItems = document.getElementById('cart-items-' + userId);
+                        const toggleIcon = this.querySelector('.toggle-icon');
+                        
+                        console.log('Cart items element:', cartItems);
+                        console.log('Toggle icon element:', toggleIcon);
+                        
+                        if (cartItems && toggleIcon) {
+                            // Toggle display directly
+                            if (cartItems.style.display === 'none') {
+                                cartItems.style.display = 'block';
+                                toggleIcon.classList.add('expanded');
+                            } else {
+                                cartItems.style.display = 'none';
+                                toggleIcon.classList.remove('expanded');
+                            }
+                            console.log('Display toggled');
+                        }
+                    };
+                });
+            };
+        </script>
+    </div>
+</body>
+</html> 
