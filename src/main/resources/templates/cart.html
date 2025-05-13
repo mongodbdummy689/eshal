@@ -401,14 +401,14 @@
                                                      onerror="this.src='/images/product-unavailable.jpg'">
                                             </div>
                                         </div>
-                                        <div class="flex-1">
-                                            <div class="flex items-start justify-between">
-                                                <div class="product-info">
+                                        <div class="flex-1 mt-4 sm:mt-0">
+                                            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between">
+                                                <div class="product-info w-full sm:w-auto">
                                                     <h3 class="product-name">${product.name || 'Product'}</h3>
                                                     <p class="product-description">${product.description || 'No description available'}</p>
                                                 </div>
                                                 <button onclick="confirmRemoveFromCart('${item.id}', '${escapedProductName}')" 
-                                                        class="remove-btn text-text-secondary hover:text-red-500 transition-colors p-2">
+                                                        class="remove-btn text-text-secondary hover:text-red-500 transition-colors p-2 self-end sm:self-start">
                                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                     </svg>
@@ -420,7 +420,7 @@
                                                     <span class="text-lg font-semibold text-primary">${item.quantity}</span>
                                                     <button class="quantity-btn bg-gray-100 text-primary px-3 py-1 rounded-lg hover:bg-gray-200 transition duration-300" onclick="updateQuantity('${item.id}', 1)">+</button>
                                                 </div>
-                                                <div class="text-right">
+                                                <div class="text-right mt-4 sm:mt-0">
                                                     <p class="text-lg font-semibold text-accent">$${itemTotal.toFixed(2)}</p>
                                                     <p class="text-sm text-text-secondary">$${item.price.toFixed(2)} each</p>
                                                 </div>
