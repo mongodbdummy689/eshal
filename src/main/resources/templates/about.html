@@ -4,13 +4,13 @@
 <body th:replace="~{layout/main :: body}">
     <div th:fragment="content">
         <!-- Hero Section -->
-        <div class="pt-16">
-            <div class="relative h-96">
-                <img src="/img/AboutUsHeroUse.jpg" alt="About Us" class="w-full h-full object-cover">
+        <div class="relative w-full">
+            <div class="aspect-[16/9] w-full">
+                <img src="/img/AboutUsHeroUse.png" alt="About Us" class="w-full h-full object-contain">
                 <div class="absolute inset-0 bg-primary-dark bg-opacity-70 flex items-center justify-center">
-                    <div class="text-center text-white">
-                        <h1 class="text-4xl font-bold mb-4">About Us</h1>
-                        <p class="text-xl">Your trusted partner in spiritual journeys</p>
+                    <div class="text-center text-white px-4">
+                        <h1 class="text-4xl md:text-5xl font-bold mb-4">About Us</h1>
+                        <p class="text-xl md:text-2xl">Your trusted partner in spiritual journeys</p>
                     </div>
                 </div>
             </div>

@@ -8,14 +8,14 @@
 <body th:replace="~{layout/main :: body}">
     <div th:fragment="content">
         <!-- Hero Section -->
-        <div class="pt-16">
-            <div class="relative h-96">
-                <img src="/img/menkit.JPG" alt="Men's Kit" class="w-full h-full object-cover">
+        <div class="relative w-full">
+            <div class="aspect-[16/9] w-full">
+                <img src="/img/menkit.jpg" alt="Men's Kit" class="w-full h-full object-contain">
                 <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <div class="text-center text-white">
-                        <h1 class="text-5xl font-bold mb-4 tracking-tight">Men's Complete Kit</h1>
-                        <p class="text-2xl font-light mb-6">Your Spiritual Journey Starts Here</p>
-                        <p class="text-lg max-w-2xl mx-auto">Everything you need for your Hajj & Umrah journey in one comprehensive package</p>
+                    <div class="text-center text-white px-4">
+                        <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Men's Complete Kit</h1>
+                        <p class="text-xl md:text-2xl font-light mb-6">Your Spiritual Journey Starts Here</p>
+                        <p class="text-base md:text-lg max-w-2xl mx-auto">Everything you need for your Hajj & Umrah journey in one comprehensive package</p>
                     </div>
                 </div>
             </div>
@@ -26,117 +26,63 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <!-- Kit Image Gallery -->
                 <div class="space-y-4">
-                    <img src="/img/menkit.JPG" alt="Men's Kit Main" class="w-full h-96 object-cover rounded-lg">
+                    <img src="/img/menkit.jpg" alt="Men's Kit Main" class="w-full h-96 object-cover rounded-lg">
                     <div class="relative mt-4">
                         <div class="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide">
                             <!-- Men's Images -->
                             <div class="relative flex-shrink-0">
-                                <img src="/img/men1.JPG" alt="Men's Kit Item 1" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="0">
+                                <img src="/img/men/ihram-cloth.jpg" alt="Men's Kit Item 1" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="0">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/men2.JPG" alt="Men's Kit Item 2" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="1">
+                                <img src="/img/men/ihram-belt.jpg" alt="Men's Kit Item 2" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="1">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/men3.JPG" alt="Men's Kit Item 3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="2">
+                                <img src="/img/men/prayer-cap.jpg" alt="Men's Kit Item 3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="2">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/men4.1.JPG" alt="Men's Kit Item 4.1" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="3">
+                                <img src="/img/men/miswak.jpg" alt="Men's Kit Item 3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="3">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/men4.2.JPG" alt="Men's Kit Item 4.2" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="4">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/men4.3.JPG" alt="Men's Kit Item 4.3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="5">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/men5.JPG" alt="Men's Kit Item 5" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="6">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/men6.JPG" alt="Men's Kit Item 6" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="7">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/men7.1.JPG" alt="Men's Kit Item 7.1" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="8">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/men7.2.JPG" alt="Men's Kit Item 7.2" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="9">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/men8.1.JPG" alt="Men's Kit Item 8.1" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="10">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/men8.2.JPG" alt="Men's Kit Item 8.2" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="11">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/men8.3.JPG" alt="Men's Kit Item 8.3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="12">
+                                <img src="/img/men/perfume.jpg" alt="Men's Kit Item 3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="4">
                             </div>
 
                             <!-- Common Images -->
                             <div class="relative flex-shrink-0">
-                                <img src="/img/common1.JPG" alt="Common Item 1" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="13">
+                                <img src="/img/common/guide.jpg" alt="Common Item 1" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="5">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/common2.JPG" alt="Common Item 2" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="14">
+                                <img src="/img/common/dua-cards.jpg" alt="Common Item 2" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="6">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/common3.JPG" alt="Common Item 3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="15">
+                                <img src="/img/common/prayer-beads.jpg" alt="Common Item 3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="7">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/common4.JPG" alt="Common Item 4" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="16">
+                                <img src="/img/common/finger-counter2.jpg" alt="Common Item 3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="8">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/common5.1.JPG" alt="Common Item 5.1" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="17">
+                                <img src="/img/common/napkin.jpg" alt="Common Item 3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="9">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/common5.2.JPG" alt="Common Item 5.2" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="18">
+                                <img src="/img/common/prayer-mat-bag.jpg" alt="Common Item 3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="10">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/common6.1.JPG" alt="Common Item 6.1" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="19">
+                                <img src="/img/common/surma.jpg" alt="Common Item 3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="11">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/common6.2.JPG" alt="Common Item 6.2" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="20">
+                                <img src="/img/common/qibla-compass1.jpg" alt="Common Item 4" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="12">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/common6.3.JPG" alt="Common Item 6.3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="21">
+                                <img src="/img/common/shoe-bag.jpg" alt="Common Item 4" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="13">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/common6.4.JPG" alt="Common Item 6.4" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="22">
+                                <img src="/img/common/stitching-set.jpg" alt="Common Item 4" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="14">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/common7.1.JPG" alt="Common Item 7.1" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="23">
+                                <img src="/img/common/travel-janamaz.jpg" alt="Common Item 4" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="15">
                             </div>
                             <div class="relative flex-shrink-0">
-                                <img src="/img/common7.2.JPG" alt="Common Item 7.2" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="24">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/common7.3.JPG" alt="Common Item 7.3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="25">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/common8.1.JPG" alt="Common Item 8.1" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="26">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/common8.2.JPG" alt="Common Item 8.2" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="27">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/common8.3.JPG" alt="Common Item 8.3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="28">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/common9.JPG" alt="Common Item 9" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="29">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/common9.1.JPG" alt="Common Item 9.1" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="30">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/common9.2.JPG" alt="Common Item 9.2" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="31">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/common9.3.JPG" alt="Common Item 9.3" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="32">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/common9.4.JPG" alt="Common Item 9.4" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="33">
-                            </div>
-                            <div class="relative flex-shrink-0">
-                                <img src="/img/common9.5.JPG" alt="Common Item 9.5" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="34">
-                            </div>
+                                <img src="/img/common/universal-adaptor1.jpg" alt="Common Item 4" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" data-index="16">
+                            </div>          
                         </div>
                     </div>
                 </div>

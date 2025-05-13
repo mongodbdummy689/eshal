@@ -30,22 +30,17 @@
         .animate-fade-in {
             animation: fadeIn 0.5s ease-out;
         }
-        .product-image {
-            transition: transform 0.3s ease;
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-        }
-        .product-image:hover {
-            transform: scale(1.05);
-        }
         .image-container {
             position: relative;
-            width: 100%;
-            height: 100%;
+            width: 160px;
+            height: 160px;
             overflow: hidden;
             border-radius: 0.5rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background-color: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .image-container::before {
             content: '';
@@ -92,12 +87,21 @@
         .flex-1 {
             margin: 0.5rem;  /* Reduced spacing */
         }
+        .product-image {
+            max-width: 100%;
+            height: inherit;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        .product-image:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body th:replace="~{layout/main :: body}">
     <div th:fragment="content">
         <!-- Cart Content -->
-        <div class="max-w-7xl mx-auto px-4 py-12">
+        <div class="max-w-7xl mx-auto px-4 py-12 mt-20">
             <div class="text-center mb-12">
                 <h1 class="text-4xl font-extrabold text-primary sm:text-5xl mb-4">Your Shopping Cart</h1>
                 <p class="text-lg text-text-secondary">Review your items and proceed to checkout</p>
@@ -279,8 +283,9 @@
                             pricePerUnitElement.textContent = `$${item.price.toFixed(2)} each`;
                         }
 
-                        // Update cart total
+                        // Update cart total and cart count
                         updateCartTotal();
+                        await updateCartCount();
                     } else {
                         throw new Error('Failed to update quantity');
                     }
@@ -311,8 +316,9 @@
                             itemElement.remove();
                         }
 
-                        // Update cart total
+                        // Update cart total and cart count
                         updateCartTotal();
+                        await updateCartCount();
 
                         // If cart is empty, show empty cart message
                         if (cartItemsCache.length === 0) {

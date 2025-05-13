@@ -15,7 +15,7 @@
             background: var(--primary-color);
             color: white;
             padding: 1rem;
-            cursor: pointer;
+            cursor: hand;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -24,6 +24,7 @@
         }
         .user-header:hover {
             background: var(--primary-color-dark);
+            cursor: grab;
         }
         .user-header * {
             pointer-events: none;
@@ -151,18 +152,24 @@
                     </div>
                     <div class="cart-items" th:id="'cart-items-' + ${user.id}" style="display: none;">
                         <div th:if="${userCartItems.containsKey(user.id)}">
-                            <div th:each="cartItem : ${userCartItems.get(user.id)}" class="cart-item">
-                                <div class="cart-item-content">
-                                    <div class="cart-item-details">
-                                        <h3 class="font-semibold" th:text="${cartItem.productId}">Product ID</h3>
-                                        <p class="text-sm text-gray-600">Quantity: <span th:text="${cartItem.quantity}">1</span></p>
-                                        <p class="text-sm text-gray-600">Price: $<span th:text="${#numbers.formatDecimal(cartItem.price, 1, 2)}">0.00</span></p>
-                                    </div>
-                                    <div class="cart-item-total">
-                                        <p class="font-semibold">Total: $<span th:text="${#numbers.formatDecimal(cartItem.price * cartItem.quantity, 1, 2)}">0.00</span></p>
-                                    </div>
-                                </div>
-                            </div>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Name</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr th:each="cartItem : ${userCartItems.get(user.id)}">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" th:text="${cartItem.productId}">Product ID</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$<span th:text="${#numbers.formatDecimal(cartItem.price, 1, 2)}">0.00</span></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${cartItem.quantity}">1</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$<span th:text="${#numbers.formatDecimal(cartItem.price * cartItem.quantity, 1, 2)}">0.00</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div th:unless="${userCartItems.containsKey(user.id)}" class="text-center py-4 text-gray-500">
                             No cart items
