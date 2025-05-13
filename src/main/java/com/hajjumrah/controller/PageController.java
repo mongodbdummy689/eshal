@@ -1,10 +1,16 @@
 package com.hajjumrah.controller;
 
+import com.hajjumrah.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class PageController {
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @GetMapping("/mens-kit")
     public String mensKit() {
@@ -17,7 +23,8 @@ public class PageController {
     }
 
     @GetMapping("/individual")
-    public String individual() {
+    public String individual(Model model) {
+        model.addAttribute("products", productRepository.findAll());
         return "individual";
     }
 
