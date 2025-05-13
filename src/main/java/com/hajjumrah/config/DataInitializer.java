@@ -44,44 +44,41 @@ public class DataInitializer implements CommandLineRunner {
             womensKit.setName("Women's Complete Kit");
             womensKit.setDescription("Everything you need for your Hajj & Umrah journey in one comprehensive package");
             womensKit.setPrice(349.99);
-            womensKit.setImageUrl("/img/womenkit.jpg");
+            womensKit.setImageUrl("/img/womenkit.JPG");
             womensKit.setCategory("Hajj & Umrah Kits");
             womensKit.setInStock(true);
             womensKit.setStockQuantity(100);
             productRepository.save(womensKit);
         }
 
-        // Initialize Common Items
-        initializeProduct("common1", "Common Item 1", "Essential item for Hajj & Umrah", 19.99, "/img/common1.JPG", "Common Items");
-        initializeProduct("common2", "Common Item 2", "Essential item for Hajj & Umrah", 24.99, "/img/common2.JPG", "Common Items");
-        initializeProduct("common3", "Common Item 3", "Essential item for Hajj & Umrah", 29.99, "/img/common3.JPG", "Common Items");
-        initializeProduct("common4", "Common Item 4", "Essential item for Hajj & Umrah", 34.99, "/img/common4.JPG", "Common Items");
+//Men's Items
+initializeProduct("ihram-cloth", "Ihram Cloth", "Essential item for Hajj & Umrah", 19.99, "/img/men/ihram-cloth.jpg", "Men's Items");
+initializeProduct("ihram-belt", "Ihram Belt", "Essential item for Hajj & Umrah", 19.99, "/img/men/ihram-belt.jpg", "Men's Items");
+initializeProduct("prayer-cap", "Prayer Cap", "Essential item for Hajj & Umrah", 19.99, "/img/men/prayer-cap.jpg", "Men's Items");
+initializeProduct("miswak", "Miswak", "Essential item for Hajj & Umrah", 19.99, "/img/men/miswak.jpg", "Men's Items");	
+initializeProduct("perfume", "Perfume", "Essential item for Hajj & Umrah", 19.99, "/img/men/perfume.jpg", "Men's Items");
 
-        // Initialize Men's Items
-        initializeProduct("men1", "Men's Item 1", "Essential item for men during Hajj & Umrah", 39.99, "/img/men1.JPG", "Men's Items");
-        initializeProduct("men2", "Men's Item 2", "Essential item for men during Hajj & Umrah", 44.99, "/img/men2.JPG", "Men's Items");
-        initializeProduct("men3", "Men's Item 3", "Essential item for men during Hajj & Umrah", 54.99, "/img/men3.JPG", "Men's Items");
-        initializeProduct("men4.1", "Men's Item 4.1", "Essential item for men during Hajj & Umrah", 59.99, "/img/men4.1.JPG", "Men's Items");
-        initializeProduct("men4.2", "Men's Item 4.2", "Essential item for men during Hajj & Umrah", 64.99, "/img/men4.2.JPG", "Men's Items");
-        initializeProduct("men4.3", "Men's Item 4.3", "Essential item for men during Hajj & Umrah", 69.99, "/img/men4.3.JPG", "Men's Items");
-        initializeProduct("men5", "Men's Item 5", "Essential item for men during Hajj & Umrah", 74.99, "/img/men5.JPG", "Men's Items");
-        initializeProduct("men6", "Men's Item 6", "Essential item for men during Hajj & Umrah", 79.99, "/img/men6.JPG", "Men's Items");
-        initializeProduct("men7.1", "Men's Item 7.1", "Essential item for men during Hajj & Umrah", 84.99, "/img/men7.1.JPG", "Men's Items");
-        initializeProduct("men7.2", "Men's Item 7.2", "Essential item for men during Hajj & Umrah", 89.99, "/img/men7.2.JPG", "Men's Items");
-        initializeProduct("men8.1", "Men's Item 8.1", "Essential item for men during Hajj & Umrah", 94.99, "/img/men8.1.JPG", "Men's Items");
-        initializeProduct("men8.2", "Men's Item 8.2", "Essential item for men during Hajj & Umrah", 99.99, "/img/men8.2.JPG", "Men's Items");
-        initializeProduct("men8.3", "Men's Item 8.3", "Essential item for men during Hajj & Umrah", 104.99, "/img/men8.3.JPG", "Men's Items");
+//Women's Items
+initializeProduct("hand-gloves", "Hand Gloves", "Essential item for Hajj & Umrah", 19.99, "/img/women/hand-gloves.jpg", "Women's Items");
+initializeProduct("makhani", "Makhani", "Essential item for Hajj & Umrah", 19.99, "/img/women/makhani.jpg", "Women's Items");
+initializeProduct("namaz-dupatta", "Namaz Dupatta", "Essential item for Hajj & Umrah", 19.99, "/img/women/namaz-dupatta.jpg", "Women's Items");
+initializeProduct("soap", "Soap", "Essential item for Hajj & Umrah", 19.99, "/img/women/soap.jpg", "Women's Items");
+initializeProduct("socks", "Socks", "Essential item for Hajj & Umrah", 19.99, "/img/women/socks.jpg", "Women's Items");
+initializeProduct("women2", "Beads", "Essential item for Hajj & Umrah", 19.99, "/img/women/women2.jpg", "Women's Items");
 
-        // Initialize Women's Items
-        initializeProduct("women1", "Women's Item 1", "Essential item for women during Hajj & Umrah", 49.99, "/img/women1.JPG", "Women's Items");
-        initializeProduct("women2", "Women's Item 2", "Essential item for women during Hajj & Umrah", 109.99, "/img/women2.JPG", "Women's Items");
-        initializeProduct("women3", "Women's Item 3", "Essential item for women during Hajj & Umrah", 114.99, "/img/women3.JPG", "Women's Items");
-        initializeProduct("women4.1", "Women's Item 4.1", "Essential item for women during Hajj & Umrah", 119.99, "/img/women4.1.JPG", "Women's Items");
-        initializeProduct("women4.2", "Women's Item 4.2", "Essential item for women during Hajj & Umrah", 124.99, "/img/women4.2.JPG", "Women's Items");
-        initializeProduct("women4.3", "Women's Item 4.3", "Essential item for women during Hajj & Umrah", 129.99, "/img/women4.3.JPG", "Women's Items");
-        initializeProduct("women5", "Women's Item 5", "Essential item for women during Hajj & Umrah", 134.99, "/img/women5.JPG", "Women's Items");
-        initializeProduct("women6", "Women's Item 6", "Essential item for women during Hajj & Umrah", 139.99, "/img/women6.JPG", "Women's Items");
-        initializeProduct("women7", "Women's Item 7", "Essential item for women during Hajj & Umrah", 144.99, "/img/women7.JPG", "Women's Items");
+//Common Items
+initializeProduct("guide", "Hajj/Umrah Guide", "Essential item for Hajj & Umrah", 19.99, "/img/common/guide.jpg", "Common Items");
+initializeProduct("dua-cards", "Hajj/Umrah Dua Cards", "Essential item for Hajj & Umrah", 19.99, "/img/common/dua-cards.jpg", "Common Items");
+initializeProduct("prayer-beads", "Prayer Beads", "Essential item for Hajj & Umrah", 19.99, "/img/common/prayer-beads.jpg", "Common Items");
+initializeProduct("finger-counter2", "Finger Counter", "Essential item for Hajj & Umrah", 19.99, "/img/common/finger-counter2.jpg", "Common Items");
+initializeProduct("napkin", "Cotton Napkin", "Essential item for Hajj & Umrah", 19.99, "/img/common/napkin.jpg", "Common Items");
+initializeProduct("prayer-mat-bag", "Prayer Mat Bag", "Essential item for Hajj & Umrah", 19.99, "/img/common/prayer-mat-bag.jpg", "Common Items");
+initializeProduct("surma", "Surma", "Essential item for Hajj & Umrah", 19.99, "/img/common/surma.jpg", "Common Items");
+initializeProduct("qibla-compass1", "Qibla Compass", "Essential item for Hajj & Umrah", 19.99, "/img/common/qibla-compass1.jpg", "Common Items");
+initializeProduct("shoe-bag", "Shoe Bag", "Essential item for Hajj & Umrah", 19.99, "/img/common/shoe-bag.jpg", "Common Items");
+initializeProduct("stitching-set", "Stitching Set", "Essential item for Hajj & Umrah", 19.99, "/img/common/stitching-set.jpg", "Common Items");
+initializeProduct("travel-janamaz", "Travel Janamaz", "Essential item for Hajj & Umrah", 19.99, "/img/common/travel-janamaz.jpg", "Common Items");
+initializeProduct("universal-adaptor1", "Universal Adaptor", "Essential item for Hajj & Umrah", 19.99, "/img/common/universal-adaptor1.jpg", "Common Items");
 
         // Create admin user if it doesn't exist
         if (!userRepository.existsByEmail("admin@hajjumrah.com")) {
