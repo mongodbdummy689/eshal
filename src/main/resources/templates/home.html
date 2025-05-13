@@ -5,18 +5,18 @@
     <div th:fragment="content">
         <!-- Hero Section -->
         <div class="relative w-full">
-            <div class="aspect-[16/9] w-full">
-                <img src="/img/home.jpg" alt="Home Hero" class="w-full h-full object-cover">
+            <div class="w-full">
+                <img src="/img/home.jpg" alt="Home Hero" class="w-full h-[calc(100vh-6rem)] object-cover">
                 <div class="absolute inset-0 bg-primary-dark bg-opacity-70 flex items-center justify-center">
-                    <div class="text-center text-white px-4">
-                        <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+                    <div class="text-center text-white px-4 max-w-4xl mx-auto py-8">
+                        <h1 class="text-3xl md:text-5xl font-bold mb-2 md:mb-4 tracking-tight">
                             <span class="block xl:inline">Welcome to</span>
                             <span class="block text-accent xl:inline">Eshal Hajj & Umrah Store</span>
                         </h1>
-                        <p class="text-xl md:text-2xl font-light mb-6">Your trusted partner for a blessed journey</p>
+                        <p class="text-lg md:text-2xl font-light mb-4 md:mb-6">Your trusted partner for a blessed journey</p>
                         <!--<p class="text-lg max-w-2xl mx-auto">We provide comprehensive packages for Hajj and Umrah pilgrims</p>-->
-                        <div class="mt-8">
-                            <a href="/mens-kit" class="btn-primary inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white md:py-4 md:text-lg md:px-10">
+                        <div class="mt-4 md:mt-8">
+                            <a href="/mens-kit" class="btn-primary inline-flex items-center justify-center px-6 py-2 md:px-8 md:py-3 border border-transparent text-base font-medium rounded-md text-white md:text-lg">
                                 Get Started
                             </a>
                         </div>
