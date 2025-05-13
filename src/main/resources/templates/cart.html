@@ -392,23 +392,23 @@
                             <div class="product-card" data-item-id="${item.id}" style="border: 2px solid #FFD700;">
                                 <div class="p-4 sm:p-6">
                                     <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-6">
-                                        <div class="flex-shrink-0 w-full sm:w-40 h-40 mb-4 sm:mb-0">
-                                            <div class="image-container h-full">
+                                        <div class="flex-shrink-0 w-full sm:w-40 mb-4 sm:mb-0">
+                                            <div class="image-container w-full h-40 sm:h-40">
                                                 <img src="${product.imageUrl || '/images/product-unavailable.jpg'}" 
                                                      alt="${product.name || 'Product'}" 
-                                                     class="product-image"
+                                                     class="product-image w-full h-full object-contain"
                                                      loading="lazy"
                                                      onerror="this.src='/images/product-unavailable.jpg'">
                                             </div>
                                         </div>
-                                        <div class="flex-1 mt-4 sm:mt-0">
+                                        <div class="flex-1 min-w-0">
                                             <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between">
                                                 <div class="product-info w-full sm:w-auto">
-                                                    <h3 class="product-name">${product.name || 'Product'}</h3>
-                                                    <p class="product-description">${product.description || 'No description available'}</p>
+                                                    <h3 class="product-name break-words">${product.name || 'Product'}</h3>
+                                                    <p class="product-description break-words">${product.description || 'No description available'}</p>
                                                 </div>
                                                 <button onclick="confirmRemoveFromCart('${item.id}', '${escapedProductName}')" 
-                                                        class="remove-btn text-text-secondary hover:text-red-500 transition-colors p-2 self-end sm:self-start">
+                                                        class="remove-btn text-text-secondary hover:text-red-500 transition-colors p-2 self-end sm:self-start mt-2 sm:mt-0">
                                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                     </svg>
