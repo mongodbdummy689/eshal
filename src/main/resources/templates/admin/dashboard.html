@@ -116,22 +116,22 @@
             <!-- Stats Overview -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 <div class="stats-card">
-                    <div class="stats-number" th:text="${users.size()}">0</div>
+                    <div class="stats-number" th:text="${regularUsers.size()}">0</div>
                     <div class="stats-label">Total Users</div>
                 </div>
                 <div class="stats-card">
-                    <div class="stats-number" th:text="${userCartItems.size()}">0</div>
+                    <div class="stats-number" th:text="${regularUserCartItems.size()}">0</div>
                     <div class="stats-label">Users with Cart Items</div>
                 </div>
                 <div class="stats-card">
-                    <div class="stats-number" th:text="${#aggregates.sum(userCartItems.values().![size()])}">0</div>
+                    <div class="stats-number" th:text="${#aggregates.sum(regularUserCartItems.values().![size()])}">0</div>
                     <div class="stats-label">Total Cart Items</div>
                 </div>
             </div>
 
             <!-- User Cart Items -->
             <div class="space-y-8">
-                <div th:each="user : ${users}" class="user-card" th:unless="${user.email == 'admin@hajjumrah.com'}">
+                <div th:each="user : ${regularUsers}" class="user-card">
                     <div class="user-header" th:data-user-id="${user.id}">
                         <div class="flex items-center justify-between w-full">
                             <div>
@@ -141,8 +141,8 @@
                             <div class="flex items-center gap-4">
                                 <div class="text-right">
                                     <p class="text-sm opacity-75">Total Cart Value:</p>
-                                    <p class="font-semibold" th:if="${userCartItems.containsKey(user.id)}">$<span th:text="${#numbers.formatDecimal(#aggregates.sum(userCartItems.get(user.id).![price * quantity]), 1, 2)}">0.00</span></p>
-                                    <p class="font-semibold" th:unless="${userCartItems.containsKey(user.id)}">$0.00</p>
+                                    <p class="font-semibold" th:if="${regularUserCartItems.containsKey(user.id)}">$<span th:text="${#numbers.formatDecimal(#aggregates.sum(regularUserCartItems.get(user.id).![price * quantity]), 1, 2)}">0.00</span></p>
+                                    <p class="font-semibold" th:unless="${regularUserCartItems.containsKey(user.id)}">$0.00</p>
                                 </div>
                                 <svg class="toggle-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -151,7 +151,7 @@
                         </div>
                     </div>
                     <div class="cart-items" th:id="'cart-items-' + ${user.id}" style="display: none;">
-                        <div th:if="${userCartItems.containsKey(user.id)}">
+                        <div th:if="${regularUserCartItems.containsKey(user.id)}">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -162,7 +162,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr th:each="cartItem : ${userCartItems.get(user.id)}">
+                                    <tr th:each="cartItem : ${regularUserCartItems.get(user.id)}">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" th:text="${productNames.get(cartItem.productId)}">Product Name</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$<span th:text="${#numbers.formatDecimal(cartItem.price, 1, 2)}">0.00</span></td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${cartItem.quantity}">1</td>
@@ -171,7 +171,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div th:unless="${userCartItems.containsKey(user.id)}" class="text-center py-4 text-gray-500">
+                        <div th:unless="${regularUserCartItems.containsKey(user.id)}" class="text-center py-4 text-gray-500">
                             No cart items
                         </div>
                     </div>
