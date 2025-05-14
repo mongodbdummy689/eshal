@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
     @Autowired
@@ -33,32 +34,36 @@ public class AdminController {
     private ProductRepository productRepository;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public String adminDashboard(Model model) {
-        List<CartItem> allCartItems = cartItemRepository.findAll();
-        List<User> allUsers = userRepository.findAll();
-
-        // Create a map of product IDs to names
+    public String dashboard(Model model) {
+        List<User> regularUsers = userRepository.findAll().stream()
+            .filter(user -> !user.getRole().equals("ROLE_ADMIN"))
+            .collect(Collectors.toList());
+        
+        Map<String, List<CartItem>> regularUserCartItems = new HashMap<>();
         Map<String, String> productNames = new HashMap<>();
-        allCartItems.forEach(item -> {
-            if (!productNames.containsKey(item.getProductId())) {
-                productRepository.findById(item.getProductId())
-                    .ifPresent(product -> productNames.put(product.getId(), product.getName()));
+        
+        for (User user : regularUsers) {
+            List<CartItem> userCartItems = cartItemRepository.findByUserId(user.getId());
+            if (!userCartItems.isEmpty()) {
+                regularUserCartItems.put(user.getId(), userCartItems);
+                // Get product names for the cart items
+                for (CartItem item : userCartItems) {
+                    if (!productNames.containsKey(item.getProductId())) {
+                        productRepository.findById(item.getProductId())
+                            .ifPresent(product -> productNames.put(product.getId(), product.getName()));
+                    }
+                }
             }
-        });
-
-        // Group cart items by user and add product names
-        Map<String, List<CartItem>> userCartItems = allCartItems.stream()
-            .collect(Collectors.groupingBy(CartItem::getUserId));
-
-        model.addAttribute("users", allUsers);
-        model.addAttribute("userCartItems", userCartItems);
+        }
+        
+        model.addAttribute("regularUsers", regularUsers);
+        model.addAttribute("regularUserCartItems", regularUserCartItems);
         model.addAttribute("productNames", productNames);
+        
         return "admin/dashboard";
     }
 
     @GetMapping("/api/cart-items")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllCartItems() {
         List<CartItem> allCartItems = cartItemRepository.findAll();
         return ResponseEntity.ok(allCartItems);
