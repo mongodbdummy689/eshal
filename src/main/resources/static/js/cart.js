@@ -153,11 +153,46 @@ async function checkAuthStatus() {
 
         console.log('Auth check response status:', response.status); // Debug log
         const data = await response.json();
-        console.log('Auth check response data:', data); // Debug log
+        console.log('Complete auth check response data:', data); // Debug log
         
         if (!data || typeof data.authenticated !== 'boolean') {
             console.error('Invalid auth response format:', data);
             return false;
+        }
+
+        // If authenticated, fetch user data to check role
+        if (data.authenticated) {
+            try {
+                const userResponse = await fetch('/api/auth/user', {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'include'
+                });
+                
+                if (userResponse.ok) {
+                    const userData = await userResponse.json();
+                    console.log('User data:', userData); // Debug log
+                    
+                    // Check for admin role and show/hide admin dashboard link
+                    if (userData && userData.roles && userData.roles.includes('ROLE_ADMIN')) {
+                        console.log('User is admin, showing admin dashboard link');
+                        const adminDashboardLink = document.getElementById('adminDashboardLink');
+                        const mobileAdminDashboardLink = document.getElementById('mobileAdminDashboardLink');
+                        
+                        if (adminDashboardLink) {
+                            console.log('Found admin dashboard link, showing it');
+                            adminDashboardLink.classList.remove('hidden');
+                        }
+                        if (mobileAdminDashboardLink) {
+                            console.log('Found mobile admin dashboard link, showing it');
+                            mobileAdminDashboardLink.classList.remove('hidden');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
         }
         
         return data.authenticated;

@@ -60,10 +60,26 @@ async function getCurrentUser() {
             }
             throw new Error('Failed to get current user');
         }
-        return await response.json();
+        const user = await response.json();
+        console.log('Current user data:', user); // Debug log
+        return user;
     } catch (error) {
         console.error('Get current user error:', error);
         return null;
+    }
+}
+
+// Add new function to check if user is admin
+async function isAdmin() {
+    try {
+        const user = await getCurrentUser();
+        console.log('Checking admin status for user:', user); // Debug log
+        const isAdminUser = user && user.role === 'ADMIN';
+        console.log('Is admin?', isAdminUser); // Debug log
+        return isAdminUser;
+    } catch (error) {
+        console.error('Error checking admin status:', error);
+        return false;
     }
 }
 
@@ -146,6 +162,23 @@ async function checkAuthStatus() {
         }
 
         const data = await response.json();
+        console.log('Auth check data:', data); // Debug log
+        
+        // If we have user data, check for admin role
+        if (data.user && data.user.role === 'ADMIN') {
+            console.log('User is admin, showing admin dashboard link');
+            const adminDashboardLink = document.getElementById('adminDashboardLink');
+            const mobileAdminDashboardLink = document.getElementById('mobileAdminDashboardLink');
+            if (adminDashboardLink) {
+                console.log('Found admin dashboard link, showing it');
+                adminDashboardLink.classList.remove('hidden');
+            }
+            if (mobileAdminDashboardLink) {
+                console.log('Found mobile admin dashboard link, showing it');
+                mobileAdminDashboardLink.classList.remove('hidden');
+            }
+        }
+        
         updateAuthUI(data.authenticated);
         return data.authenticated;
     } catch (error) {
@@ -159,6 +192,17 @@ function updateAuthUI(isAuthenticated) {
     const loginRegisterLink = document.getElementById('loginRegisterLink');
     const logoutLink = document.getElementById('logoutLink');
     const cartLink = document.getElementById('cartLink');
+    const adminDashboardLink = document.getElementById('adminDashboardLink');
+    const mobileAdminDashboardLink = document.getElementById('mobileAdminDashboardLink');
+    
+    console.log('Updating UI with auth status:', isAuthenticated);
+    console.log('Found elements:', {
+        loginRegisterLink: !!loginRegisterLink,
+        logoutLink: !!logoutLink,
+        cartLink: !!cartLink,
+        adminDashboardLink: !!adminDashboardLink,
+        mobileAdminDashboardLink: !!mobileAdminDashboardLink
+    });
     
     if (loginRegisterLink && logoutLink) {
         if (isAuthenticated) {
@@ -169,6 +213,8 @@ function updateAuthUI(isAuthenticated) {
             loginRegisterLink.classList.remove('hidden');
             logoutLink.classList.add('hidden');
             if (cartLink) cartLink.classList.add('hidden');
+            if (adminDashboardLink) adminDashboardLink.classList.add('hidden');
+            if (mobileAdminDashboardLink) mobileAdminDashboardLink.classList.add('hidden');
         }
     }
 }
