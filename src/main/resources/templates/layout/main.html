@@ -153,9 +153,34 @@
                     <!-- Desktop Navigation -->
                     <div class="hidden md:ml-6 md:flex md:space-x-8">
                         <a href="/" class="nav-link">Home</a>
-                        <a href="/mens-kit" class="nav-link">Men's Kit</a>
-                        <a href="/womens-kit" class="nav-link">Women's Kit</a>
-                        <a href="/individual" class="nav-link">Individual</a>
+                        <div class="relative group" id="productsDropdown">
+                            <button class="nav-link flex items-center">
+                                Products
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="absolute left-0 mt-2 w-96 rounded-md shadow-lg bg-primary-dark ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out" id="productsMenu">
+                                <div class="py-1">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <div class="px-4 py-2 text-accent font-semibold">Hajj & Umrah Kits</div>
+                                            <a href="/mens-kit" class="block px-4 py-2 text-white hover:bg-primary-light hover:text-accent">Men's Kit</a>
+                                            <a href="/mens-mini-kit" class="block px-4 py-2 text-white hover:bg-primary-light hover:text-accent">Men's Mini Kit</a>
+                                            <a href="/womens-kit" class="block px-4 py-2 text-white hover:bg-primary-light hover:text-accent">Women's Kit</a>
+                                            <a href="/womens-mini-kit" class="block px-4 py-2 text-white hover:bg-primary-light hover:text-accent">Women's Mini Kit</a>
+                                        </div>
+                                        <div>
+                                            <div class="px-4 py-2 text-accent font-semibold">Other Products</div>
+                                            <a href="/individual" class="block px-4 py-2 text-white hover:bg-primary-light hover:text-accent">Individual</a>
+                                            <a href="/tohfa-e-khulus" class="block px-4 py-2 text-white hover:bg-primary-light hover:text-accent">Tohfa-e-Khulus</a>
+                                            <a href="/janamaz" class="block px-4 py-2 text-white hover:bg-primary-light hover:text-accent">Janamaz</a>
+                                            <a href="/bag-on-rent" class="block px-4 py-2 text-white hover:bg-primary-light hover:text-accent">Bag-On-Rent</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <a href="/about" class="nav-link">About Us</a>
                     </div>
                 </div>
@@ -174,7 +199,11 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                         </svg>
                     </a>
-                    <a href="#" id="loginRegisterLink" class="nav-link">Login/Register</a>
+                    <a href="#" id="loginRegisterLink" class="nav-link">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                    </a>
                     <a href="#" id="logoutLink" class="nav-link hidden">Logout</a>
                 </div>
 
@@ -199,10 +228,32 @@
         <div class="hidden md:hidden" id="mobile-menu">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Home</a>
-                <a href="/mens-kit" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Men's Kit</a>
-                <a href="/womens-kit" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Women's Kit</a>
-                <a href="/individual" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Individual</a>
-                <a href="/about" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">About Us</a>
+                <div class="relative">
+                    <button class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light flex items-center justify-between" id="mobileProductsButton">
+                        Products
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="hidden pl-4" id="mobileProductsMenu">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <div class="px-3 py-2 text-accent font-semibold">Hajj & Umrah Kits</div>
+                                <a href="/mens-kit" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Men's Kit</a>
+                                <a href="/mens-mini-kit" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Men's Mini Kit</a>
+                                <a href="/womens-kit" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Women's Kit</a>
+                                <a href="/womens-mini-kit" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Women's Mini Kit</a>
+                            </div>
+                            <div>
+                                <div class="px-3 py-2 text-accent font-semibold">Other Products</div>
+                                <a href="/individual" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Individual</a>
+                                <a href="/tohfa-e-khulus" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Tohfa-e-Khulus</a>
+                                <a href="/janamaz" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Janamaz</a>
+                                <a href="/bag-on-rent" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Bag-On-Rent</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <a href="/cart" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light hidden" id="mobileCartLink">
                     Cart <span id="mobileCartCount" class="cart-count">0</span>
                 </a>
@@ -215,7 +266,14 @@
                         Admin Dashboard
                     </div>
                 </a>
-                <a href="#" id="mobileLoginRegisterLink" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">Login/Register</a>
+                <a href="#" id="mobileLoginRegisterLink" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        Login/Register
+                    </div>
+                </a>
                 <a href="#" id="mobileLogoutLink" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent hover:bg-primary-light hidden">Logout</a>
             </div>
         </div>
@@ -231,24 +289,58 @@
     <!-- Footer -->
     <footer th:fragment="footer" class="footer py-12 mt-16">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Left Column -->
                 <div>
-                    <h3 class="text-xl font-semibold mb-4">Contact Us</h3>
-                    <p>Address: Shop No. 5, Building No. 5, HM Royal Society, Near Talab Masjid, Kondhwa, Pune - 411 048</p>
-                    <p>Phone: 9923067286 / 9764417286 / 7030890979</p>
+                    <h3 class="text-xl font-semibold mb-4">Contact Information</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="text-accent font-medium mb-2">Address</h4>
+                            <p>Shop No. 5, Building No. 5, HM Royal Society, Near Talab Masjid, Kondhwa, Pune - 411 048</p>
+                        </div>
+                        <div>
+                            <h4 class="text-accent font-medium mb-2">Phone Numbers</h4>
+                            <p>9923067286 / 9764417286 / 7030890979</p>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Middle Column -->
                 <div>
-                    <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
-                    <ul>
-                        <li><a href="/mens-kit" class="hover:text-accent-light">Men's Kit</a></li>
-                        <li><a href="/womens-kit" class="hover:text-accent-light">Women's Kit</a></li>
-                        <li><a href="/individual" class="hover:text-accent-light">Individual Package</a></li>
-                        <li><a href="/about" class="hover:text-accent-light">About Us</a></li>
-                    </ul>
+                    <h3 class="text-xl font-semibold mb-4 text-center">Quick Links</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="text-accent font-medium mb-2">Hajj & Umrah Kits</h4>
+                            <ul class="space-y-2">
+                                <li><a href="/mens-kit" class="text-white hover:text-accent-light hover:underline">Men's Kit</a></li>
+                                <li><a href="/mens-mini-kit" class="text-white hover:text-accent-light hover:underline">Men's Mini Kit</a></li>
+                                <li><a href="/womens-kit" class="text-white hover:text-accent-light hover:underline">Women's Kit</a></li>
+                                <li><a href="/womens-mini-kit" class="text-white hover:text-accent-light hover:underline">Women's Mini Kit</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-accent font-medium mb-2">Other Products</h4>
+                            <ul class="space-y-2">
+                                <li><a href="/individual" class="text-white hover:text-accent-light hover:underline">Individual Package</a></li>
+                                <li><a href="/tohfa-e-khulus" class="text-white hover:text-accent-light hover:underline">Tohfa-e-Khulus</a></li>
+                                <li><a href="/janamaz" class="text-white hover:text-accent-light hover:underline">Janamaz</a></li>
+                                <li><a href="/bag-on-rent" class="text-white hover:text-accent-light hover:underline">Bag-On-Rent</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">About Us</h3>
+                    <div class="space-y-4">
+                        <p class="text-white">Eshal Hajj & Umrah Store is your trusted partner for all your Hajj and Umrah needs. We provide high-quality products and services to make your spiritual journey comfortable and memorable.</p>
+                        <a href="/about" class="text-accent hover:text-accent-light hover:underline inline-block mt-4">Learn More →</a>
+                    </div>
                 </div>
             </div>
-            <div class="mt-8 text-center">
-                <p>&copy; 2024 Hajj & Umrah. All rights reserved.</p>
+            <div class="mt-8 text-center border-t border-gray-700 pt-8">
+                <p>&copy; 2024 Eshal Hajj & Umrah Store | Powered by Atenar.</p>
             </div>
         </div>
     </footer>
@@ -279,50 +371,54 @@
                 isAuthenticated = data.authenticated;
 
                 const cartLink = document.getElementById('cartLink');
+                const mobileCartLink = document.getElementById('mobileCartLink');
                 const loginRegisterLink = document.getElementById('loginRegisterLink');
                 const logoutLink = document.getElementById('logoutLink');
 
+                // Always show cart links
+                if (cartLink) cartLink.classList.remove('hidden');
+                if (mobileCartLink) mobileCartLink.classList.remove('hidden');
+
                 if (isAuthenticated) {
-                    cartLink.classList.remove('hidden');
                     loginRegisterLink.classList.add('hidden');
                     logoutLink.classList.remove('hidden');
-                    // Only update cart count if authenticated
-                    if (typeof updateCartCount === 'function') {
-                        await updateCartCount();
-                    }
                 } else {
-                    cartLink.classList.add('hidden');
                     loginRegisterLink.classList.remove('hidden');
                     logoutLink.classList.add('hidden');
                 }
 
-                // Initialize item cards if we're on the individual page
-                if (window.location.pathname === '/individual') {
-                    console.log('DOM Content Loaded - Initializing item cards'); // Debug log
+                // Always update cart count
+                if (typeof updateCartCount === 'function') {
+                    await updateCartCount();
+                }
+
+                // Initialize item cards if we're on a product page
+                if (window.location.pathname.includes('/mens-kit') || 
+                    window.location.pathname.includes('/mens-mini-kit') ||
+                    window.location.pathname.includes('/womens-kit') || 
+                    window.location.pathname.includes('/womens-mini-kit') ||
+                    window.location.pathname.includes('/individual') ||
+                    window.location.pathname.includes('/janamaz')) {
                     
-                    // Initialize all item cards
-                    const itemCards = document.querySelectorAll('.bg-white.rounded-lg');
-                    console.log('Found item cards:', itemCards.length); // Debug log
+                    // Initialize all item cards - handle both individual items and kit pages
+                    const itemCards = document.querySelectorAll('.card[data-product-id]');
                     
                     itemCards.forEach((card, index) => {
-                        console.log(`Initializing card ${index + 1}`); // Debug log
-                        
                         const decreaseBtn = card.querySelector('.quantity-decrease');
                         const increaseBtn = card.querySelector('.quantity-increase');
                         const quantitySpan = card.querySelector('.quantity-value');
                         const addToCartBtn = card.querySelector('.add-to-cart');
                         
-                        console.log(`Card ${index + 1} - Found buttons:`, { // Debug log
-                            decreaseBtn: !!decreaseBtn,
-                            increaseBtn: !!increaseBtn,
-                            addToCartBtn: !!addToCartBtn
-                        });
-                        
+                        // Initialize quantity state for this card
                         let quantity = 1;
+                        if (quantitySpan) {
+                            quantitySpan.textContent = quantity;
+                        }
 
                         if (decreaseBtn) {
-                            decreaseBtn.addEventListener('click', () => {
-                                console.log('Decrease button clicked'); // Debug log
+                            decreaseBtn.addEventListener('click', (event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
                                 if (quantity > 1) {
                                     quantity--;
                                     quantitySpan.textContent = quantity;
@@ -331,57 +427,42 @@
                         }
 
                         if (increaseBtn) {
-                            increaseBtn.addEventListener('click', () => {
-                                console.log('Increase button clicked'); // Debug log
+                            increaseBtn.addEventListener('click', (event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
                                 quantity++;
                                 quantitySpan.textContent = quantity;
                             });
                         }
 
                         if (addToCartBtn) {
-                            console.log(`Adding click listener to Add to Cart button for card ${index + 1}`); // Debug log
                             addToCartBtn.addEventListener('click', async (event) => {
-                                console.log('Add to Cart button clicked'); // Debug log
                                 event.preventDefault(); // Prevent any default behavior
                                 event.stopPropagation(); // Stop event propagation
                                 
                                 try {
-                                    console.log('Checking authentication status...'); // Debug log
-                                    const isAuthenticated = await checkAuthStatus();
-                                    console.log('Is authenticated:', isAuthenticated); // Debug log
+                                    const productId = card.getAttribute('data-product-id');
+                                    const itemPrice = parseFloat(card.getAttribute('data-price'));
+                                    
+                                    if (!productId) {
+                                        throw new Error('Product ID not found');
+                                    }
+                                    
+                                    if (isNaN(itemPrice)) {
+                                        throw new Error('Invalid price');
+                                    }
 
-                                    if (isAuthenticated) {
-                                        // User is logged in, add to cart
-                                        const productId = card.dataset.productId;
-                                        const itemPrice = parseFloat(card.dataset.price);
-                                        
-                                        console.log('Product details:', { productId, itemPrice, quantity }); // Debug log
-                                        
-                                        const cartData = {
-                                            productId: productId,
-                                            quantity: quantity,
-                                            price: itemPrice
-                                        };
-
-                                        console.log('Adding to cart:', cartData); // Debug log
-                                        const success = await addToCart(cartData.productId, cartData.quantity, cartData.price);
-                                        if (success) {
-                                            alert('Item added to cart successfully!');
-                                            await updateCartCount(); // Update cart count after successful addition
-                                        }
-                                    } else {
-                                        console.log('User not authenticated, showing login modal'); // Debug log
-                                        // User is not authenticated, show login modal
-                                        const loginModal = document.getElementById('loginModal');
-                                        if (loginModal) {
-                                            showModal(loginModal);
-                                        } else {
-                                            console.error('Login modal not found');
-                                        }
+                                    const success = await addToCart(productId, quantity, itemPrice);
+                                    if (success) {
+                                        alert('Item added to cart successfully!');
+                                        await updateCartCount(); // Update cart count after successful addition
+                                        // Reset quantity after successful addition
+                                        quantity = 1;
+                                        quantitySpan.textContent = quantity;
                                     }
                                 } catch (error) {
-                                    console.error('Error:', error);
-                                    alert('An error occurred. Please try again.');
+                                    console.error('Error adding item to cart:', error);
+                                    alert('Failed to add item to cart. Please try again.');
                                 }
                             });
                         }
@@ -389,11 +470,6 @@
                 }
             } catch (error) {
                 console.error('Error checking auth status:', error);
-                // Hide cart link on error
-                const cartLink = document.getElementById('cartLink');
-                if (cartLink) {
-                    cartLink.classList.add('hidden');
-                }
             }
         });
 
@@ -446,18 +522,45 @@
                 });
             }
 
+            // Mobile Products dropdown toggle
+            const mobileProductsButton = document.getElementById('mobileProductsButton');
+            const mobileProductsMenu = document.getElementById('mobileProductsMenu');
+            
+            if (mobileProductsButton && mobileProductsMenu) {
+                mobileProductsButton.addEventListener('click', () => {
+                    mobileProductsMenu.classList.toggle('hidden');
+                });
+            }
+
+            // Desktop Products dropdown behavior
+            const productsDropdown = document.getElementById('productsDropdown');
+            const productsMenu = document.getElementById('productsMenu');
+            let dropdownTimeout;
+
+            if (productsDropdown && productsMenu) {
+                productsDropdown.addEventListener('mouseenter', () => {
+                    clearTimeout(dropdownTimeout);
+                    productsMenu.classList.remove('opacity-0', 'invisible');
+                    productsMenu.classList.add('opacity-100', 'visible');
+                });
+
+                productsDropdown.addEventListener('mouseleave', () => {
+                    dropdownTimeout = setTimeout(() => {
+                        productsMenu.classList.remove('opacity-100', 'visible');
+                        productsMenu.classList.add('opacity-0', 'invisible');
+                    }, 300); // 300ms delay before hiding
+                });
+            }
+
             // Update mobile menu items when auth state changes
             const updateMobileMenu = (isAuthenticated) => {
-                const mobileCartLink = document.getElementById('mobileCartLink');
                 const mobileLoginRegisterLink = document.getElementById('mobileLoginRegisterLink');
                 const mobileLogoutLink = document.getElementById('mobileLogoutLink');
 
                 if (isAuthenticated) {
-                    if (mobileCartLink) mobileCartLink.classList.remove('hidden');
                     if (mobileLoginRegisterLink) mobileLoginRegisterLink.classList.add('hidden');
                     if (mobileLogoutLink) mobileLogoutLink.classList.remove('hidden');
                 } else {
-                    if (mobileCartLink) mobileCartLink.classList.add('hidden');
                     if (mobileLoginRegisterLink) mobileLoginRegisterLink.classList.remove('hidden');
                     if (mobileLogoutLink) mobileLogoutLink.classList.add('hidden');
                 }

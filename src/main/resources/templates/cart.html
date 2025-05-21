@@ -17,6 +17,20 @@
             background-color: var(--primary-color);
             color: white;
         }
+        .quantity-value {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background-color: #f9fafb;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+        }
         .remove-btn {
             transition: all 0.2s ease;
         }
@@ -100,344 +114,55 @@
 </head>
 <body th:replace="~{layout/main :: body}">
     <div th:fragment="content">
-        <!-- Cart Content -->
-        <div class="max-w-7xl mx-auto px-4 py-12 mt-20">
-            <div class="text-center mb-12">
-                <h1 class="text-4xl font-extrabold text-primary sm:text-5xl mb-4">Your Shopping Cart</h1>
-                <p class="text-lg text-text-secondary">Review your items and proceed to checkout</p>
-            </div>
+        <div class="container mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold mb-8 mt-16">Shopping Cart</h1>
             
-            <div id="cartItems" class="space-y-8 animate-fade-in">
-                <!-- Cart items will be dynamically loaded here -->
-            </div>
-
-            <div id="cartSummary" class="cart-summary mt-12 bg-white rounded-xl shadow-xl p-8 border border-gray-100 hidden">
-                <div class="flex justify-between items-center mb-8">
-                    <span class="text-2xl font-semibold text-primary">Total Amount:</span>
-                    <span id="cartTotal" class="text-3xl font-bold text-accent">$0.00</span>
-                </div>
-                <button id="checkoutBtn" class="w-full btn-primary py-4 px-8 rounded-xl transition duration-300 font-medium text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                    Proceed to Checkout
-                </button>
-            </div>
-
-            <!-- Payment Success Modal -->
-            <div id="paymentSuccessModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center">
-                <div class="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full mx-4">
-                    <div class="text-center">
-                        <svg class="mx-auto h-16 w-16 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <h3 class="mt-4 text-2xl font-bold text-primary">Congratulations!</h3>
-                        <p class="mt-2 text-text-secondary">Your order has been confirmed successfully.</p>
-                        <button onclick="window.location.href='/'" class="mt-6 w-full btn-primary py-3 px-6 rounded-lg transition duration-300">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Cart Items -->
+                <div class="lg:col-span-2">
+                    <div id="cartItems" class="space-y-4">
+                        <!-- Cart items will be loaded here -->
+                    </div>
+                    
+                    <div id="emptyCart" class="hidden text-center py-8">
+                        <p class="text-gray-500">Your cart is empty</p>
+                        <a href="/" class="mt-4 inline-block bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition-colors">
                             Continue Shopping
-                        </button>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Cart Summary -->
+                <div id="cartSummary" class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+                        
+                        <div class="space-y-4">
+                            <div class="flex justify-between">
+                                <span>Subtotal</span>
+                                <span id="subtotal">$0.00</span>
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <span>Shipping</span>
+                                <span id="shipping">$0.00</span>
+                            </div>
+                            
+                            <div class="border-t pt-4">
+                                <div class="flex justify-between font-semibold">
+                                    <span>Total</span>
+                                    <span id="total">$0.00</span>
+                                </div>
+                            </div>
+                            
+                            <button id="checkoutBtn" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary-dark transition-colors">
+                                Proceed to Checkout
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Add Razorpay Script -->
-        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-        <script th:src="@{/js/cart.js}"></script>
-        <script>
-            // Cache for cart items
-            let cartItemsCache = [];
-
-            // Load cart items when page loads
-            document.addEventListener('DOMContentLoaded', async function() {
-                await checkAuthStatus();
-                await loadCartItems();
-            });
-
-            // Initialize Razorpay payment
-            function initializePayment(amount) {
-                const options = {
-                    key: 'YOUR_RAZORPAY_KEY_ID', // Replace with your Razorpay Key ID
-                    amount: amount * 100, // Amount in smallest currency unit (paise for INR)
-                    currency: "INR",
-                    name: "Hajj & Umrah",
-                    description: "Payment for your order",
-                    handler: function (response) {
-                        // Handle successful payment
-                        handlePaymentSuccess(response);
-                    },
-                    prefill: {
-                        name: "Customer Name",
-                        email: "customer@example.com",
-                        contact: "9999999999"
-                    },
-                    theme: {
-                        color: "#1a4d2e" // Using primary color
-                    }
-                };
-
-                const rzp = new Razorpay(options);
-                rzp.open();
-            }
-
-            // Handle payment success
-            async function handlePaymentSuccess(response) {
-                try {
-                    // Here you would typically verify the payment on your server
-                    // and update the order status in your database
-                    
-                    // Show success modal
-                    const successModal = document.getElementById('paymentSuccessModal');
-                    successModal.classList.remove('hidden');
-                    successModal.classList.add('flex');
-                } catch (error) {
-                    console.error('Error handling payment success:', error);
-                    alert('There was an error processing your payment. Please contact support.');
-                }
-            }
-
-            // Update checkout button click handler
-            document.getElementById('checkoutBtn').addEventListener('click', function() {
-                const totalAmount = parseFloat(document.getElementById('cartTotal').textContent.replace('$', ''));
-                if (totalAmount > 0) {
-                    initializePayment(totalAmount);
-                } else {
-                    alert('Your cart is empty. Please add items before checkout.');
-                }
-            });
-
-            // Get cart items from the API
-            async function getCart() {
-                try {
-                    const isAuthenticated = await checkAuthStatus();
-                    if (!isAuthenticated) {
-                        console.log('User not authenticated, skipping cart fetch');
-                        return [];
-                    }
-
-                    const response = await fetch('/api/cart', {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        credentials: 'include'
-                    });
-
-                    if (!response.ok) {
-                        if (response.status === 401) {
-                            console.log('User not authenticated, returning empty cart');
-                            return [];
-                        }
-                        throw new Error('Failed to fetch cart');
-                    }
-
-                    return await response.json();
-                } catch (error) {
-                    console.error('Error fetching cart:', error);
-                    return [];
-                }
-            }
-
-            // Update item quantity
-            async function updateQuantity(itemId, change) {
-                try {
-                    const cartItems = await getCart();
-                    const item = cartItems.find(item => item.id === itemId);
-                    
-                    if (!item) {
-                        console.error('Item not found in cart');
-                        return;
-                    }
-
-                    const newQuantity = item.quantity + change;
-                    
-                    if (newQuantity < 1) {
-                        return;
-                    }
-
-                    const response = await fetch(`/api/cart/${itemId}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        credentials: 'include',
-                        body: JSON.stringify({ quantity: newQuantity })
-                    });
-
-                    if (response.ok) {
-                        // Update local cache
-                        const itemIndex = cartItemsCache.findIndex(i => i.id === itemId);
-                        if (itemIndex !== -1) {
-                            cartItemsCache[itemIndex].quantity = newQuantity;
-                        }
-
-                        // Update UI
-                        const itemElement = document.querySelector(`[data-item-id="${itemId}"]`);
-                        if (itemElement) {
-                            const quantityElement = itemElement.querySelector('.text-lg.font-semibold.text-primary');
-                            const totalElement = itemElement.querySelector('.text-lg.font-semibold.text-accent');
-                            const pricePerUnitElement = itemElement.querySelector('.text-sm.text-text-secondary');
-
-                            quantityElement.textContent = newQuantity;
-                            const newTotal = (item.price * newQuantity).toFixed(2);
-                            totalElement.textContent = `$${newTotal}`;
-                            pricePerUnitElement.textContent = `$${item.price.toFixed(2)} each`;
-                        }
-
-                        // Update cart total and cart count
-                        updateCartTotal();
-                        await updateCartCount();
-                    } else {
-                        throw new Error('Failed to update quantity');
-                    }
-                } catch (error) {
-                    console.error('Error updating quantity:', error);
-                    alert('Failed to update quantity. Please try again.');
-                }
-            }
-
-            // Remove item from cart
-            async function removeFromCart(itemId) {
-                try {
-                    const response = await fetch(`/api/cart/${itemId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        credentials: 'include'
-                    });
-
-                    if (response.ok) {
-                        // Update local cache
-                        cartItemsCache = cartItemsCache.filter(item => item.id !== itemId);
-
-                        // Update UI
-                        const itemElement = document.querySelector(`[data-item-id="${itemId}"]`);
-                        if (itemElement) {
-                            itemElement.remove();
-                        }
-
-                        // Update cart total and cart count
-                        updateCartTotal();
-                        await updateCartCount();
-
-                        // If cart is empty, show empty cart message
-                        if (cartItemsCache.length === 0) {
-                            const cartItemsContainer = document.getElementById('cartItems');
-                            const cartSummary = document.getElementById('cartSummary');
-                            cartItemsContainer.innerHTML = `
-                                <div class="text-center py-16 bg-white rounded-xl shadow-lg border border-gray-100">
-                                    <svg class="mx-auto h-16 w-16 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                    </svg>
-                                    <h3 class="mt-4 text-xl font-medium text-primary">Your cart is empty</h3>
-                                    <p class="mt-2 text-text-secondary">Start shopping to add items to your cart.</p>
-                                    <div class="mt-8">
-                                        <a href="/" class="inline-flex items-center px-6 py-3 border border-transparent rounded-xl shadow-sm text-base font-medium text-white btn-primary transition duration-300 transform hover:-translate-y-0.5">
-                                            Continue Shopping
-                                        </a>
-                                    </div>
-                                </div>`;
-                            cartSummary.classList.add('hidden');
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error removing item:', error);
-                    alert('Failed to remove item. Please try again.');
-                }
-            }
-
-            // Helper function to update cart total
-            function updateCartTotal() {
-                const total = cartItemsCache.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                const cartTotal = document.getElementById('cartTotal');
-                cartTotal.textContent = `$${total.toFixed(2)}`;
-            }
-
-            // Load cart items
-            async function loadCartItems() {
-                try {
-                    const cartItems = await getCart();
-                    cartItemsCache = cartItems; // Store in cache
-                    const cartItemsContainer = document.getElementById('cartItems');
-                    const cartTotal = document.getElementById('cartTotal');
-                    const cartSummary = document.getElementById('cartSummary');
-                    let total = 0;
-
-                    if (cartItems.length === 0) {
-                        cartItemsContainer.innerHTML = `
-                            <div class="text-center py-16 bg-white rounded-xl shadow-lg border border-gray-100">
-                                <svg class="mx-auto h-16 w-16 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                </svg>
-                                <h3 class="mt-4 text-xl font-medium text-primary">Your cart is empty</h3>
-                                <p class="mt-2 text-text-secondary">Start shopping to add items to your cart.</p>
-                                <div class="mt-8">
-                                    <a href="/" class="inline-flex items-center px-6 py-3 border border-transparent rounded-xl shadow-sm text-base font-medium text-white btn-primary transition duration-300 transform hover:-translate-y-0.5">
-                                        Continue Shopping
-                                    </a>
-                                </div>
-                            </div>`;
-                        cartSummary.classList.add('hidden');
-                        return;
-                    }
-
-                    cartSummary.classList.remove('hidden');
-                    cartItemsContainer.innerHTML = cartItems.map(item => {
-                        const itemTotal = item.price * item.quantity;
-                        total += itemTotal;
-                        const product = item.product || {};
-                        const escapedProductName = (product.name || 'Product').replace(/'/g, "\\'");
-                        
-                        return `
-                            <div class="product-card" data-item-id="${item.id}" style="border: 2px solid #FFD700;">
-                                <div class="p-4 sm:p-6">
-                                    <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-6">
-                                        <div class="flex-shrink-0 w-full sm:w-40 mb-4 sm:mb-0">
-                                            <div class="image-container w-full h-40 sm:h-40">
-                                                <img src="${product.imageUrl || '/images/product-unavailable.jpg'}" 
-                                                     alt="${product.name || 'Product'}" 
-                                                     class="product-image w-full h-full object-contain"
-                                                     loading="lazy"
-                                                     onerror="this.src='/images/product-unavailable.jpg'">
-                                            </div>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between">
-                                                <div class="product-info w-full sm:w-auto">
-                                                    <h3 class="product-name break-words">${product.name || 'Product'}</h3>
-                                                    <p class="product-description break-words">${product.description || 'No description available'}</p>
-                                                </div>
-                                                <button onclick="confirmRemoveFromCart('${item.id}', '${escapedProductName}')" 
-                                                        class="remove-btn text-text-secondary hover:text-red-500 transition-colors p-2 self-end sm:self-start mt-2 sm:mt-0">
-                                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                            <div class="mt-4 flex flex-col sm:flex-row sm:items-center justify-between space-y-4 sm:space-y-0">
-                                                <div class="flex items-center space-x-4">
-                                                    <button class="quantity-btn bg-gray-100 text-primary px-3 py-1 rounded-lg hover:bg-gray-200 transition duration-300" onclick="updateQuantity('${item.id}', -1)">-</button>
-                                                    <span class="text-lg font-semibold text-primary">${item.quantity}</span>
-                                                    <button class="quantity-btn bg-gray-100 text-primary px-3 py-1 rounded-lg hover:bg-gray-200 transition duration-300" onclick="updateQuantity('${item.id}', 1)">+</button>
-                                                </div>
-                                                <div class="text-right mt-4 sm:mt-0">
-                                                    <p class="text-lg font-semibold text-accent">$${itemTotal.toFixed(2)}</p>
-                                                    <p class="text-sm text-text-secondary">$${item.price.toFixed(2)} each</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>`
-                    }).join('');
-
-                    cartTotal.textContent = `$${total.toFixed(2)}`;
-                } catch (error) {
-                    console.error('Error loading cart items:', error);
-                    alert('There was an error loading your cart. Please try again.');
-                }
-            }
-        </script>
     </div>
 </body>
 </html>

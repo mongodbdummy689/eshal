@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Janamaz - Hajj & Umrah</title>
+    <style>
+        .add-to-cart {
+            position: relative;
+            z-index: 10;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        .bg-white.rounded-lg {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body th:replace="~{layout/main :: body}">
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <div class="relative w-full">
+            <div class="w-full">
+                <img src="/img/janamaz/janamaz1.jpeg" alt="Janamaz Collection" class="w-full h-[calc(100vh-6rem)] object-cover">
+                <div class="absolute inset-0 bg-primary-dark bg-opacity-70 flex items-center justify-center">
+                    <div class="text-center text-white px-4 max-w-4xl mx-auto py-8">
+                        <h1 class="text-3xl md:text-5xl font-bold mb-2 md:mb-4 tracking-tight">Janamaz Collection</h1>
+                        <p class="text-lg md:text-2xl font-light mb-4 md:mb-6">Premium Quality Prayer Mats</p>
+                        <p class="text-base md:text-lg max-w-2xl mx-auto">Choose from our exclusive collection of beautifully designed prayer mats</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Janamaz Collection -->
+        <div class="max-w-7xl mx-auto px-4 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Product Cards -->
+                <div th:each="product : ${products}" class="card bg-white overflow-hidden" th:data-product-id="${product.id}" th:data-price="${product.price}">
+                    <div class="relative h-48">
+                        <img th:src="${product.imageUrl}" th:alt="${product.name}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2 text-primary" th:text="${product.name}">Product Name</h3>
+                        <p class="text-text-secondary mb-2" th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 2)}">$0.00</p>
+                        <p class="text-sm text-gray-600 mb-4" th:text="${product.description}">Product Description</p>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                            <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                            <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                        </div>
+                        <button class="add-to-cart w-full py-3 px-6 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

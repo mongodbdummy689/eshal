@@ -195,27 +195,21 @@ function updateAuthUI(isAuthenticated) {
     const adminDashboardLink = document.getElementById('adminDashboardLink');
     const mobileAdminDashboardLink = document.getElementById('mobileAdminDashboardLink');
     
-    console.log('Updating UI with auth status:', isAuthenticated);
-    console.log('Found elements:', {
-        loginRegisterLink: !!loginRegisterLink,
-        logoutLink: !!logoutLink,
-        cartLink: !!cartLink,
-        adminDashboardLink: !!adminDashboardLink,
-        mobileAdminDashboardLink: !!mobileAdminDashboardLink
-    });
-    
     if (loginRegisterLink && logoutLink) {
         if (isAuthenticated) {
             loginRegisterLink.classList.add('hidden');
             logoutLink.classList.remove('hidden');
-            if (cartLink) cartLink.classList.remove('hidden');
         } else {
             loginRegisterLink.classList.remove('hidden');
             logoutLink.classList.add('hidden');
-            if (cartLink) cartLink.classList.add('hidden');
             if (adminDashboardLink) adminDashboardLink.classList.add('hidden');
             if (mobileAdminDashboardLink) mobileAdminDashboardLink.classList.add('hidden');
         }
+    }
+
+    // Always show cart link regardless of authentication status
+    if (cartLink) {
+        cartLink.classList.remove('hidden');
     }
 }
 
