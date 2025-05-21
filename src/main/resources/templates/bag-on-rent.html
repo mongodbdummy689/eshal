@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Bag On Rent - Hajj & Umrah</title>
+</head>
+<body th:replace="~{layout/main :: body}">
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <div class="relative w-full">
+            <div class="w-full">
+                <img src="/img/bags/bag-hero.jpeg" alt="Bag On Rent" class="w-full h-[calc(100vh-6rem)] object-cover">
+                <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div class="text-center text-white px-4 max-w-4xl mx-auto py-8">
+                        <h1 class="text-3xl md:text-5xl font-bold mb-2 md:mb-4 tracking-tight">Trolley Bag On Rent</h1>
+                        <p class="text-lg md:text-2xl font-light mb-4 md:mb-6">Convenient Travel Solutions for Your Journey</p>
+                        <p class="text-base md:text-lg max-w-2xl mx-auto">Quality trolley bags available for rent at affordable rates</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rules and Guidelines Section -->
+        <div class="max-w-7xl mx-auto px-4 py-16">
+            <div class="grid grid-cols-1 gap-12">
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-bold text-center mb-8">Rules and Guidelines</h2>
+                    <div class="bg-white rounded-lg shadow-lg p-8">
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">1.</span>
+                                <p>Customer taking Trolley Bag on rent is to use this for personal use only (not for commercial)</p>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">2.</span>
+                                <p>Customer to read carefully all the Rules and Regulations.</p>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">3.</span>
+                                <p>Customer to give hard copy of their Aadhar Card with Present Address and 2 mobile nos.</p>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">4.</span>
+                                <p>Customer to pay Deposit & Rent in advance</p>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">5.</span>
+                                <p>Customer to check the condition of bag/s i.e. wheels, lock, handle, zeep, body etc before signing of this form.</p>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">6.</span>
+                                <p>The day issued and the day returned the bag, both will be considered a full day.</p>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">7.</span>
+                                <p>Customer to return the bag/s on date confirmed and mentioned on the form.</p>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">8.</span>
+                                <p>Any delay, the rent will be calculated @ Rs.100/- per day and deducted from deposit amount.</p>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">9.</span>
+                                <p>While returning the bag/s, any damage to bag, the repairing charged based on damage will be recovered from customer & will be deducted from Deposit amount.</p>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">10.</span>
+                                <p>In case of lost of bag, fully damaged, customer has to compensate the cost of the bag.</p>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">11.</span>
+                                <p>If bag/s are not available, customer has to register their name with details with token amount & accordingly we will call them on availability of bag/s. This will be available on first registered first served basis.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Download Form Button -->
+                        <div class="mt-8 text-center">
+                            <a href="/img/bags/Bag-On-Rent Rules & Guidelines.pdf" download class="inline-block bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-light transition-colors duration-300">
+                                Download Rental Form
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

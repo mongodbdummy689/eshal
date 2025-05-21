@@ -44,7 +44,7 @@ public class DataInitializer implements CommandLineRunner {
             womensKit.setName("Women's Complete Kit");
             womensKit.setDescription("Everything you need for your Hajj & Umrah journey in one comprehensive package");
             womensKit.setPrice(349.99);
-            womensKit.setImageUrl("/img/womenkit.JPG");
+            womensKit.setImageUrl("/img/womenkit.jpg");
             womensKit.setCategory("Hajj & Umrah Kits");
             womensKit.setInStock(true);
             womensKit.setStockQuantity(100);
@@ -52,8 +52,8 @@ public class DataInitializer implements CommandLineRunner {
         }
 
 //Men's Items
-initializeProduct("ihram-cloth", "Ihram Cloth", "Essential item for Hajj & Umrah", 19.99, "/img/men/ihram-cloth.jpg", "Men's Items");
-initializeProduct("ihram-belt", "Ihram Belt", "Essential item for Hajj & Umrah", 19.99, "/img/men/ihram-belt.jpg", "Men's Items");
+initializeProduct("ihram-cloth", "Ehram", "Essential item for Hajj & Umrah", 19.99, "/img/men/ihram-cloth.jpg", "Men's Items");
+initializeProduct("ihram-belt", "Ehram Belt", "Essential item for Hajj & Umrah", 19.99, "/img/men/ihram-belt.jpg", "Men's Items");
 initializeProduct("prayer-cap", "Prayer Cap", "Essential item for Hajj & Umrah", 19.99, "/img/men/prayer-cap.jpg", "Men's Items");
 initializeProduct("miswak", "Miswak", "Essential item for Hajj & Umrah", 19.99, "/img/men/miswak.jpg", "Men's Items");	
 initializeProduct("perfume", "Perfume", "Essential item for Hajj & Umrah", 19.99, "/img/men/perfume.jpg", "Men's Items");
@@ -64,7 +64,7 @@ initializeProduct("makhani", "Makhani", "Essential item for Hajj & Umrah", 19.99
 initializeProduct("namaz-dupatta", "Namaz Dupatta", "Essential item for Hajj & Umrah", 19.99, "/img/women/namaz-dupatta.jpg", "Women's Items");
 initializeProduct("soap", "Soap", "Essential item for Hajj & Umrah", 19.99, "/img/women/soap.jpg", "Women's Items");
 initializeProduct("socks", "Socks", "Essential item for Hajj & Umrah", 19.99, "/img/women/socks.jpg", "Women's Items");
-initializeProduct("women2", "Beads", "Essential item for Hajj & Umrah", 19.99, "/img/women/women2.jpg", "Women's Items");
+initializeProduct("women2", "Tawaf Tasbeeh", "Essential item for Hajj & Umrah", 19.99, "/img/women/women2.jpg", "Women's Items");
 
 //Common Items
 initializeProduct("guide", "Hajj/Umrah Guide", "Essential item for Hajj & Umrah", 19.99, "/img/common/guide.jpg", "Common Items");
@@ -80,10 +80,29 @@ initializeProduct("stitching-set", "Stitching Set", "Essential item for Hajj & U
 initializeProduct("travel-janamaz", "Travel Janamaz", "Essential item for Hajj & Umrah", 19.99, "/img/common/travel-janamaz.jpg", "Common Items");
 initializeProduct("universal-adaptor1", "Universal Adaptor", "Essential item for Hajj & Umrah", 19.99, "/img/common/universal-adaptor1.jpg", "Common Items");
 
+//Tohfa-E-Khulus
+initializeProduct("khajur", "Khajur (Dates)", "Premium quality dates from Madinah", 299, "/img/tohfaekhulus/khajur.jpg", "Tohfa-E-Khulus");
+initializeProduct("zamzam", "Zam Zam Water", "Blessed water from the holy well of Zam Zam", 499, "/img/tohfaekhulus/zamzam.jpg", "Tohfa-E-Khulus");
+initializeProduct("janamaz", "Janamaz", "Premium quality prayer mat with beautiful design", 1299, "/img/tohfaekhulus/janamaz.jpg", "Tohfa-E-Khulus");
+
+//Men's Mini Kit
+initializeProduct("mens-mini-kit-001", "Men's Umrah Mini Kit", "Essential Items for Your Spiritual Journey", 1000, "/img/umrahminikit/men-kit.jpeg", "Men's Mini Kit");
+
+//Women's Mini Kit
+initializeProduct("womens-mini-kit-001", "Women's Umrah Mini Kit", "Essential Items for Your Spiritual Journey", 900, "/img/umrahminikit/women-kit.jpeg", "Women's Mini Kit");
+
+//Janamaz
+initializeProduct("janamaz-001", "Classic Janamaz", "Traditional design prayer mat with premium quality material", 1299, "/img/janamaz/janamaz1.jpeg", "Janamaz");
+initializeProduct("janamaz-002", "Modern Janamaz", "Contemporary design prayer mat with elegant patterns", 1499, "/img/janamaz/janamaz2.jpeg", "Janamaz");
+initializeProduct("janamaz-003", "Luxury Janamaz", "High-end prayer mat with intricate designs", 1999, "/img/janamaz/janamaz3.jpeg", "Janamaz");
+initializeProduct("janamaz-004", "Travel Janamaz", "Compact and portable prayer mat for travelers", 999, "/img/janamaz/janamaz4.jpeg", "Janamaz");
+initializeProduct("janamaz-005", "Premium Janamaz", "Premium quality prayer mat with beautiful embroidery", 1799, "/img/janamaz/janamaz5.jpeg", "Janamaz");
+initializeProduct("janamaz-006", "Deluxe Janamaz", "Deluxe prayer mat with premium comfort", 1699, "/img/janamaz/janamaz6.jpeg", "Janamaz");
+
         // Create admin user if it doesn't exist
-        if (!userRepository.existsByEmail("admin@hajjumrah.com")) {
+        if (!userRepository.existsByEmail("admin@eshal.com")) {
             User admin = new User();
-            admin.setEmail("admin@hajjumrah.com");
+            admin.setEmail("admin@eshal.com");
             admin.setPassword(passwordEncoder.encode("admin123"));
             admin.setFullName("System Administrator");
             admin.setRole("ADMIN");

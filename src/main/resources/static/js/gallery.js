@@ -32,14 +32,12 @@ function initializeImageModal() {
 // Global modal functions
 function showModal(modal) {
     try {
-        console.log('Showing modal...');
         if (!modal) {
             console.error('Modal element is null or undefined');
             return;
         }
         modal.classList.remove('hidden');
         modal.classList.add('flex');
-        console.log('Modal shown successfully');
     } catch (error) {
         console.error('Error showing modal:', error);
     }
@@ -47,14 +45,12 @@ function showModal(modal) {
 
 function hideModal(modal) {
     try {
-        console.log('Hiding modal...');
         if (!modal) {
             console.error('Modal element is null or undefined');
             return;
         }
         modal.classList.remove('flex');
         modal.classList.add('hidden');
-        console.log('Modal hidden successfully');
     } catch (error) {
         console.error('Error hiding modal:', error);
     }
@@ -63,7 +59,6 @@ function hideModal(modal) {
 // Image Gallery functions
 function showImageModal(index) {
     try {
-        console.log('Showing image modal for index:', index);
         const modalImg = document.getElementById('modalImage');
         if (!modalImg) {
             console.error('Modal image element not found!');
@@ -76,7 +71,6 @@ function showImageModal(index) {
         modalImg.src = galleryImages[index].src;
         currentImageIndex = index;
         showModal(imageModal);
-        console.log('Image modal shown successfully');
     } catch (error) {
         console.error('Error showing image modal:', error);
     }
@@ -84,7 +78,6 @@ function showImageModal(index) {
 
 function showNextImage() {
     try {
-        console.log('Showing next image...');
         currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
         showImageModal(currentImageIndex);
     } catch (error) {
@@ -104,12 +97,10 @@ function showPrevImage() {
 
 function initializeGallery() {
     if (isInitialized) {
-        console.log('Gallery already initialized, skipping...');
         return;
     }
 
     try {
-        console.log('Initializing gallery...');
         const galleryContainer = document.querySelector('.flex.overflow-x-auto');
         if (!galleryContainer) {
             console.error('Gallery container not found!');
@@ -118,7 +109,6 @@ function initializeGallery() {
         
         // Get all images with the gallery-image class
         const images = document.querySelectorAll('.gallery-image');
-        console.log('Found', images.length, 'gallery images');
         
         if (images.length === 0) {
             console.error('No gallery images found!');
@@ -130,19 +120,15 @@ function initializeGallery() {
         
         // Add click handlers to all images
         images.forEach((img, index) => {
-            console.log(`Adding click handler to image ${index}:`, img.src);
             img.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Image clicked:', this.src);
                 const index = parseInt(this.getAttribute('data-index'));
-                console.log('Image index:', index);
                 showImageModal(index);
             });
         });
         
         isInitialized = true;
-        console.log('Gallery initialization complete');
     } catch (error) {
         console.error('Error initializing gallery:', error);
     }

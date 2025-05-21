@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Tohfa-e-Khulus - Hajj & Umrah</title>
+</head>
+<body th:replace="~{layout/main :: body}">
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <div class="relative w-full">
+            <div class="w-full">
+                <img src="/img/tohfaekhulus/heropage.jpeg" alt="Tohfa-e-Khulus" class="w-full h-[calc(100vh-6rem)] object-cover">
+                <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div class="text-center text-white px-4 max-w-4xl mx-auto py-8">
+                        <h1 class="text-3xl md:text-5xl font-bold mb-2 md:mb-4 tracking-tight">Tohfa-e-Khulus</h1>
+                        <p class="text-lg md:text-2xl font-light mb-4 md:mb-6">Hajj aur Umrah ke saath bhi - Hajj aur Umrah ke baadh bhi</p>
+                        <p class="text-base md:text-lg max-w-2xl mx-auto">Tohfa-e-Khulus... Nek duwaon ke saath</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kit Contents -->
+        <div class="max-w-7xl mx-auto px-4 py-16">
+            <div class="grid grid-cols-1 gap-12">
+                <!-- Kit Details -->
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-bold text-center mb-8">Customize Your Spiritual Journey</h2>
+                    <p class="text-gray-600 text-center mb-8">Select items that resonate with your spiritual needs</p>
+                    
+                    <div class="modern-item-list">
+                        <div class="hover-image-container">
+                            <img class="hover-image" src="/img/tohfaekhulus/content.jpeg" alt="Tohfa-e-Khulus Content">
+                        </div>
+
+                        <table class="modern-item-table">
+                            <tbody>
+                                <tr th:if="${products != null and !products.empty}" th:each="product : ${products}" 
+                                    th:data-price="${product.price}" 
+                                    th:data-id="${product.id}" 
+                                    th:data-image="${product.imageUrl}">
+                                    <td class="modern-item-cell">
+                                        <div class="modern-item-content">
+                                            <h3 class="modern-item-title" th:text="${product.name}">Product Name</h3>
+                                            <p class="modern-item-description" th:text="${product.description}">Product Description</p>
+                                        </div>
+                                        <div class="modern-price-cell">
+                                            <span class="modern-price-tag" th:text="'₹' + ${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}">₹0</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr th:if="${products == null or products.empty}">
+                                    <td class="modern-item-cell">
+                                        <div class="modern-item-content">
+                                            <h3 class="modern-item-title">No products available</h3>
+                                            <p class="modern-item-description">Please check back later for updates.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-12 text-center">
+                        <div class="card inline-block" style="background: transparent; border: none; box-shadow: none;">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <button class="quantity-decrease bg-gray-200 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-300 transition duration-300">-</button>
+                                <span class="quantity-value text-xl font-semibold">1</span>
+                                <button class="quantity-increase bg-gray-200 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-300 transition duration-300">+</button>
+                            </div>
+                            <button class="add-to-cart w-full py-3 px-6 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider" id="addToCartBtn" disabled>
+                                Add to Cart - <span id="cartPrice">₹0</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .add-to-cart {
+                position: relative;
+                z-index: 10;
+                cursor: pointer;
+                pointer-events: auto;
+            }
+            .bg-white.rounded-lg {
+                position: relative;
+                z-index: 1;
+            }
+            .modern-item-table {
+                width: 100%;
+                max-width: 900px;
+                margin: 0 auto;
+                border-collapse: separate;
+                border-spacing: 0 8px;
+                background: transparent;
+            }
+            .modern-item-table tbody {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .modern-item-table tr {
+                background: white;
+                transition: all 0.3s ease;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+                border-radius: 12px;
+                margin-bottom: 0;
+                cursor: pointer;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+            }
+            .modern-item-table tr:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            }
+            .modern-item-table tr.selected {
+                background-color: #f0fdf4;
+                border: 2px solid #1a4d2e;
+            }
+            .modern-item-table td {
+                padding: 1.25rem;
+                vertical-align: middle;
+            }
+            .modern-item-cell {
+                padding: 1.25rem 1rem 1.25rem 3rem;
+                position: relative;
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+            .modern-item-content {
+                flex: 1;
+            }
+            .modern-item-cell::after {
+                content: '';
+                position: absolute;
+                left: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 24px;
+                height: 24px;
+                border: 2px solid #e2e8f0;
+                border-radius: 6px;
+                transition: all 0.2s ease;
+            }
+            .modern-item-table tr.selected .modern-item-cell::after {
+                content: '✓';
+                background-color: #1a4d2e;
+                border-color: #1a4d2e;
+                color: white;
+                font-size: 1rem;
+                font-weight: bold;
+                text-align: center;
+                line-height: 24px;
+            }
+            .modern-item-title {
+                font-size: 1.1rem;
+                font-weight: 600;
+                color: #1a4d2e;
+                margin-bottom: 0.5rem;
+                letter-spacing: -0.01em;
+                padding-left: 2rem;
+            }
+            .modern-item-description {
+                color: #64748b;
+                font-size: 0.9rem;
+                line-height: 1.5;
+                margin: 0;
+                padding-left: 2rem;
+            }
+            .modern-price-cell {
+                padding: 0;
+                text-align: right;
+                font-weight: 600;
+                color: #1a4d2e;
+                margin-left: 1rem;
+            }
+            .modern-price-tag {
+                font-size: 1.1rem;
+                font-weight: 600;
+                color: #1a4d2e;
+                padding: 0.5rem 1rem;
+                background: #f8fafc;
+                border-radius: 8px;
+                display: inline-block;
+            }
+            .modern-item-list {
+                padding: 1rem;
+                background: transparent;
+                position: relative;
+                display: flex;
+                gap: 2rem;
+                align-items: flex-start;
+            }
+            .hover-image-container {
+                width: 500px;
+                height: 500px;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .hover-image {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                background-color: #f8fafc;
+                opacity: 1;
+            }
+            .hover-image-container:hover .hover-image {
+                transform: scale(1.02);
+                transition-delay: 0.3s;
+            }
+            @media (max-width: 1024px) {
+                .modern-item-list {
+                    flex-direction: column;
+                }
+                .hover-image-container {
+                    width: 100%;
+                    max-width: 600px;
+                    height: 500px;
+                    margin: 0 auto 2rem;
+                }
+                .modern-item-table tbody {
+                    grid-template-columns: 1fr;
+                }
+            }
+            @media (max-width: 640px) {
+                .modern-item-table {
+                    border-spacing: 0 12px;
+                }
+                .modern-item-title {
+                    font-size: 1rem;
+                }
+                .modern-item-description {
+                    font-size: 0.85rem;
+                }
+                .modern-price-tag {
+                    font-size: 1rem;
+                    padding: 0.4rem 0.8rem;
+                }
+            }
+        </style>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const rows = document.querySelectorAll('.modern-item-table tr');
+                const cartPriceElement = document.getElementById('cartPrice');
+                const addToCartBtn = document.getElementById('addToCartBtn');
+                const quantityValue = document.querySelector('.quantity-value');
+                const decreaseBtn = document.querySelector('.quantity-decrease');
+                const increaseBtn = document.querySelector('.quantity-increase');
+                const hoverImage = document.querySelector('.hover-image');
+                let quantity = 1;
+
+                // Hover functionality
+                rows.forEach(row => {
+                    if (row.dataset.image) {
+                        row.addEventListener('mouseenter', () => {
+                            const imageUrl = row.dataset.image;
+                            if (imageUrl) {
+                                hoverImage.src = imageUrl;
+                            }
+                        });
+
+                        row.addEventListener('mouseleave', () => {
+                            hoverImage.src = '/img/tohfaekhulus/content.jpeg';
+                        });
+
+                        // Click functionality
+                        row.addEventListener('click', () => {
+                            row.classList.toggle('selected');
+                            updateTotal();
+                        });
+                    }
+                });
+
+                function updateTotal() {
+                    let total = 0;
+                    rows.forEach(row => {
+                        if (row.classList.contains('selected') && row.dataset.price) {
+                            total += parseInt(row.dataset.price);
+                        }
+                    });
+
+                    cartPriceElement.textContent = `₹${total.toLocaleString()}`;
+                    addToCartBtn.disabled = total === 0;
+                }
+
+                decreaseBtn.addEventListener('click', () => {
+                    if (quantity > 1) {
+                        quantity--;
+                        quantityValue.textContent = quantity;
+                    }
+                });
+
+                increaseBtn.addEventListener('click', () => {
+                    quantity++;
+                    quantityValue.textContent = quantity;
+                });
+
+                addToCartBtn.addEventListener('click', async function() {
+                    const selectedItems = Array.from(rows)
+                        .filter(row => row.classList.contains('selected') && row.dataset.id)
+                        .map(row => ({
+                            id: row.dataset.id,
+                            name: row.querySelector('.modern-item-title')?.textContent || '',
+                            price: row.dataset.price
+                        }));
+
+                    if (selectedItems.length === 0) {
+                        alert('Please select at least one item');
+                        return;
+                    }
+
+                    try {
+                        for (const item of selectedItems) {
+                            await addToCart(item.id, quantity, parseFloat(item.price));
+                        }
+
+                        alert('Items added to cart successfully!');
+
+                        rows.forEach(row => row.classList.remove('selected'));
+                        quantity = 1;
+                        quantityValue.textContent = quantity;
+                        updateTotal();
+
+                    } catch (error) {
+                        console.error('Error adding items to cart:', error);
+                        alert('Failed to add items to cart. Please try again.');
+                    }
+                });
+            });
+        </script>
+    </div>
+</body>
+</html> 

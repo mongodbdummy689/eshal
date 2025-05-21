@@ -4,33 +4,271 @@
 <body th:replace="~{layout/main :: body}">
     <div th:fragment="content">
         <!-- Hero Section -->
-        <div class="relative w-full">
-            <div class="w-full">
-                <img src="/img/home.jpg" alt="Home Hero" class="w-full h-[calc(100vh-6rem)] object-cover">
-                <div class="absolute inset-0 bg-primary-dark bg-opacity-70 flex items-center justify-center">
-                    <div class="text-center text-white px-4 max-w-4xl mx-auto py-8">
-                        <h1 class="text-3xl md:text-5xl font-bold mb-2 md:mb-4 tracking-tight">
-                            <span class="block xl:inline">Welcome to</span>
-                            <span class="block text-accent xl:inline">Eshal Hajj & Umrah Store</span>
-                        </h1>
-                        <p class="text-lg md:text-2xl font-light mb-4 md:mb-6">Your trusted partner for a blessed journey</p>
-                        <!--<p class="text-lg max-w-2xl mx-auto">We provide comprehensive packages for Hajj and Umrah pilgrims</p>-->
-                        <div class="mt-4 md:mt-8">
-                            <a href="/mens-kit" class="btn-primary inline-flex items-center justify-center px-6 py-2 md:px-8 md:py-3 border border-transparent text-base font-medium rounded-md text-white md:text-lg">
-                                Get Started
-                            </a>
+        <style>
+            * {box-sizing: border-box;}
+            body {font-family: Verdana, sans-serif;}
+            
+            /* Slideshow container */
+            .slideshow-container {
+                width: 100%;
+                position: relative;
+                margin: auto;
+                overflow: hidden;
+                height: 600px; /* Fixed height for consistency */
+            }
+            
+            .mySlides {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            }
+            
+            .mySlides.active {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            
+            .mySlides.next {
+                transform: translateX(100%);
+            }
+            
+            .mySlides.prev {
+                transform: translateX(-100%);
+            }
+            
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* This ensures images maintain aspect ratio while filling container */
+            }
+            
+            /* Caption text */
+            .text {
+                position: absolute;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+            }
+            
+            .text-content {
+                text-align: center;
+                color: white;
+                max-width: 64rem;
+                margin: 0 auto;
+                padding: 2rem;
+            }
+            
+            .text h1 {
+                font-size: 3rem;
+                font-weight: bold;
+                margin-bottom: 0.5rem;
+                line-height: 1.2;
+                letter-spacing: -0.025em;
+            }
+            
+            .text h1.welcome-top {
+                font-size: 2.5rem;
+                font-weight: 400;
+                margin-bottom: 1rem;
+                letter-spacing: 0.05em;
+            }
+            
+            .text h1.welcome-center {
+                font-size: 5rem;
+                font-weight: 900;
+                color: #FFD700;
+                margin-bottom: 1rem;
+                letter-spacing: -0.025em;
+                text-transform: uppercase;
+                font-family: 'Noto Naskh Arabic', 'Amiri', serif;
+                font-style: italic;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            
+            .text h1.welcome-bottom {
+                font-size: 2.5rem;
+                font-weight: 400;
+                color: white;
+                letter-spacing: 0.05em;
+            }
+            
+            .text p {
+                font-size: 1.5rem;
+                font-weight: 300;
+                margin-bottom: 1.5rem;
+                line-height: 1.5;
+            }
+            
+            .text p.subtitle {
+                font-size: 1.125rem;
+                max-width: 32rem;
+                margin: 0 auto;
+            }
+            
+            /* Number text (1/3 etc) */
+            .numbertext {
+                color: #f2f2f2;
+                font-size: 12px;
+                padding: 8px 12px;
+                position: absolute;
+                top: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 2;
+            }
+            
+            /* The dots/bullets/indicators */
+            .dot {
+                height: 15px;
+                width: 15px;
+                margin: 0 2px;
+                background-color: #bbb;
+                border-radius: 50%;
+                display: inline-block;
+                transition: background-color 0.6s ease;
+                cursor: pointer;
+            }
+            
+            .active {
+                background-color: #717171;
+            }
+            
+            /* On smaller screens, adjust height */
+            @media only screen and (max-width: 768px) {
+                .slideshow-container {
+                    height: 400px;
+                }
+            }
+            
+            .nav-button {
+                display: inline-block;
+                padding: 1rem 2rem;
+                background-color: #FFD700;
+                color: #000;
+                font-size: 1.25rem;
+                font-weight: 600;
+                text-decoration: none;
+                border-radius: 0.5rem;
+                transition: all 0.3s ease;
+                margin-top: 2rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+            
+            .nav-button:hover {
+                background-color: #fff;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            </style>
+                        
+            <div class="slideshow-container">
+                <div class="mySlides active">
+                    <div class="numbertext">1 / 3</div>
+                    <img src="/img/home.jpg" alt="Home">
+                    <div class="text">
+                        <div class="text-content">
+                            <h1 class="welcome-top">Welcome to</h1>
+                            <h1 class="welcome-center">Eshal</h1>
+                            <h1 class="welcome-bottom">Hajj & Umrah Store</h1>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mySlides next">
+                    <div class="numbertext">2 / 3</div>
+                    <img src="/img/menkit.jpg" alt="Men's Kit">
+                    <div class="text">
+                        <div class="text-content">
+                            <h1>Men's Hajj/Umrah Kit</h1>
+                            <p>Aapke Hajj aur Umrah ke safar ko banaye aasan !</p>
+                            <p class="subtitle">Everything you need for your Hajj & Umrah journey in one comprehensive package</p>
+                            <a href="/mens-kit" class="nav-button">View Men's Kit</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mySlides next">
+                    <div class="numbertext">3 / 3</div>
+                    <img src="/img/womenkit.jpg" alt="Women's Kit">
+                    <div class="text">
+                        <div class="text-content">
+                            <h1>Women's Hajj/Umrah Kit</h1>
+                            <p>Aapke Hajj aur Umrah ke safar ko banaye aasan !</p>
+                            <p class="subtitle">Everything you need for your Hajj & Umrah journey in one comprehensive package</p>
+                            <a href="/womens-kit" class="nav-button">View Women's Kit</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <br>
+            
+            <div style="text-align:center">
+                <span class="dot active" onclick="currentSlide(1)"></span> 
+                <span class="dot" onclick="currentSlide(2)"></span> 
+                <span class="dot" onclick="currentSlide(3)"></span> 
+            </div>
+            
+            <script>
+            let slideIndex = 1;
+            let slides = document.getElementsByClassName("mySlides");
+            let dots = document.getElementsByClassName("dot");
+            let slideInterval;
+            
+            function showSlides(n) {
+                // Remove all classes first
+                for (let i = 0; i < slides.length; i++) {
+                    slides[i].className = "mySlides";
+                    dots[i].className = "dot";
+                }
+                
+                // Update slide index
+                if (n > slides.length) {slideIndex = 1}
+                if (n < 1) {slideIndex = slides.length}
+                
+                // Set current slide as active
+                slides[slideIndex-1].className = "mySlides active";
+                dots[slideIndex-1].className = "dot active";
+                
+                // Set next slide
+                let nextIndex = slideIndex;
+                if (nextIndex >= slides.length) nextIndex = 0;
+                slides[nextIndex].className = "mySlides next";
+                
+                // Set previous slide
+                let prevIndex = slideIndex - 2;
+                if (prevIndex < 0) prevIndex = slides.length - 1;
+                slides[prevIndex].className = "mySlides prev";
+            }
+            
+            function currentSlide(n) {
+                clearInterval(slideInterval); // Clear existing interval
+                showSlides(slideIndex = n);
+                startSlideInterval(); // Restart the interval
+            }
+            
+            function startSlideInterval() {
+                slideInterval = setInterval(() => {
+                    slideIndex++;
+                    showSlides(slideIndex);
+                }, 4000);
+            }
+            
+            // Initialize slideshow
+            showSlides(slideIndex);
+            startSlideInterval();
+            </script>
 
         <!-- Featured Packages Section -->
         <div class="bg-gray-50 py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
                     <h2 class="text-3xl font-extrabold text-primary-dark sm:text-4xl">
-                        Featured Packages
+                        Hajj & Umrah Kits
                     </h2>
                     <p class="mt-4 text-lg text-text-secondary">
                         Choose from our carefully curated packages for your spiritual journey

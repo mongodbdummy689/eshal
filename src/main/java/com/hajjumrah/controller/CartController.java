@@ -11,9 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import jakarta.servlet.http.HttpSession;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,18 +28,45 @@ public class CartController {
     @Autowired
     private ProductRepository productRepository;
 
+    private static final String GUEST_CART_KEY = "guestCart";
+
     @PostMapping("/add")
-    public ResponseEntity<?> addToCart(@RequestBody CartItem cartItem, Authentication authentication) {
+    public ResponseEntity<?> addToCart(@RequestBody CartItem cartItem, Authentication authentication, HttpSession session) {
         try {
-            User user = userRepository.findByEmail(authentication.getName())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-            
             // Verify product exists before adding to cart
             Product product = productRepository.findById(cartItem.getProductId())
                     .orElseThrow(() -> new RuntimeException("Product not found"));
-            
-            cartItem.setUserId(user.getId());
-            cartItemRepository.save(cartItem);
+
+            if (authentication != null && authentication.isAuthenticated()) {
+                // Handle authenticated user
+                User user = userRepository.findByEmail(authentication.getName())
+                        .orElseThrow(() -> new RuntimeException("User not found"));
+                cartItem.setUserId(user.getId());
+                cartItemRepository.save(cartItem);
+            } else {
+                // Handle guest user
+                @SuppressWarnings("unchecked")
+                List<CartItem> guestCart = (List<CartItem>) session.getAttribute(GUEST_CART_KEY);
+                if (guestCart == null) {
+                    guestCart = new ArrayList<>();
+                }
+
+                // Check if item already exists in cart
+                Optional<CartItem> existingItem = guestCart.stream()
+                        .filter(item -> item.getProductId().equals(cartItem.getProductId()))
+                        .findFirst();
+
+                if (existingItem.isPresent()) {
+                    // Update quantity if item exists
+                    existingItem.get().setQuantity(existingItem.get().getQuantity() + cartItem.getQuantity());
+                } else {
+                    // Add new item if it doesn't exist
+                    cartItem.setId(UUID.randomUUID().toString());
+                    guestCart.add(cartItem);
+                }
+
+                session.setAttribute(GUEST_CART_KEY, guestCart);
+            }
             return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
@@ -48,67 +74,60 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Map<String, Object>>> getCart(Authentication authentication) {
+    public ResponseEntity<?> getCart(Authentication authentication, HttpSession session) {
         try {
-            User user = userRepository.findByEmail(authentication.getName())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-            
-            List<CartItem> cartItems = cartItemRepository.findByUserId(user.getId());
-            
-            List<Map<String, Object>> cartItemsWithDetails = cartItems.stream()
-                .map(item -> {
-                    Map<String, Object> itemMap = new HashMap<>();
-                    itemMap.put("id", item.getId());
-                    itemMap.put("quantity", item.getQuantity());
-                    itemMap.put("price", item.getPrice());
-                    itemMap.put("productId", item.getProductId());
-                    
-                    // Get product details
-                    Product product = productRepository.findById(item.getProductId()).orElse(null);
-                    if (product != null) {
-                        Map<String, Object> productDetails = new HashMap<>();
-                        productDetails.put("id", product.getId());
-                        productDetails.put("name", product.getName());
-                        productDetails.put("description", product.getDescription());
-                        productDetails.put("imageUrl", product.getImageUrl());
-                        productDetails.put("category", product.getCategory());
-                        itemMap.put("product", productDetails);
-                    } else {
-                        // If product not found, add minimal product info
-                        Map<String, Object> productDetails = new HashMap<>();
-                        productDetails.put("id", item.getProductId());
-                        productDetails.put("name", "Product not available");
-                        productDetails.put("description", "This product is no longer available");
-                        productDetails.put("imageUrl", "/images/product-unavailable.jpg");
-                        productDetails.put("category", "Unavailable");
-                        itemMap.put("product", productDetails);
-                    }
-                    
-                    return itemMap;
-                })
-                .collect(Collectors.toList());
-            
-            return ResponseEntity.ok(cartItemsWithDetails);
+            List<CartItem> cartItems;
+            if (authentication != null && authentication.isAuthenticated()) {
+                // Get cart for authenticated user
+                User user = userRepository.findByEmail(authentication.getName())
+                        .orElseThrow(() -> new RuntimeException("User not found"));
+                cartItems = cartItemRepository.findByUserId(user.getId());
+            } else {
+                // Get cart for guest user
+                @SuppressWarnings("unchecked")
+                List<CartItem> guestCart = (List<CartItem>) session.getAttribute(GUEST_CART_KEY);
+                cartItems = guestCart != null ? guestCart : new ArrayList<>();
+            }
+
+            // Enrich cart items with product details
+            cartItems = cartItems.stream()
+                    .map(item -> {
+                        Product product = productRepository.findById(item.getProductId()).orElse(null);
+                        if (product != null) {
+                            item.setProduct(product);
+                        }
+                        return item;
+                    })
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(cartItems);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 
     @PutMapping("/{itemId}")
-    public ResponseEntity<?> updateCartItem(@PathVariable String itemId, @RequestBody Map<String, Integer> update, Authentication authentication) {
+    public ResponseEntity<?> updateCartItem(@PathVariable String itemId, @RequestBody Map<String, Integer> update, 
+                                          Authentication authentication, HttpSession session) {
         try {
-            User user = userRepository.findByEmail(authentication.getName())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-            
-            CartItem cartItem = cartItemRepository.findById(itemId)
-                    .orElseThrow(() -> new RuntimeException("Cart item not found"));
-            
-            if (!cartItem.getUserId().equals(user.getId())) {
-                return ResponseEntity.status(403).build();
+            if (authentication != null && authentication.isAuthenticated()) {
+                // Update for authenticated user
+                CartItem cartItem = cartItemRepository.findById(itemId)
+                        .orElseThrow(() -> new RuntimeException("Cart item not found"));
+                cartItem.setQuantity(update.get("quantity"));
+                cartItemRepository.save(cartItem);
+            } else {
+                // Update for guest user
+                @SuppressWarnings("unchecked")
+                List<CartItem> guestCart = (List<CartItem>) session.getAttribute(GUEST_CART_KEY);
+                if (guestCart != null) {
+                    guestCart.stream()
+                            .filter(item -> item.getId().equals(itemId))
+                            .findFirst()
+                            .ifPresent(item -> item.setQuantity(update.get("quantity")));
+                    session.setAttribute(GUEST_CART_KEY, guestCart);
+                }
             }
-            
-            cartItem.setQuantity(update.get("quantity"));
-            cartItemRepository.save(cartItem);
             return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
@@ -116,19 +135,71 @@ public class CartController {
     }
 
     @DeleteMapping("/{itemId}")
-    public ResponseEntity<?> removeFromCart(@PathVariable String itemId, Authentication authentication) {
+    public ResponseEntity<?> removeFromCart(@PathVariable String itemId, Authentication authentication, HttpSession session) {
         try {
+            if (authentication != null && authentication.isAuthenticated()) {
+                // Remove for authenticated user
+                cartItemRepository.deleteById(itemId);
+            } else {
+                // Remove for guest user
+                @SuppressWarnings("unchecked")
+                List<CartItem> guestCart = (List<CartItem>) session.getAttribute(GUEST_CART_KEY);
+                if (guestCart != null) {
+                    guestCart.removeIf(item -> item.getId().equals(itemId));
+                    session.setAttribute(GUEST_CART_KEY, guestCart);
+                }
+            }
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/convert-guest-cart")
+    public ResponseEntity<?> convertGuestCartToDatabaseCart(Authentication authentication, HttpSession session) {
+        try {
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return ResponseEntity.badRequest().body(Map.of("error", "User must be authenticated to convert cart"));
+            }
+
             User user = userRepository.findByEmail(authentication.getName())
                     .orElseThrow(() -> new RuntimeException("User not found"));
+
+            @SuppressWarnings("unchecked")
+            List<CartItem> guestCart = (List<CartItem>) session.getAttribute(GUEST_CART_KEY);
             
-            CartItem cartItem = cartItemRepository.findById(itemId)
-                    .orElseThrow(() -> new RuntimeException("Cart item not found"));
-            
-            if (!cartItem.getUserId().equals(user.getId())) {
-                return ResponseEntity.status(403).build();
+            if (guestCart != null && !guestCart.isEmpty()) {
+                // Convert each guest cart item to a database cart item
+                for (CartItem guestItem : guestCart) {
+                    // Verify product still exists
+                    Product product = productRepository.findById(guestItem.getProductId())
+                            .orElseThrow(() -> new RuntimeException("Product not found: " + guestItem.getProductId()));
+
+                    // Create new cart item for database
+                    CartItem dbCartItem = new CartItem();
+                    dbCartItem.setUserId(user.getId());
+                    dbCartItem.setProductId(guestItem.getProductId());
+                    dbCartItem.setQuantity(guestItem.getQuantity());
+                    dbCartItem.setPrice(guestItem.getPrice());
+
+                    // Check if item already exists in user's cart
+                    Optional<CartItem> existingItem = cartItemRepository.findByUserIdAndProductId(user.getId(), guestItem.getProductId());
+                    
+                    if (existingItem.isPresent()) {
+                        // Update quantity if item exists
+                        CartItem item = existingItem.get();
+                        item.setQuantity(item.getQuantity() + guestItem.getQuantity());
+                        cartItemRepository.save(item);
+                    } else {
+                        // Save new item if it doesn't exist
+                        cartItemRepository.save(dbCartItem);
+                    }
+                }
+
+                // Clear guest cart after successful conversion
+                session.removeAttribute(GUEST_CART_KEY);
             }
-            
-            cartItemRepository.delete(cartItem);
+
             return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));

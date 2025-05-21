@@ -45,19 +45,34 @@ public class AuthController {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @GetMapping("/check")
-    public ResponseEntity<?> checkAuth(HttpSession session) {
+    @GetMapping("/status")
+    public ResponseEntity<?> checkAuthStatus(HttpSession session) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Map<String, Boolean> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         
-        // Check both session and SecurityContext
         boolean isAuthenticated = auth != null && 
                                 auth.isAuthenticated() && 
                                 !auth.getName().equals("anonymousUser") &&
                                 session.getAttribute("SPRING_SECURITY_CONTEXT") != null;
         
         response.put("authenticated", isAuthenticated);
+        
+        if (isAuthenticated) {
+            User user = userRepository.findByEmail(auth.getName()).orElse(null);
+            if (user != null) {
+                response.put("user", Map.of(
+                    "email", user.getEmail(),
+                    "role", user.getRole()
+                ));
+            }
+        }
+        
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/check")
+    public ResponseEntity<?> checkAuth(HttpSession session) {
+        return checkAuthStatus(session);
     }
 
     @PostMapping("/register")

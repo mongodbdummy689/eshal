@@ -1,0 +1,131 @@
+Cart icon not to be visible if user is not logged in. - Done
+Login/Register to replace Logout. - Done
+Hero section to be center aligned. - Done
+Images for all the sections on homepage. - Not required
+Expand images - Done
+UI update.- Done
+fix mens and womens add to cart - Done
+About page to be consistent - Done
+Add Docker image
+Promote to git
+Deploy on render
+Cart count on mobile
+Cart page render on mobile
+
+Changes implemented after discussion with maam-
+
+Header color - Same as footer. - Done
+Register: Mobile Number - Done
+Hajj/Umrah
+Repace Abaya with 1. Dupatta 2. Makhni
+Lady Gloves - Hand Gloves
+Lady Socks - Socks
+Replace Travel bag with Shoe Bag
+Replace Compass with Qibla Compass
+Fragrance-free Soap
+Stitching Kit
+Indiviual background image - Ehramm men and women 
+Hero section on homepage mobile view
+Update address, phone
+Admin changes - item name, price, quantity, total price
+Make individual faces visible on desktop view
+Admin Login - User details
+Compressed images pending
+About us images required?
+Data initializer
+Images view
+Git
+Make logo backgroundless 
+Women's Kit image breaking - still breaking on individual screen
+Fetch item name instead of item id for users - breaking
+Hero section on mobile display
+Cart images breaking on mobile view
+Replace the new ai images with the old ones
+Dashboard link when admin logs in
+------------------------------------
+
+Awaiting Response:
+Razorpay integration
+Payment mode - Online
+Register details requirement - full name, address, mobile num, mail
+Order Tracking
+
+mongodb+srv://mongodbdummy689:5dODsTJQrjnejaQm@cluster0.oaz4i2d.mongodb.net/hajjUmrah?retryWrites=true&w=majority&appName=Cluster0
+
+Done changes discussed with Client:
+Changes to be tested: 
+Change header to add Product - Men's, Women't, Indiviual, Tofah-e-khulus, Mini, Bag-On-Rent - Done
+Change name to - Men's Hajj/Umrah Kit, Women's Hajj/Umrah Kit,
+Main page - turn it into slideshow - Men's kit - Women's Kit - Customizable kit (Tofah-e-khulus)
+Change font style - Eshal above hajj and umrah store
+Featured packages - Hajj & Umrah Kits
+
+Changes:
+Add to cart without registration
+Registration - during payment
+Change mail to mobile number
+Add a note with * against the price tags saying Extra shipping charges
+Remove company logos from images
+Replace pocket with mixed one
+Exact product prices - Admin update
+
+Changes for Proceed to checkout- 
+Mobile notifications for purchase - 9923067286
+full name, transaction id, address: flat no, apt name, floor, street name, nearby landmark , city, pincode
+Order Tracking - Your product will be shipped within 24 hours and will be delivered within 5-7 days. 
+Your courier tracking id will be provided once the product is shipped.
+
+
+Services to be implemented:
+Razorpay, Tillio, Google Maps API
+
+
+Changes done for pending info:
+Descriptions for kits:
+[2:03 PM, 5/20/2025] +91 99230 67286: Description for kits
+[2:04 PM, 5/20/2025] +91 99230 67286: Men’s Hajj & Umrah Kit
+Description:
+Our thoughtfully created Men’s Hajj & Umrah Kit ensures that you are Umrah ready. From Ihram to all essentials Umrah Items, each product is selected to meet the needs of Umrah with ease and comfort in mind.
+What’s Included:(kit items below)
+[2:04 PM, 5/20/2025] +91 99230 67286: Women’s Hajj and Umrah Kit:
+Our Women’s Hajj & Umrah Kit is thoughtfully designed to make your Umrah Journey more comfortable and stress-free. With carefully selected essentials tailored for women, this kit helps you stay organized, modest, and at ease throughout your journey.
+
+Mini Umrah Kit for Men/Women - 
+Eshal Umrah Mini kit - Men
+1) Ehram
+2) Ehram Belt
+3) Tawaf Tasbeeh
+4) Oder less soap
+5) Finger Couner
+6) Chappal Bag
+7) Umrah Dua Card
+7 items price Rs.1000/-
+
+Eshal Mini Kit - Women
+1) Makhani
+2) Dupatta
+3) Hand gloves 
+4) Socks 
+5) Cap
+6) Tawaf Tasbeeh
+7)Oderless Soap
+8)Finger Counter 
+9)Chappal Bag
+10) Umrah Dua Card
+
+10 items price Rs.900/-
+Tofah-e-khulus - Done
+Bag-On-Rent - TBD
+Janamaz - Images, Price range
+Tag line on homepage 
+
+To be provided: 
+Images on homepage featured categories
+To be provided - Kit (Box) images to be added on pages
+Janamaz - Prices
+Shipping standard charges - TBP
+Team images & details to be added
+Services to be added: 
+Payment gateway - Razorpay details
+Messaging service - Twilio
+Address service - Google Maps API
