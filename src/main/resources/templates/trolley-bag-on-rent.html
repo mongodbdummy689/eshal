@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Trolley Bag On Rent - Hajj & Umrah</title>
+</head>
+<body th:replace="~{layout/main :: body}">
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <div class="relative w-full">
+            <div class="w-full">
+                <img src="/img/bags/bag-hero.jpeg" alt="Trolley Bag On Rent" class="w-full h-[calc(100vh-6rem)] object-cover">
+                <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div class="text-center text-white px-4 max-w-4xl mx-auto py-8">
+                        <h1 class="text-3xl md:text-5xl font-bold mb-2 md:mb-4 tracking-tight">Trolley Bag On Rent</h1>
+                        <p class="text-lg md:text-2xl font-light mb-4 md:mb-6">Convenient Travel Solutions for Your Journey</p>
+                        <p class="text-base md:text-lg max-w-2xl mx-auto">Quality trolley bags available for rent at affordable rates</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rules and Guidelines Section -->
+        <div class="max-w-7xl mx-auto px-4 py-16">
+            <div class="grid grid-cols-1 gap-12">
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-bold text-center mb-8">Rules and Guidelines</h2>
+                    <div class="bg-white rounded-lg shadow-lg p-8">
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">1.</span>
+                                <div>
+                                    <p class="font-semibold">Usage Policy</p>
+                                    <p>Trolley bags are exclusively for personal use</p>
+                                    <p>Commercial utilization is strictly prohibited</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">2.</span>
+                                <div>
+                                    <p class="font-semibold">Documentation Requirements</p>
+                                    <p>Valid Aadhar Card with current residential address</p>
+                                    <p>Two active contact numbers</p>
+                                    <p>Mandatory acknowledgment of terms and conditions</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">3.</span>
+                                <div>
+                                    <p class="font-semibold">Financial Terms</p>
+                                    <p>Advance payment of security deposit and rental fees</p>
+                                    <p>Late return charges: ₹100 per day</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">4.</span>
+                                <div>
+                                    <p class="font-semibold">Bag Handling Protocol</p>
+                                    <p>Pre-rental inspection of all components (wheels, locking mechanism, handles, zippers, structural integrity)</p>
+                                    <p>Strict adherence to agreed return date</p>
+                                    <p>Rental period includes both issue and return dates</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">5.</span>
+                                <div>
+                                    <p class="font-semibold">Liability and Compensation</p>
+                                    <p>Security deposit deduction for repair costs</p>
+                                    <p>Full replacement value for lost or irreparably damaged items</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-primary font-semibold mr-2">6.</span>
+                                <div>
+                                    <p class="font-semibold">Reservation System</p>
+                                    <p>Advance registration with nominal token amount</p>
+                                    <p>Allocation based on chronological registration order</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Download Form Button -->
+                        <div class="mt-8 text-center">
+                            <a href="/img/bags/Bag-On-Rent Rules & Guidelines.pdf" download class="inline-block bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-light transition-colors duration-300">
+                                Download Rental Form
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -64,7 +64,7 @@ public class SecurityConfig {
                     "/tohfa-e-khulus",
                     "/janamaz",
                     "/about",
-                    "/bag-on-rent",
+                    "/trolley-bag-on-rent",
                     "/favicon.ico"
                 ).permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")

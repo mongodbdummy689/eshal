@@ -91,7 +91,11 @@ public class PageController {
 
     @GetMapping("/individual")
     public String individual(Model model) {
-        model.addAttribute("products", productRepository.findAll());
+        List<Product> allProducts = productRepository.findAll();
+        List<Product> filteredProducts = allProducts.stream()
+            .filter(product -> !"Janamaz".equals(product.getCategory()))
+            .collect(Collectors.toList());
+        model.addAttribute("products", filteredProducts);
         return "individual";
     }
 
@@ -102,7 +106,7 @@ public class PageController {
             List<Product> categoryProducts = productService.getProductsByCategory("Tohfa-E-Khulus");
             
             // Get specific products by IDs that might not be in the category
-            List<String> specificIds = Arrays.asList("prayer-beads", "surma", "perfume", "prayer-cap", "miswak");
+            List<String> specificIds = Arrays.asList("prayer-beads", "surma", "perfume", "prayer-cap", "miswak", "janamaz-001");
             List<Product> specificProducts = specificIds.stream()
                 .map(id -> productService.getProductById(id))
                 .filter(product -> product != null)
@@ -152,9 +156,9 @@ public class PageController {
         return "about";
     }
 
-    @GetMapping("/bag-on-rent")
-    public String bagOnRent() {
-        return "bag-on-rent";
+    @GetMapping("/trolley-bag-on-rent")
+    public String trolleyBagOnRent() {
+        return "trolley-bag-on-rent";
     }
 
     @GetMapping("/cart")

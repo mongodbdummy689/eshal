@@ -116,16 +116,47 @@ Eshal Mini Kit - Women
 10 items price Rs.900/-
 Tofah-e-khulus - Done
 Bag-On-Rent - TBD
-Janamaz - Images, Price range
+Janamaz - Images
 Tag line on homepage 
 
 To be provided: 
-Images on homepage featured categories
+Kit images on homepage featured categories
 To be provided - Kit (Box) images to be added on pages
 Janamaz - Prices
 Shipping standard charges - TBP
 Team images & details to be added
+
 Services to be added: 
 Payment gateway - Razorpay details
 Messaging service - Twilio
 Address service - Google Maps API
+
+
+Fix the mobile view.
+
+Suggestions for website
+
+7)	On first page of Individual items – pull the matter up side,  now it is hiding kaaba image
+
+Please note the following fixes as per the suggestions-
+
+1)	Eshal name should be in the same font of branding everywhere
+	Changes - Since same font style isn't feasible/available, instead used Eshal image wherever possible.
+2)	It should be Hajj & Umrah and not Hajj/Umrah.
+	Changes - Replaced all occurences of Hajj / Umrah with Hajj & Umrah throughout the site.
+3)	Kit’s pic should be there instead of scattered items…it is not giving feel of kit
+	- Each kit pic required (men's/women's mini kit) as discussed prior. Kit pics similar to Tofah-e-khulus kit pic.
+4)	Along with kit – items description in short (providing below with separate image)
+	Changes - Revised Men's Hajj & Umrah Kit page for demonstration purposes. Added a View All Items Detials button to display larger images with corresponding item descriptions. Replaced original mens-kit image with the one provided.
+5)	For mini kit also content of items should be written on page
+	- Same changes as demonstrated in Men's Hajj & Umrah Kit page can be applied to all kit items pages if approved.
+6) 	It should be Eshal’s Umrah Mini Kit – likewise change everywhere ( not Mini Umrah kit)
+	Changes - Renamed Men's Mini Umrah Kit & Women's Mini Umrah Kit to Eshal’s Umrah Mini Kit throughout all occurences in the site.
+8)	In the individual items lot of changes required for the item names – not soap it should be Odourless Soap, Socks should be Ladies Socks, Hajj & Umrah Guide as well Card, Tasbeeh in place of prayer beeds, about travel janamaz, get clarity from us in person as it is appearing at three places with different name & actually it is one product. It should be named as Travel Janamaz with Compass, it should be Sewing Kit instead of stitching kit etc. Likewise lots of changes are required.
+	Changes - All the mentioned item name changes have been applied.
+9)	Separate tab for Janamaz is provided hence it should maintain there itself.
+	Changes - Removed all occurences of Janamaz under Individual page and now Janamaz is visible under following two pages - Janamaz and Tohfa-E-Khulus- Janamaz image on Tofah-e-khulus is also changed to refer image from Janamaz page.
+10)	It should be “Trolley Bags on Rent” instead of “Bag on Rent”
+	Changes - Renamed all occurences of "Bag On Rent" with "Trolley Bag On Rent" throughout the site.
+11)	Trolley Bags on Rent page should have key notes of guidelines which is provided today.
+	Changes - Reduced the number of points from 11 to 6, making it more concise and easier to read. Added section headers for each point. Used more professional language throughout. Organized related information into logical groups.
