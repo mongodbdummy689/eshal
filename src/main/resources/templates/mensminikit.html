@@ -13,7 +13,7 @@
                 <img src="/img/umrahminikit/men-kit.jpeg" alt="Men's Mini Kit" class="w-full h-[calc(100vh-6rem)] object-cover">
                 <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                     <div class="text-center text-white px-4 max-w-4xl mx-auto py-8">
-                        <h1 class="text-3xl md:text-5xl font-bold mb-2 md:mb-4 tracking-tight">Eshal’s Umrah Mini Kit</h1>
+                        <h1 class="text-3xl md:text-5xl font-bold mb-2 md:mb-4 tracking-tight">Eshal's Umrah Mini Kit for Men</h1>
                         <p class="text-lg md:text-2xl font-light mb-4 md:mb-6">Aapke Hajj aur Umrah ke safar ko banaye aasan !</p>
                         <p class="text-base md:text-lg max-w-2xl mx-auto">A compact package with all the essential items you need for your Umrah journey</p>
                     </div>
@@ -26,20 +26,30 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <!-- Kit Image Gallery -->
                 <div class="space-y-4">
-                    <img src="/img/umrahminikit/men-kit.jpeg" alt="Men's Mini Kit Main" class="w-full h-96 object-cover rounded-lg">
-                    <div class="relative mt-4">
-                        <div class="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide">
-                            <div th:each="product, stat : ${products}" class="relative flex-shrink-0">
-                                <img th:src="${product.imageUrl}" th:alt="${product.name}" class="w-48 h-32 object-cover rounded-lg cursor-pointer gallery-image" th:data-index="${stat.index}">
+                    <img src="/img/umrahminikit/men-kit.jpeg" alt="Men's Mini Kit Main" class="w-full h-auto object-contain rounded-lg">
+                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-900 font-semibold text-lg">Total 7 Essential Items</p>
+                                <p class="text-gray-600 text-sm mt-1">Carefully curated for your Umrah journey</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-bold text-gray-900" th:text="'₹' + ${#numbers.formatDecimal(kitProduct.price, 0, 'COMMA', 0, 'POINT')}">₹0</p>
+                                <p class="text-gray-600 text-sm mt-1">Inclusive of all items</p>
                             </div>
                         </div>
+                    </div>
+                    <div class="text-center">
+                        <button id="viewAllDetails" class="w-full py-3 px-6 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider">
+                            View All Items Details
+                        </button>
                     </div>
                 </div>
 
                 <!-- Kit Details -->
                 <div class="space-y-6">
-                    <h2 class="text-3xl font-bold">Men's Mini Hajj & Umrah Kit</h2>
-                    <p class="text-gray-600">Our compact Men's Mini Hajj & Umrah Kit contains all the essential items you need for your spiritual journey. Perfect for travelers who prefer a lighter, more streamlined package while maintaining all the necessary items for Umrah.</p>
+                    <h2 class="text-3xl font-bold">Eshal's Umrah Mini Kit for Men</h2>
+                    <p class="text-gray-600">Our compact Men's Mini Umrah Kit contains all the essential items you need for your spiritual journey. Perfect for travelers who prefer a lighter, more streamlined package while maintaining all the necessary items for Umrah.</p>
                     
                     <div class="space-y-4">
                         <h3 class="text-xl font-semibold">Kit Contents:</h3>
@@ -49,14 +59,13 @@
                                     <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
-                                    <span th:text="${product.name}"></span>
+                                    <span class="font-medium" th:text="${product.name}"></span>
                                 </li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="pt-6">
-                        <h3 class="text-2xl font-bold text-indigo-600 mb-4" th:text="'₹' + ${#numbers.formatDecimal(kitProduct.price, 0, 'COMMA', 0, 'POINT')}">₹0</h3>
                         <div class="card inline-block" th:data-product-id="${kitProduct.id}" th:data-price="${kitProduct.price}" style="background: transparent; border: none; box-shadow: none;">
                             <div class="flex items-center space-x-4 mb-4">
                                 <button class="quantity-decrease bg-gray-200 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-300 transition duration-300">-</button>
@@ -70,20 +79,190 @@
             </div>
         </div>
 
-        <!-- Add gallery script at the end of the content fragment -->
+        <!-- Item Details Modal -->
+        <div id="itemModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-6 w-[95%] md:w-[85%] lg:w-[75%] xl:w-[65%] mx-4 relative">
+                <!-- Navigation Arrows -->
+                <button id="prevItem" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <button id="nextItem" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+
+                <div class="flex justify-between items-start mb-4">
+                    <h3 id="modalTitle" class="text-2xl font-bold"></h3>
+                    <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex flex-col gap-6">
+                    <div class="w-full">
+                        <img id="modalImage" src="" alt="" class="w-full h-[50vh] md:h-[60vh] object-contain rounded-lg">
+                    </div>
+                    <div class="w-full">
+                        <p id="modalDescription" class="text-gray-600 text-lg"></p>
+                    </div>
+                </div>
+
+                <!-- Thumbnail Navigation -->
+                <div class="mt-6 pt-4 border-t border-gray-200">
+                    <div class="flex overflow-x-auto space-x-2 pb-2 scrollbar-hide">
+                        <div id="thumbnailContainer" class="flex space-x-2">
+                            <!-- Thumbnails will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script th:inline="javascript">
-            console.log('Content fragment loaded');
-            window.addEventListener('load', function() {
-                console.log('Window loaded in content fragment');
-                if (typeof initializeGallery === 'function') {
-                    console.log('Initializing gallery...');
-                    initializeGallery();
-                } else {
-                    console.error('Gallery initialization function not found');
+            document.addEventListener('DOMContentLoaded', function() {
+                const modal = document.getElementById('itemModal');
+                const modalTitle = document.getElementById('modalTitle');
+                const modalImage = document.getElementById('modalImage');
+                const modalDescription = document.getElementById('modalDescription');
+                const closeModal = document.getElementById('closeModal');
+                const prevButton = document.getElementById('prevItem');
+                const nextButton = document.getElementById('nextItem');
+                const thumbnailContainer = document.getElementById('thumbnailContainer');
+                const viewAllDetailsButton = document.getElementById('viewAllDetails');
+
+                // Get products from Thymeleaf
+                const products = /*[[${products}]]*/ [];
+                const itemDetails = {};
+                
+                // Convert products array to itemDetails object while maintaining the sequence
+                products.forEach(product => {
+                    itemDetails[product.id] = {
+                        title: product.name,
+                        image: product.imageUrl,
+                        description: product.description
+                    };
+                });
+
+                // Get array of item IDs for navigation (maintaining the sequence from the controller)
+                const itemIds = products.map(product => product.id);
+                let currentItemIndex = 0;
+
+                // Create thumbnails
+                function createThumbnails() {
+                    thumbnailContainer.innerHTML = '';
+                    itemIds.forEach((itemId, index) => {
+                        const item = itemDetails[itemId];
+                        const thumbnail = document.createElement('div');
+                        thumbnail.className = 'thumbnail-item flex-shrink-0 cursor-pointer relative';
+                        thumbnail.innerHTML = `
+                            <img src="${item.image}" alt="${item.title}" 
+                                class="w-16 h-16 object-cover rounded-lg border-2 border-transparent hover:border-blue-500 transition-colors"
+                                data-index="${index}">
+                        `;
+                        thumbnail.addEventListener('click', () => {
+                            currentItemIndex = index;
+                            showItem(itemId);
+                        });
+                        thumbnailContainer.appendChild(thumbnail);
+                    });
                 }
+
+                function showItem(itemId) {
+                    const item = itemDetails[itemId];
+                    if (item) {
+                        modalTitle.textContent = item.title;
+                        modalImage.src = item.image;
+                        modalImage.alt = item.title;
+                        modalDescription.textContent = item.description;
+                        currentItemIndex = itemIds.indexOf(itemId);
+                        updateNavigationButtons();
+                        updateThumbnailSelection();
+                    }
+                }
+
+                function updateThumbnailSelection() {
+                    const thumbnails = thumbnailContainer.querySelectorAll('.thumbnail-item img');
+                    thumbnails.forEach((thumb, index) => {
+                        if (index === currentItemIndex) {
+                            thumb.classList.add('border-blue-500');
+                            thumb.classList.remove('border-transparent');
+                            // Scroll thumbnail into view
+                            thumb.parentElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'nearest',
+                                inline: 'center'
+                            });
+                        } else {
+                            thumb.classList.remove('border-blue-500');
+                            thumb.classList.add('border-transparent');
+                        }
+                    });
+                }
+
+                function updateNavigationButtons() {
+                    prevButton.style.visibility = currentItemIndex > 0 ? 'visible' : 'hidden';
+                    nextButton.style.visibility = currentItemIndex < itemIds.length - 1 ? 'visible' : 'hidden';
+                }
+
+                function showNextItem() {
+                    if (currentItemIndex < itemIds.length - 1) {
+                        currentItemIndex++;
+                        showItem(itemIds[currentItemIndex]);
+                    }
+                }
+
+                function showPrevItem() {
+                    if (currentItemIndex > 0) {
+                        currentItemIndex--;
+                        showItem(itemIds[currentItemIndex]);
+                    }
+                }
+
+                // Initialize thumbnails
+                createThumbnails();
+
+                // Add click event for the View All Details button
+                viewAllDetailsButton.addEventListener('click', function() {
+                    currentItemIndex = 0;
+                    showItem(itemIds[0]);
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                });
+
+                prevButton.addEventListener('click', showPrevItem);
+                nextButton.addEventListener('click', showNextItem);
+
+                // Add keyboard navigation
+                document.addEventListener('keydown', function(e) {
+                    if (!modal.classList.contains('hidden')) {
+                        if (e.key === 'ArrowLeft') {
+                            showPrevItem();
+                        } else if (e.key === 'ArrowRight') {
+                            showNextItem();
+                        } else if (e.key === 'Escape') {
+                            modal.classList.add('hidden');
+                            modal.classList.remove('flex');
+                        }
+                    }
+                });
+
+                closeModal.addEventListener('click', function() {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                });
+
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                    }
+                });
             });
         </script>
-        <script th:src="@{/js/gallery.js}"></script>
     </div>
 </body>
 </html> 

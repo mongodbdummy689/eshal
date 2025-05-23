@@ -82,12 +82,12 @@ Razorpay, Tillio, Google Maps API
 
 Changes done for pending info:
 Descriptions for kits:
-[2:03 PM, 5/20/2025] +91 99230 67286: Description for kits
-[2:04 PM, 5/20/2025] +91 99230 67286: Men’s Hajj & Umrah Kit
+[2:03 PM, 5/20/2025]  Description for kits
+[2:04 PM, 5/20/2025]  Men’s Hajj & Umrah Kit
 Description:
 Our thoughtfully created Men’s Hajj & Umrah Kit ensures that you are Umrah ready. From Ihram to all essentials Umrah Items, each product is selected to meet the needs of Umrah with ease and comfort in mind.
 What’s Included:(kit items below)
-[2:04 PM, 5/20/2025] +91 99230 67286: Women’s Hajj and Umrah Kit:
+[2:04 PM, 5/20/2025]  Women’s Hajj and Umrah Kit:
 Our Women’s Hajj & Umrah Kit is thoughtfully designed to make your Umrah Journey more comfortable and stress-free. With carefully selected essentials tailored for women, this kit helps you stay organized, modest, and at ease throughout your journey.
 
 Mini Umrah Kit for Men/Women - 
@@ -138,7 +138,7 @@ Suggestions for website
 
 7)	On first page of Individual items – pull the matter up side,  now it is hiding kaaba image
 
-Please note the following fixes as per the suggestions-
+Please note the following fixes as per the suggestions on 21/5/25-
 
 1)	Eshal name should be in the same font of branding everywhere
 	Changes - Since same font style isn't feasible/available, instead used Eshal image wherever possible.
@@ -160,3 +160,66 @@ Please note the following fixes as per the suggestions-
 	Changes - Renamed all occurences of "Bag On Rent" with "Trolley Bag On Rent" throughout the site.
 11)	Trolley Bags on Rent page should have key notes of guidelines which is provided today.
 	Changes - Reduced the number of points from 11 to 6, making it more concise and easier to read. Added section headers for each point. Used more professional language throughout. Organized related information into logical groups.
+
+
+------------------------------------------------------------------------------------------------------------
+
+Suggestions on 22/5/25-
+
+Image of Travel Janamz should be changed
+Janamaz details with quality wise price will be given seperately - Pending
+  
+Please note the following fixes as per the suggestions on 22/5/25-
+
+Fixed all kit pages : Men's Kit, Women's Kit, Men's Mini Kit & Women's Mini Kit with the same changes as demonstrated on 22/5/25 on Men's page for item description to be viewed in modal. Changed the button styling to match the styling of Add to Cart. Added an info section detailing number of items in each kit and price.
+
+items shown in the view all items details, there should be some sequence of items shown i.e. Ehram, Ehram Belt, Travel Janamaz, Universal Adaptor, odourless Soap, Tasbeeh, Tawaf Tasbeeh, Digital Tasbeeh, Ittar, Surma, Prayer Cap, Meswak, Cotton Napkin, Umrah Guide, Umrah Dua Card, Sewing Kit, Chappal Bag, Kit bag (total 17+ items)
+- Fixed sequence of items in both Kit items and View All Items Details as per the stated sequence for Hajj & Umrah Kit for Men.
+
+In Hajj & Umrah Kit for Women - all items should appear in the pic & in sequence of Makhani, Namaz Dupatta, Handglows, Socks, Cap, Travel Janamaz, Universal Adaptor, odourless Soap, Tasbeeh, Tawaf Tasbeeh, Digital Tasbeeh, Surma, Cotton Napkin, Umrah Guide, Umrah Dua Card, Sewing Kit, Chappal Bag, Kit bag (total 17+ items)
+- Fixed sequence of items in both Kit items and View All Items Details as per the stated sequence for Hajj & Umrah Kit for Women.
+
+why travel mat bag ?? it is the part of Travel Janamaz
+-Removed the item Travel Mat bag since it's part of Travel Janamaz.
+
+Min kits for men & women should at 3rd and 4th rank on top
+-Moved Mini Kit for Men to 3rd position and Mini Kit for Women at 4th position in the Products drop down.
+
+Eshal's Umrah Mini Kit for Men - Renamed as stated.
+In Mini Kit for Men - add all items as detailed earlier - Fixed.
+
+In Tohfa e Khulus - add all items as given earlier. Janamaz, Tasbeeh, Namaj Cap, Miswak, Finger counter. Zamzam water bottle ( 60 ml), Khajur ( 4 nos.), surma, Makhani, Namaj Dupatta, Big Rumal - Added.
+Please note: The UI is under development for image display on Tohfa e Khulus page for each item.
+
+Trolly Bag on Rent - 
+6. instead of Registration use Booking - Fixed.
+
+Team Members 
+First - Saleha Farooque Shaikh - Proprietor 
+Second - Junaid Farooque Shaikh- Founder & CEO
+Third - Farooque Mahibub Shaikh - Customer Service Manager
+-Updated
+
+Changes on Individual Items page:
+In individual items - in the title of Hajj & Umrah Guide ( remove as well as card line as this was commonly suggested for both
+- Removed as well as card for Hajj & Umrah Guide and fixed it to Hajj & Umrah Guide and Hajj & Umrah Dua Cards.
+In the Individual category - what is complete kit ???? for men and women
+-Updated Men's Complete Kit and Women’s Complete Kit to match Eshal's Hajj & Umrah Kit for Men and Eshal's Hajj & Umrah Kit for Women respectively.
+Use same wording everywhere e.g. Tasbeeh, some places you have mentioned Prayer Beeds .... like wise you need to keep standard items names
+-Fixed item names and descriptions to be consistent across pages.
+
+Instead of "Individual Package" can we find out some other suitable and attractive title?
+-Please find below some of the options to replace "Individual Package":
+Custom Hajj & Umrah Essentials
+Build Your Hajj & Umrah Kit
+Personalized Hajj & Umrah Items
+Select Your Hajj & Umrah Supplies
+Hajj & Umrah Item Selection
+Choose Your Hajj & Umrah Essentials
+Hajj & Umrah Items Marketplace
+Customize Your Hajj & Umrah Journey
+Hajj & Umrah Supplies Collection
+Select Your Spiritual Journey Items
+
+you said about changing the bag images...at front
+-Added a new professional looking background image on Trolley Bag on Rent page.

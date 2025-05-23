@@ -22,7 +22,41 @@ public class PageController {
     private ProductService productService;
 
     @GetMapping("/mens-kit")
-    public String mensKit() {
+    public String mensKit(Model model) {
+        // First, get the kit product
+        Product kitProduct = productService.getProductById("mens-kit-001");
+        if (kitProduct != null) {
+            model.addAttribute("kitProduct", kitProduct);
+        }
+
+        // Get all products for the men's kit in the specified sequence
+        List<String> productIds = Arrays.asList(
+            "ehram",           // Ehram
+            "ehram-belt",            // Ehram Belt
+            "travel-janamaz",            // Travel Janamaz
+            "universal-adaptor",     // Universal Adaptor
+            "soap",                  // Odourless Soap
+            "tasbeeh",          // Tasbeeh
+            "tawaf-tasbeeh",         // Tawaf Tasbeeh
+            "digital-tasbeeh",       // Digital Tasbeeh
+            "ittar",               // Ittar
+            "surma",                 // Surma
+            "prayer-cap",            // Prayer Cap
+            "miswak",                // Meswak
+            "napkin",                // Cotton Napkin
+            "guide",                 // Umrah Guide
+            "dua-cards",             // Umrah Dua Card
+            "sewing-kit",         // Sewing Kit
+            "shoe-bag",              // Chappal Bag
+            "kit-bag"                // Kit bag
+        );
+        
+        List<Product> products = productIds.stream()
+            .map(id -> productService.getProductById(id))
+            .filter(product -> product != null)
+            .collect(Collectors.toList());
+            
+        model.addAttribute("products", products);
         return "mens-kit";
     }
 
@@ -36,13 +70,13 @@ public class PageController {
 
         // Then get the individual products that make up the kit
         List<String> productIds = Arrays.asList(
-            "ihram-cloth",
-            "ihram-belt",
-            "women2",
-            "soap",
-            "finger-counter2",
-            "shoe-bag",
-            "dua-cards"
+            "ehram",           // Ehram
+            "ehram-belt",      // Ehram Belt
+            "tawaf-tasbeeh",   // Tawaf Tasbeeh
+            "soap",            // Odourless Soap
+            "digital-tasbeeh", // Digital Tasbeeh
+            "shoe-bag",        // Chappal Bag
+            "dua-cards"        // Umrah Dua Card
         );
         
         List<Product> products = productIds.stream()
@@ -55,7 +89,41 @@ public class PageController {
     }
 
     @GetMapping("/womens-kit")
-    public String womensKit() {
+    public String womensKit(Model model) {
+        // First, get the kit product
+        Product kitProduct = productService.getProductById("womens-kit-001");
+        if (kitProduct != null) {
+            model.addAttribute("kitProduct", kitProduct);
+        }
+
+        // Get all products for the women's kit in the specified sequence
+        List<String> productIds = Arrays.asList(
+            "makhani",              // Makhani
+            "namaz-dupatta",        // Namaz Dupatta
+            "hand-gloves",          // Handgloves
+            "socks",                // Socks
+            "prayer-cap",           // Cap
+            "travel-janamaz",       // Travel Janamaz
+            "universal-adaptor",    // Universal Adaptor
+            "soap",                 // Odourless Soap
+            "tasbeeh",             // Tasbeeh
+            "tawaf-tasbeeh",       // Tawaf Tasbeeh
+            "digital-tasbeeh",     // Digital Tasbeeh
+            "surma",               // Surma
+            "napkin",              // Cotton Napkin
+            "guide",               // Umrah Guide
+            "dua-cards",           // Umrah Dua Card
+            "sewing-kit",          // Sewing Kit
+            "shoe-bag",            // Chappal Bag
+            "kit-bag"              // Kit bag
+        );
+        
+        List<Product> products = productIds.stream()
+            .map(id -> productService.getProductById(id))
+            .filter(product -> product != null)
+            .collect(Collectors.toList());
+            
+        model.addAttribute("products", products);
         return "womens-kit";
     }
 
@@ -67,17 +135,18 @@ public class PageController {
             model.addAttribute("kitProduct", kitProduct);
         }
 
-        // Then get the individual products that make up the kit
+        // Then get the individual products that make up the kit in the specified sequence
         List<String> productIds = Arrays.asList(
-            "makhani",
-            "namaz-dupatta",
-            "hand-gloves",
-            "socks",
-            "women2",
-            "soap",
-            "finger-counter2",
-            "shoe-bag",
-            "dua-cards"
+            "makhani",              // 1) Makhani
+            "namaz-dupatta",        // 2) Dupatta
+            "hand-gloves",          // 3) Hand gloves
+            "socks",                // 4) Socks
+            "prayer-cap",           // 5) Cap
+            "tawaf-tasbeeh",        // 6) Tawaf Tasbeeh
+            "soap",                 // 7) Odourless Soap
+            "digital-tasbeeh",      // 8) Digital Tasbeeh
+            "shoe-bag",             // 9) Shoe Bag
+            "dua-cards"             // 10) Umrah Dua Card
         );
         
         List<Product> products = productIds.stream()
@@ -102,33 +171,27 @@ public class PageController {
     @GetMapping("/tohfa-e-khulus")
     public String tohfaEKhulus(Model model) {
         try {
-            // Get all products from Tohfa-E-Khulus category
-            List<Product> categoryProducts = productService.getProductsByCategory("Tohfa-E-Khulus");
+            // Get specific products by IDs in the requested order
+            List<String> specificIds = Arrays.asList(
+                "janamaz-001",      // Janamaz
+                "tasbeeh",          // Tasbeeh
+                "prayer-cap",       // Namaj Cap
+                "miswak",           // Miswak
+                "digital-tasbeeh",  // Digital tasbeeh
+                "zamzam",           // Zamzam water bottle (60 ml)
+                "khajur",           // Khajur (4 nos.)
+                "surma",            // Surma
+                "makhani",          // Makhani
+                "namaz-dupatta",    // Namaj Dupatta
+                "napkin"            // Napkin
+            );
             
-            // Get specific products by IDs that might not be in the category
-            List<String> specificIds = Arrays.asList("prayer-beads", "surma", "perfume", "prayer-cap", "miswak", "janamaz-001");
-            List<Product> specificProducts = specificIds.stream()
+            List<Product> products = specificIds.stream()
                 .map(id -> productService.getProductById(id))
                 .filter(product -> product != null)
                 .collect(Collectors.toList());
             
-            // Combine both lists, removing duplicates
-            List<Product> allProducts = new ArrayList<>();
-            allProducts.addAll(categoryProducts);
-            
-            // Add specific products if they're not already in the list
-            specificProducts.forEach(product -> {
-                if (allProducts.stream().noneMatch(p -> p.getId().equals(product.getId()))) {
-                    allProducts.add(product);
-                }
-            });
-
-            // Log the products for debugging
-            System.out.println("Category Products: " + categoryProducts.size());
-            System.out.println("Specific Products: " + specificProducts.size());
-            System.out.println("Total Products: " + allProducts.size());
-            
-            model.addAttribute("products", allProducts);
+            model.addAttribute("products", products);
         } catch (Exception e) {
             System.err.println("Error fetching products: " + e.getMessage());
             e.printStackTrace();
