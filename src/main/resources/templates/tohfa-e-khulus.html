@@ -21,322 +21,718 @@
 
         <!-- Kit Contents -->
         <div class="max-w-7xl mx-auto px-4 py-16">
-            <div class="grid grid-cols-1 gap-12">
-                <!-- Kit Details -->
-                <div class="space-y-6">
-                    <h2 class="text-3xl font-bold text-center mb-8">Customize Your Spiritual Journey</h2>
-                    <p class="text-gray-600 text-center mb-8">Select items that resonate with your spiritual needs</p>
-                    
-                    <div class="modern-item-list">
-                        <div class="hover-image-container">
-                            <img class="hover-image" src="/img/tohfaekhulus/content.jpeg" alt="Tohfa-e-Khulus Content">
+            <div class="space-y-6">
+                <h2 class="text-3xl font-bold text-center mb-8">Customize Your Spiritual Journey</h2>
+                <p class="text-gray-600 text-center mb-8">Select items that resonate with your spiritual needs</p>
+                
+                <!-- Product Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Product Cards -->
+                    <div th:each="product : ${products}" class="card bg-white overflow-hidden" th:data-product-id="${product.id}" th:data-price="${product.price}">
+                        <div class="relative h-48">
+                            <img th:src="${product.imageUrl}" th:alt="${product.name}" class="w-full h-full object-cover">
                         </div>
-
-                        <table class="modern-item-table">
-                            <tbody>
-                                <tr th:if="${products != null and !products.empty}" th:each="product : ${products}" 
-                                    th:data-price="${product.price}" 
-                                    th:data-id="${product.id}" 
-                                    th:data-image="${product.imageUrl}">
-                                    <td class="modern-item-cell">
-                                        <div class="modern-item-content">
-                                            <h3 class="modern-item-title" th:text="${product.name}">Product Name</h3>
-                                            <p class="modern-item-description" th:text="${product.description}">Product Description</p>
-                                        </div>
-                                        <div class="modern-price-cell">
-                                            <span class="modern-price-tag" th:text="'₹' + ${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}">₹0</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr th:if="${products == null or products.empty}">
-                                    <td class="modern-item-cell">
-                                        <div class="modern-item-content">
-                                            <h3 class="modern-item-title">No products available</h3>
-                                            <p class="modern-item-description">Please check back later for updates.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="mt-12 text-center">
-                        <div class="card inline-block" style="background: transparent; border: none; box-shadow: none;">
-                            <div class="flex items-center space-x-4 mb-4">
-                                <button class="quantity-decrease bg-gray-200 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-300 transition duration-300">-</button>
-                                <span class="quantity-value text-xl font-semibold">1</span>
-                                <button class="quantity-increase bg-gray-200 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-300 transition duration-300">+</button>
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold mb-2 text-primary" th:text="${product.name}" th:data-description="${product.description}">Product Name</h3>
+                            <p class="text-text-secondary mb-2" th:text="'₹' + ${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}">₹0</p>
+                            <div class="flex items-center space-x-2 mb-4">
+                                <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                                <span class="quantity-value text-lg font-semibold text-primary">1</span>
+                                <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
                             </div>
-                            <button class="add-to-cart w-full py-3 px-6 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider" id="addToCartBtn" disabled>
-                                Add to Cart - <span id="cartPrice">₹0</span>
-                            </button>
+                            <div class="flex space-x-2">
+                                <button class="select-item flex-1 py-2 px-4 bg-gray-100 text-primary font-semibold rounded-lg transition duration-300 hover:bg-gray-200 uppercase tracking-wider">Select</button>
+                                <button class="view-details py-2 px-4 bg-gray-100 text-primary font-semibold rounded-lg transition duration-300 hover:bg-gray-200 uppercase tracking-wider">View</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Common Add to Cart Button -->
+                <div class="fixed bottom-0 left-0 right-0 bg-white shadow-lg p-4 z-50">
+                    <div class="max-w-7xl mx-auto">
+                        <!-- Mobile View -->
+                        <div class="md:hidden space-y-4">
+                            <div class="flex flex-col space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-base font-semibold">Selected Items: <span id="selectedCount">0</span></span>
+                                    <span class="text-base font-semibold">Total: <span id="totalPrice">₹0</span></span>
+                                </div>
+                                <div class="flex flex-col space-y-2">
+                                    <button id="viewSummary" class="w-full py-3 px-4 bg-gray-100 text-primary font-semibold rounded-lg transition duration-300 hover:bg-gray-200 uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                        View Summary
+                                    </button>
+                                    <button id="addAllToCart" class="w-full py-3 px-4 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                        Add Selected to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Desktop View -->
+                        <div class="hidden md:flex items-center justify-between">
+                            <div class="flex items-center space-x-6">
+                                <span class="text-lg font-semibold">Selected Items: <span id="selectedCountDesktop">0</span></span>
+                                <span class="text-lg font-semibold">Total: <span id="totalPriceDesktop">₹0</span></span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <button id="viewSummaryDesktop" class="py-3 px-8 bg-gray-100 text-primary font-semibold rounded-lg transition duration-300 hover:bg-gray-200 uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                    View Summary
+                                </button>
+                                <button id="addAllToCartDesktop" class="py-3 px-8 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                    Add Selected to Cart
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Summary Modal -->
+        <div id="summaryModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-6 w-[95%] md:w-[85%] lg:w-[75%] xl:w-[65%] mx-4 relative max-h-[90vh] flex flex-col">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-primary">Selected Items Summary</h2>
+                    <button class="text-gray-500 hover:text-gray-700" onclick="closeSummaryModal()">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div id="summaryItems" class="flex-1 overflow-y-auto pr-2 space-y-4 min-h-0">
+                    <!-- Summary items will be dynamically added here -->
+                </div>
+                <div class="mt-6 pt-6 border-t border-gray-200 bg-white">
+                    <div class="flex flex-col space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div class="text-lg font-semibold">
+                                Total Items: <span id="summaryItemCount">0</span>
+                            </div>
+                            <div class="text-lg font-semibold">
+                                Total Amount: <span id="summaryTotalPrice">₹0</span>
+                            </div>
+                        </div>
+                        <button id="addToCartFromSummary" class="w-full py-3 px-6 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            Add Selected to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item Details Modal -->
+        <div id="itemModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 overflow-y-auto">
+            <div class="bg-white rounded-lg p-6 w-[95%] md:w-[85%] lg:w-[75%] xl:w-[65%] mx-4 my-8 relative max-h-[90vh] flex flex-col">
+                <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 z-10" onclick="closeModal()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+                <div class="flex flex-col space-y-6 overflow-y-auto pr-2">
+                    <!-- Title -->
+                    <div class="text-center sticky top-0 bg-white pt-2 pb-4">
+                        <h3 id="modalTitle" class="text-2xl font-bold text-primary"></h3>
+                    </div>
+                    
+                    <!-- Image -->
+                    <div class="relative w-full max-w-2xl mx-auto">
+                        <button id="prevItem" class="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-primary p-2 rounded-full shadow-lg transition-all duration-300 -translate-x-1/2 z-10">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <img id="modalImage" src="" alt="Product Image" class="w-full h-auto rounded-lg shadow-lg object-contain max-h-[50vh]">
+                        <button id="nextItem" class="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-primary p-2 rounded-full shadow-lg transition-all duration-300 translate-x-1/2 z-10">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="text-center max-w-2xl mx-auto">
+                        <p id="modalDescription" class="text-gray-600 text-lg"></p>
+                    </div>
+                    
+                    <!-- Quantity Controls, Price and Select Button -->
+                    <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-6 sticky bottom-0 bg-white pt-4 pb-2">
+                        <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
+                            <p id="modalPrice" class="text-xl font-semibold text-primary"></p>
+                            <div class="flex items-center space-x-4">
+                                <button class="quantity-decrease bg-gray-100 text-primary px-3 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                                <span class="quantity-value text-xl font-semibold text-primary">1</span>
+                                <button class="quantity-increase bg-gray-100 text-primary px-3 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                            </div>
+                        </div>
+                        <button class="select-item w-full md:w-auto min-w-[200px] py-3 px-6 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider">Select Item</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <style>
-            .add-to-cart {
-                position: relative;
-                z-index: 10;
-                cursor: pointer;
-                pointer-events: auto;
-            }
-            .bg-white.rounded-lg {
-                position: relative;
-                z-index: 1;
-            }
-            .modern-item-table {
-                width: 100%;
-                max-width: 900px;
-                margin: 0 auto;
-                border-collapse: separate;
-                border-spacing: 0 8px;
-                background: transparent;
-            }
-            .modern-item-table tbody {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-            }
-            .modern-item-table tr {
-                background: white;
+            .card {
                 transition: all 0.3s ease;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-                border-radius: 12px;
-                margin-bottom: 0;
-                cursor: pointer;
-                position: relative;
-                display: flex;
-                flex-direction: column;
+                border: none;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             }
-            .modern-item-table tr:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
             }
-            .modern-item-table tr.selected {
-                background-color: #f0fdf4;
-                border: 2px solid #1a4d2e;
+            .card.selected {
+                border: 2px solid #FFD700;
             }
-            .modern-item-table td {
-                padding: 1.25rem;
-                vertical-align: middle;
+            .select-item.selected {
+                background-color: #FFD700;
+                color: black;
             }
-            .modern-item-cell {
-                padding: 1.25rem 1rem 1.25rem 3rem;
-                position: relative;
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
+            /* Custom scrollbar for summary items */
+            #summaryItems::-webkit-scrollbar {
+                width: 6px;
             }
-            .modern-item-content {
-                flex: 1;
+            #summaryItems::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 3px;
             }
-            .modern-item-cell::after {
-                content: '';
-                position: absolute;
-                left: 1rem;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 24px;
-                height: 24px;
-                border: 2px solid #e2e8f0;
-                border-radius: 6px;
-                transition: all 0.2s ease;
+            #summaryItems::-webkit-scrollbar-thumb {
+                background: #888;
+                border-radius: 3px;
             }
-            .modern-item-table tr.selected .modern-item-cell::after {
-                content: '✓';
-                background-color: #1a4d2e;
-                border-color: #1a4d2e;
-                color: white;
-                font-size: 1rem;
-                font-weight: bold;
-                text-align: center;
-                line-height: 24px;
-            }
-            .modern-item-title {
-                font-size: 1.1rem;
-                font-weight: 600;
-                color: #1a4d2e;
-                margin-bottom: 0.5rem;
-                letter-spacing: -0.01em;
-                padding-left: 2rem;
-            }
-            .modern-item-description {
-                color: #64748b;
-                font-size: 0.9rem;
-                line-height: 1.5;
-                margin: 0;
-                padding-left: 2rem;
-            }
-            .modern-price-cell {
-                padding: 0;
-                text-align: right;
-                font-weight: 600;
-                color: #1a4d2e;
-                margin-left: 1rem;
-            }
-            .modern-price-tag {
-                font-size: 1.1rem;
-                font-weight: 600;
-                color: #1a4d2e;
-                padding: 0.5rem 1rem;
-                background: #f8fafc;
-                border-radius: 8px;
-                display: inline-block;
-            }
-            .modern-item-list {
-                padding: 1rem;
-                background: transparent;
-                position: relative;
-                display: flex;
-                gap: 2rem;
-                align-items: flex-start;
-            }
-            .hover-image-container {
-                width: 500px;
-                height: 500px;
-                border-radius: 12px;
-                overflow: hidden;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                flex-shrink: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            .hover-image {
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-                background-color: #f8fafc;
-                opacity: 1;
-            }
-            .hover-image-container:hover .hover-image {
-                transform: scale(1.02);
-                transition-delay: 0.3s;
-            }
-            @media (max-width: 1024px) {
-                .modern-item-list {
-                    flex-direction: column;
-                }
-                .hover-image-container {
-                    width: 100%;
-                    max-width: 600px;
-                    height: 500px;
-                    margin: 0 auto 2rem;
-                }
-                .modern-item-table tbody {
-                    grid-template-columns: 1fr;
-                }
-            }
-            @media (max-width: 640px) {
-                .modern-item-table {
-                    border-spacing: 0 12px;
-                }
-                .modern-item-title {
-                    font-size: 1rem;
-                }
-                .modern-item-description {
-                    font-size: 0.85rem;
-                }
-                .modern-price-tag {
-                    font-size: 1rem;
-                    padding: 0.4rem 0.8rem;
-                }
+            #summaryItems::-webkit-scrollbar-thumb:hover {
+                background: #555;
             }
         </style>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                const rows = document.querySelectorAll('.modern-item-table tr');
-                const cartPriceElement = document.getElementById('cartPrice');
-                const addToCartBtn = document.getElementById('addToCartBtn');
-                const quantityValue = document.querySelector('.quantity-value');
-                const decreaseBtn = document.querySelector('.quantity-decrease');
-                const increaseBtn = document.querySelector('.quantity-increase');
-                const hoverImage = document.querySelector('.hover-image');
-                let quantity = 1;
+                const cards = document.querySelectorAll('.card[data-product-id]');
+                const modal = document.getElementById('itemModal');
+                const summaryModal = document.getElementById('summaryModal');
+                const modalImage = document.getElementById('modalImage');
+                const modalTitle = document.getElementById('modalTitle');
+                const modalDescription = document.getElementById('modalDescription');
+                const modalPrice = document.getElementById('modalPrice');
+                const prevItemBtn = document.getElementById('prevItem');
+                const nextItemBtn = document.getElementById('nextItem');
+                const addAllToCartBtn = document.getElementById('addAllToCart');
+                const addAllToCartBtnDesktop = document.getElementById('addAllToCartDesktop');
+                const viewSummaryBtn = document.getElementById('viewSummary');
+                const viewSummaryBtnDesktop = document.getElementById('viewSummaryDesktop');
+                const selectedCountSpan = document.getElementById('selectedCount');
+                const selectedCountSpanDesktop = document.getElementById('selectedCountDesktop');
+                const totalPriceSpan = document.getElementById('totalPrice');
+                const totalPriceSpanDesktop = document.getElementById('totalPriceDesktop');
+                const summaryItemsContainer = document.getElementById('summaryItems');
+                const summaryItemCountSpan = document.getElementById('summaryItemCount');
+                const summaryTotalPriceSpan = document.getElementById('summaryTotalPrice');
 
-                // Hover functionality
-                rows.forEach(row => {
-                    if (row.dataset.image) {
-                        row.addEventListener('mouseenter', () => {
-                            const imageUrl = row.dataset.image;
-                            if (imageUrl) {
-                                hoverImage.src = imageUrl;
-                            }
-                        });
+                let selectedItems = new Map(); // Map to store selected items and their quantities
+                let totalSelectedCount = 0;    // Track total number of selected items
+                let totalPrice = 0;            // Track total price
+                let currentItemIndex = -1;     // Track current item in modal
+                let cardQuantities = new Map(); // Map to store quantities for each card
 
-                        row.addEventListener('mouseleave', () => {
-                            hoverImage.src = '/img/tohfaekhulus/content.jpeg';
-                        });
+                function updateSelectedCount() {
+                    // Ensure totalPrice is never negative
+                    totalPrice = Math.max(0, totalPrice);
+                    totalSelectedCount = Math.max(0, totalSelectedCount);
 
-                        // Click functionality
-                        row.addEventListener('click', () => {
-                            row.classList.toggle('selected');
-                            updateTotal();
-                        });
+                    // Update mobile view
+                    selectedCountSpan.textContent = totalSelectedCount;
+                    totalPriceSpan.textContent = `₹${totalPrice.toLocaleString()}`;
+                    addAllToCartBtn.disabled = totalSelectedCount === 0;
+                    viewSummaryBtn.disabled = totalSelectedCount === 0;
+
+                    // Update desktop view
+                    selectedCountSpanDesktop.textContent = totalSelectedCount;
+                    totalPriceSpanDesktop.textContent = `₹${totalPrice.toLocaleString()}`;
+                    addAllToCartBtnDesktop.disabled = totalSelectedCount === 0;
+                    viewSummaryBtnDesktop.disabled = totalSelectedCount === 0;
+
+                    // Update summary modal button
+                    if (addToCartFromSummaryBtn) {
+                        addToCartFromSummaryBtn.disabled = totalSelectedCount === 0;
                     }
-                });
+                }
 
-                function updateTotal() {
-                    let total = 0;
-                    rows.forEach(row => {
-                        if (row.classList.contains('selected') && row.dataset.price) {
-                            total += parseInt(row.dataset.price);
+                function updateModalSelectionState(card) {
+                    const modalSelectBtn = modal.querySelector('.select-item');
+                    if (modalSelectBtn) {
+                        const selectBtn = card.querySelector('.select-item');
+                        if (selectBtn.classList.contains('selected')) {
+                            modalSelectBtn.classList.add('selected');
+                            modalSelectBtn.textContent = 'Remove Selection';
+                        } else {
+                            modalSelectBtn.classList.remove('selected');
+                            modalSelectBtn.textContent = 'Select Item';
+                        }
+                    }
+                }
+
+                function updateCardSelectionState(card) {
+                    const selectBtn = card.querySelector('.select-item');
+                    const productId = card.dataset.productId;
+                    if (selectedItems.has(productId)) {
+                        card.classList.add('selected');
+                        selectBtn.classList.add('selected');
+                        selectBtn.textContent = 'Selected';
+                    } else {
+                        card.classList.remove('selected');
+                        selectBtn.classList.remove('selected');
+                        selectBtn.textContent = 'Select';
+                    }
+                }
+
+                function toggleItemSelection(card, quantity) {
+                    const price = card.dataset.price;
+                    const productId = card.dataset.productId;
+                    const selectBtn = card.querySelector('.select-item');
+                    const itemPrice = parseFloat(price);
+                    
+                    if (selectBtn.classList.contains('selected')) {
+                        // DESELECTION LOGIC
+                        const currentQuantity = selectedItems.get(productId) || 0;
+                        selectedItems.delete(productId);
+                        card.classList.remove('selected');
+                        selectBtn.classList.remove('selected');
+                        selectBtn.textContent = 'Select';
+                        
+                        // Update totals
+                        totalSelectedCount -= currentQuantity;
+                        totalPrice -= (itemPrice * currentQuantity);
+                    } else {
+                        // SELECTION LOGIC
+                        selectedItems.set(productId, quantity);
+                        card.classList.add('selected');
+                        selectBtn.classList.add('selected');
+                        selectBtn.textContent = 'Selected';
+                        
+                        // Update totals
+                        totalSelectedCount += quantity;
+                        totalPrice += (itemPrice * quantity);
+                    }
+                    
+                    // Update both card and modal selection states
+                    updateCardSelectionState(card);
+                    if (currentItemIndex !== -1) {
+                        updateModalSelectionState(card);
+                    }
+                    
+                    updateSelectedCount();
+                }
+
+                function updateQuantity(card, newQuantity) {
+                    const productId = card.dataset.productId;
+                    const selectBtn = card.querySelector('.select-item');
+                    const itemPrice = parseFloat(card.dataset.price);
+                    
+                    // Update card quantity display
+                    const cardQuantitySpan = card.querySelector('.quantity-value');
+                    if (cardQuantitySpan) {
+                        cardQuantitySpan.textContent = newQuantity;
+                    }
+                    
+                    if (selectBtn.classList.contains('selected')) {
+                        const oldQuantity = selectedItems.get(productId) || 0;
+                        const quantityDiff = newQuantity - oldQuantity;
+
+                        // Update selected items map
+                        selectedItems.set(productId, newQuantity);
+                        
+                        // Update totals
+                        totalSelectedCount += quantityDiff;
+                        totalPrice += (itemPrice * quantityDiff);
+                        
+                        updateSelectedCount();
+                    }
+                }
+
+                function updateModalContent(card) {
+                    const productName = card.querySelector('h3').textContent;
+                    const productPrice = card.querySelector('p').textContent;
+                    const productImage = card.querySelector('img').src;
+                    const productDescription = card.querySelector('h3').getAttribute('data-description');
+                    const productId = card.dataset.productId;
+                    
+                    modalImage.src = productImage;
+                    modalTitle.textContent = productName;
+                    modalPrice.textContent = productPrice;
+                    modalDescription.textContent = productDescription;
+                    
+                    // Update modal quantity and selection state
+                    const modalQuantitySpan = modal.querySelector('.quantity-value');
+                    if (modalQuantitySpan) {
+                        const quantity = cardQuantities.get(productId) || 1;
+                        modalQuantitySpan.textContent = quantity;
+                    }
+                    
+                    updateModalSelectionState(card);
+                }
+
+                function updateSummaryModal() {
+                    summaryItemsContainer.innerHTML = '';
+                    let itemCount = 0;
+
+                    selectedItems.forEach((quantity, productId) => {
+                        const card = document.querySelector(`.card[data-product-id="${productId}"]`);
+                        if (card) {
+                            const price = card.dataset.price;
+                            const itemTotal = quantity * parseFloat(price);
+                            itemCount += quantity;
+
+                            const summaryItem = document.createElement('div');
+                            summaryItem.className = 'flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200';
+                            summaryItem.innerHTML = `
+                                <div class="flex items-center space-x-4 flex-1 min-w-0">
+                                    <img src="${card.querySelector('img').src}" alt="${card.querySelector('h3').textContent}" class="w-16 h-16 object-cover rounded flex-shrink-0">
+                                    <div class="min-w-0">
+                                        <h4 class="font-semibold text-primary truncate">${card.querySelector('h3').textContent}</h4>
+                                        <p class="text-text-secondary">₹${parseFloat(price).toLocaleString()}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4 ml-4 flex-shrink-0">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="summary-quantity-decrease" data-product-id="${productId}">-</button>
+                                        <span class="summary-quantity-value text-lg font-semibold text-primary">${quantity}</span>
+                                        <button class="summary-quantity-increase" data-product-id="${productId}">+</button>
+                                    </div>
+                                    <button class="remove-item" data-product-id="${productId}">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            `;
+                            summaryItemsContainer.appendChild(summaryItem);
                         }
                     });
 
-                    cartPriceElement.textContent = `₹${total.toLocaleString()}`;
-                    addToCartBtn.disabled = total === 0;
+                    summaryItemCountSpan.textContent = totalSelectedCount;
+                    summaryTotalPriceSpan.textContent = `₹${totalPrice.toLocaleString()}`;
+
+                    // Add event listeners for summary modal controls
+                    document.querySelectorAll('.summary-quantity-decrease').forEach(btn => {
+                        btn.addEventListener('click', (event) => {
+                            const productId = event.target.dataset.productId;
+                            const card = document.querySelector(`.card[data-product-id="${productId}"]`);
+                            if (card) {
+                                const currentQuantity = cardQuantities.get(productId) || 1;
+                                if (currentQuantity > 1) {
+                                    const newQuantity = currentQuantity - 1;
+                                    cardQuantities.set(productId, newQuantity);
+                                    updateQuantity(card, newQuantity);
+                                    updateSummaryModal(); // Refresh the summary modal
+                                    if (currentItemIndex !== -1) {
+                                        updateModalContent(cards[currentItemIndex]);
+                                    }
+                                }
+                            }
+                        });
+                    });
+
+                    document.querySelectorAll('.summary-quantity-increase').forEach(btn => {
+                        btn.addEventListener('click', (event) => {
+                            const productId = event.target.dataset.productId;
+                            const card = document.querySelector(`.card[data-product-id="${productId}"]`);
+                            if (card) {
+                                const currentQuantity = cardQuantities.get(productId) || 1;
+                                const newQuantity = currentQuantity + 1;
+                                cardQuantities.set(productId, newQuantity);
+                                updateQuantity(card, newQuantity);
+                                updateSummaryModal(); // Refresh the summary modal
+                                if (currentItemIndex !== -1) {
+                                    updateModalContent(cards[currentItemIndex]);
+                                }
+                            }
+                        });
+                    });
+
+                    document.querySelectorAll('.remove-item').forEach(btn => {
+                        btn.addEventListener('click', (event) => {
+                            const productId = event.target.closest('.remove-item').dataset.productId;
+                            const card = document.querySelector(`.card[data-product-id="${productId}"]`);
+                            if (card) {
+                                const selectBtn = card.querySelector('.select-item');
+                                if (selectBtn) {
+                                    // Get the quantity and price before removing
+                                    const quantity = selectedItems.get(productId) || 0;
+                                    const price = parseFloat(card.dataset.price);
+                                    
+                                    // Update totals
+                                    totalSelectedCount -= quantity;
+                                    totalPrice -= (price * quantity);
+                                    
+                                    // Remove from selectedItems
+                                    selectedItems.delete(productId);
+                                    
+                                    // Update UI
+                                    updateCardSelectionState(card);
+                                    if (currentItemIndex !== -1) {
+                                        updateModalContent(cards[currentItemIndex]);
+                                    }
+                                    
+                                    // Update counts and prices
+                                    updateSelectedCount();
+                                    
+                                    // Update the summary modal
+                                    updateSummaryModal();
+                                    
+                                    // If no items left, close the modal
+                                    if (selectedItems.size === 0) {
+                                        closeSummaryModal();
+                                    }
+                                }
+                            }
+                        });
+                    });
                 }
 
-                decreaseBtn.addEventListener('click', () => {
-                    if (quantity > 1) {
-                        quantity--;
-                        quantityValue.textContent = quantity;
+                // View Summary functionality
+                function showSummary() {
+                    updateSummaryModal();
+                    summaryModal.classList.remove('hidden');
+                    summaryModal.classList.add('flex');
+                }
+
+                viewSummaryBtn.addEventListener('click', showSummary);
+                viewSummaryBtnDesktop.addEventListener('click', showSummary);
+
+                // Close summary modal function
+                window.closeSummaryModal = function() {
+                    summaryModal.classList.add('hidden');
+                    summaryModal.classList.remove('flex');
+                };
+
+                // Close summary modal when clicking outside
+                summaryModal.addEventListener('click', (event) => {
+                    if (event.target === summaryModal) {
+                        closeSummaryModal();
                     }
                 });
 
-                increaseBtn.addEventListener('click', () => {
-                    quantity++;
-                    quantityValue.textContent = quantity;
-                });
-
-                addToCartBtn.addEventListener('click', async function() {
-                    const selectedItems = Array.from(rows)
-                        .filter(row => row.classList.contains('selected') && row.dataset.id)
-                        .map(row => ({
-                            id: row.dataset.id,
-                            name: row.querySelector('.modern-item-title')?.textContent || '',
-                            price: row.dataset.price
-                        }));
-
-                    if (selectedItems.length === 0) {
-                        alert('Please select at least one item');
-                        return;
+                function navigateToItem(direction) {
+                    if (currentItemIndex === -1) return;
+                    
+                    let newIndex = currentItemIndex + direction;
+                    
+                    // Handle circular navigation
+                    if (newIndex >= cards.length) {
+                        newIndex = 0; // Loop to first item
+                    } else if (newIndex < 0) {
+                        newIndex = cards.length - 1; // Loop to last item
                     }
+                    
+                    currentItemIndex = newIndex;
+                    const card = cards[currentItemIndex];
+                    updateModalContent(card);
+                }
 
-                    try {
-                        for (const item of selectedItems) {
-                            await addToCart(item.id, quantity, parseFloat(item.price));
+                // Add event listeners for navigation buttons
+                prevItemBtn.addEventListener('click', () => navigateToItem(-1));
+                nextItemBtn.addEventListener('click', () => navigateToItem(1));
+
+                // Add keyboard navigation
+                document.addEventListener('keydown', (event) => {
+                    if (!modal.classList.contains('hidden')) {
+                        if (event.key === 'ArrowLeft') {
+                            navigateToItem(-1);
+                        } else if (event.key === 'ArrowRight') {
+                            navigateToItem(1);
                         }
+                    }
+                });
 
-                        alert('Items added to cart successfully!');
+                // Initialize all cards
+                cards.forEach(card => {
+                    const decreaseBtn = card.querySelector('.quantity-decrease');
+                    const increaseBtn = card.querySelector('.quantity-increase');
+                    const quantitySpan = card.querySelector('.quantity-value');
+                    const selectBtn = card.querySelector('.select-item');
+                    const viewDetailsBtn = card.querySelector('.view-details');
+                    const productId = card.dataset.productId;
+                    
+                    // Initialize quantity for this card
+                    cardQuantities.set(productId, 1);
+                    if (quantitySpan) {
+                        quantitySpan.textContent = '1';
+                    }
 
-                        rows.forEach(row => row.classList.remove('selected'));
-                        quantity = 1;
-                        quantityValue.textContent = quantity;
-                        updateTotal();
+                    // Quantity controls
+                    if (decreaseBtn) {
+                        decreaseBtn.addEventListener('click', (event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            const currentQuantity = cardQuantities.get(productId) || 1;
+                            if (currentQuantity > 1) {
+                                const newQuantity = currentQuantity - 1;
+                                cardQuantities.set(productId, newQuantity);
+                                quantitySpan.textContent = newQuantity;
+                                updateQuantity(card, newQuantity);
+                            }
+                        });
+                    }
 
+                    if (increaseBtn) {
+                        increaseBtn.addEventListener('click', (event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            const currentQuantity = cardQuantities.get(productId) || 1;
+                            const newQuantity = currentQuantity + 1;
+                            cardQuantities.set(productId, newQuantity);
+                            quantitySpan.textContent = newQuantity;
+                            updateQuantity(card, newQuantity);
+                        });
+                    }
+
+                    // Select functionality
+                    if (selectBtn) {
+                        selectBtn.addEventListener('click', (event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            const quantity = cardQuantities.get(productId) || 1;
+                            toggleItemSelection(card, quantity);
+                        });
+                    }
+
+                    // View details functionality
+                    if (viewDetailsBtn) {
+                        viewDetailsBtn.addEventListener('click', (event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            
+                            currentItemIndex = Array.from(cards).indexOf(card);
+                            updateModalContent(card);
+                            
+                            modal.classList.remove('hidden');
+                            modal.classList.add('flex');
+                        });
+                    }
+                });
+
+                // Add event listeners for modal controls
+                const modalSelectBtn = modal.querySelector('.select-item');
+                const modalQuantityDecrease = modal.querySelector('.quantity-decrease');
+                const modalQuantityIncrease = modal.querySelector('.quantity-increase');
+                const modalQuantitySpan = modal.querySelector('.quantity-value');
+
+                if (modalQuantityDecrease && modalQuantityIncrease && modalQuantitySpan) {
+                    modalQuantityDecrease.addEventListener('click', () => {
+                        const card = cards[currentItemIndex];
+                        if (card) {
+                            const productId = card.dataset.productId;
+                            const currentQuantity = cardQuantities.get(productId) || 1;
+                            if (currentQuantity > 1) {
+                                const newQuantity = currentQuantity - 1;
+                                cardQuantities.set(productId, newQuantity);
+                                modalQuantitySpan.textContent = newQuantity;
+                                updateQuantity(card, newQuantity);
+                            }
+                        }
+                    });
+
+                    modalQuantityIncrease.addEventListener('click', () => {
+                        const card = cards[currentItemIndex];
+                        if (card) {
+                            const productId = card.dataset.productId;
+                            const currentQuantity = cardQuantities.get(productId) || 1;
+                            const newQuantity = currentQuantity + 1;
+                            cardQuantities.set(productId, newQuantity);
+                            modalQuantitySpan.textContent = newQuantity;
+                            updateQuantity(card, newQuantity);
+                        }
+                    });
+                }
+
+                if (modalSelectBtn) {
+                    modalSelectBtn.addEventListener('click', () => {
+                        const card = cards[currentItemIndex];
+                        if (card) {
+                            const quantity = cardQuantities.get(card.dataset.productId) || 1;
+                            toggleItemSelection(card, quantity);
+                            // Update the button text and state
+                            updateModalSelectionState(card);
+                        }
+                    });
+                }
+
+                // Add all selected items to cart
+                async function addAllToCart() {
+                    try {
+                        for (const [productId, quantity] of selectedItems) {
+                            const card = document.querySelector(`.card[data-product-id="${productId}"]`);
+                            if (card) {
+                                await addToCart(productId, quantity, parseFloat(card.dataset.price));
+                            }
+                        }
+                        alert('Selected items added to cart successfully!');
+                        
+                        // Reset all states
+                        selectedItems.clear();
+                        cardQuantities.clear();
+                        totalSelectedCount = 0;
+                        totalPrice = 0;
+                        
+                        // Reset all cards
+                        cards.forEach(card => {
+                            // Reset selection state
+                            card.classList.remove('selected');
+                            const selectBtn = card.querySelector('.select-item');
+                            if (selectBtn) {
+                                selectBtn.classList.remove('selected');
+                                selectBtn.textContent = 'Select';
+                            }
+                            
+                            // Reset quantity
+                            const quantitySpan = card.querySelector('.quantity-value');
+                            if (quantitySpan) {
+                                quantitySpan.textContent = '1';
+                            }
+                            
+                            // Initialize quantity in cardQuantities
+                            cardQuantities.set(card.dataset.productId, 1);
+                        });
+                        
+                        // Update UI
+                        updateSelectedCount();
+                        
+                        // Close summary modal
+                        closeSummaryModal();
+                        
+                        // Reset modal if it's open
+                        if (currentItemIndex !== -1) {
+                            const currentCard = cards[currentItemIndex];
+                            if (currentCard) {
+                                updateModalContent(currentCard);
+                            }
+                        }
                     } catch (error) {
                         console.error('Error adding items to cart:', error);
                         alert('Failed to add items to cart. Please try again.');
                     }
+                }
+
+                addAllToCartBtn.addEventListener('click', addAllToCart);
+                addAllToCartBtnDesktop.addEventListener('click', addAllToCart);
+
+                // Close modal function
+                window.closeModal = function() {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                };
+
+                // Close modal when clicking outside
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        closeModal();
+                    }
                 });
+
+                // Add event listener for the summary modal's Add to Cart button
+                const addToCartFromSummaryBtn = document.getElementById('addToCartFromSummary');
+                if (addToCartFromSummaryBtn) {
+                    addToCartFromSummaryBtn.addEventListener('click', addAllToCart);
+                }
             });
         </script>
     </div>

@@ -166,9 +166,9 @@ Please note the following fixes as per the suggestions on 21/5/25-
 
 Suggestions on 22/5/25-
 
-Image of Travel Janamz should be changed
+
 Janamaz details with quality wise price will be given seperately - Pending
-  
+
 Please note the following fixes as per the suggestions on 22/5/25-
 
 Fixed all kit pages : Men's Kit, Women's Kit, Men's Mini Kit & Women's Mini Kit with the same changes as demonstrated on 22/5/25 on Men's page for item description to be viewed in modal. Changed the button styling to match the styling of Add to Cart. Added an info section detailing number of items in each kit and price.
@@ -198,7 +198,7 @@ Team Members
 First - Saleha Farooque Shaikh - Proprietor 
 Second - Junaid Farooque Shaikh- Founder & CEO
 Third - Farooque Mahibub Shaikh - Customer Service Manager
--Updated
+-Updated About Us with Team Member names and title.
 
 Changes on Individual Items page:
 In individual items - in the title of Hajj & Umrah Guide ( remove as well as card line as this was commonly suggested for both
@@ -223,3 +223,32 @@ Select Your Spiritual Journey Items
 
 you said about changing the bag images...at front
 -Added a new professional looking background image on Trolley Bag on Rent page.
+
+Cover all the items in individual category...
+-As discussed earlier, all items are displayed on Individual Items page except for Janamaz since it was suggested to be displayed only on Janamaz page and Tohfa-E-Khulus page. Should I add Janamaz category back on Individual page? If yes, do you want to display all Janamaz or any specific types?
+
+Image of Travel Janamz should be changed
+-Fixed images that were being cropped. In case, the Travel Janamaz image still should be changed on Men's Kit and Women’s Kit, please let me know which image.
+
+Suggestion from 21/5/25
+3)	Kit’s pic should be there instead of scattered items…it is not giving feel of kit
+- Updated Men's and Women’s Kit images to give a feel of a full kit instead of scattered items.
+
+Git commands -
+git status
+git add .
+git commit -m "message"
+git pull
+press i (i for insert)
+write your merge message
+press esc (escape)
+write :wq (write & quit)
+then press enter
+git push origin HEAD:main
+
+Fixed:
+Tohfa-E-Khulus page UI fix
+Apply Kit images on homepage
+To be fixed:
+Fix Hero images to be responsive on all pages
+Admin - Set Prices
