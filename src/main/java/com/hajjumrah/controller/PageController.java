@@ -163,8 +163,8 @@ public class PageController {
         List<Product> allProducts = productRepository.findAll();
         List<Product> filteredProducts = allProducts.stream()
             .filter(product -> !"Janamaz".equals(product.getCategory()))
-            .filter(product -> !"Khajur".equals(product.getName()))
-            .filter(product -> !"Zam Zam Water".equals(product.getName()))
+            .filter(product -> !"Khajur (Dates - 4 pcs)".equals(product.getName()))
+            .filter(product -> !"Zam Zam Water (60 ml)".equals(product.getName()))
             .collect(Collectors.toList());
         model.addAttribute("products", filteredProducts);
         return "individual";
