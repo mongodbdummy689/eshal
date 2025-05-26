@@ -102,7 +102,7 @@ public class PageController {
             "namaz-dupatta",        // Namaz Dupatta
             "hand-gloves",          // Handgloves
             "socks",                // Socks
-            "prayer-cap",           // Cap
+            "hijabcap",           // Hijab Cap
             "travel-janamaz",       // Travel Janamaz
             "universal-adaptor",    // Universal Adaptor
             "soap",                 // Odourless Soap
@@ -141,7 +141,7 @@ public class PageController {
             "namaz-dupatta",        // 2) Dupatta
             "hand-gloves",          // 3) Hand gloves
             "socks",                // 4) Socks
-            "prayer-cap",           // 5) Cap
+            "hijabcap",           // 5) Hijab Cap
             "tawaf-tasbeeh",        // 6) Tawaf Tasbeeh
             "soap",                 // 7) Odourless Soap
             "digital-tasbeeh",      // 8) Digital Tasbeeh
@@ -163,6 +163,8 @@ public class PageController {
         List<Product> allProducts = productRepository.findAll();
         List<Product> filteredProducts = allProducts.stream()
             .filter(product -> !"Janamaz".equals(product.getCategory()))
+            .filter(product -> !"Khajur".equals(product.getName()))
+            .filter(product -> !"Zam Zam Water".equals(product.getName()))
             .collect(Collectors.toList());
         model.addAttribute("products", filteredProducts);
         return "individual";

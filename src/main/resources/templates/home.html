@@ -23,6 +23,9 @@
                 height: 100%;
                 opacity: 0;
                 transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
             
             .mySlides.active {
@@ -41,7 +44,7 @@
             img {
                 width: 100%;
                 height: 100%;
-                object-fit: cover; /* This ensures images maintain aspect ratio while filling container */
+                object-fit: contain; /* Changed from cover to contain */
             }
             
             /* Caption text */
@@ -52,7 +55,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 2rem;
+                padding: 1rem;
             }
             
             .text-content {
@@ -60,11 +63,11 @@
                 color: white;
                 max-width: 64rem;
                 margin: 0 auto;
-                padding: 2rem;
+                padding: 1rem;
             }
             
             .text h1 {
-                font-size: 3rem;
+                font-size: 2.5rem;
                 font-weight: bold;
                 margin-bottom: 0.5rem;
                 line-height: 1.2;
@@ -73,16 +76,17 @@
             
             .text h1.welcome-top {
                 font-size: 2.5rem;
-                font-weight: 400;
-                margin-bottom: 1rem;
-                letter-spacing: 0.05em;
+                font-weight: bold;
+                margin-bottom: 0.5rem;
+                line-height: 1.2;
+                letter-spacing: -0.025em;
             }
             
             .text h1.welcome-center {
-                font-size: 5rem;
+                font-size: 8rem;
                 font-weight: 900;
                 color: #FFD700;
-                margin-bottom: 1rem;
+                margin-bottom: 0.5rem;
                 letter-spacing: -0.025em;
                 text-transform: uppercase;
                 font-family: 'Noto Naskh Arabic', 'Amiri', serif;
@@ -92,28 +96,28 @@
             
             .text h1.welcome-center img {
                 width: auto;
-                height: 5rem;
+                height: 8rem;
                 object-fit: contain;
                 margin: 0 auto;
                 display: block;
             }
             
             .text h1.welcome-bottom {
-                font-size: 2.5rem;
+                font-size: 2rem;
                 font-weight: 400;
                 color: white;
                 letter-spacing: 0.05em;
             }
             
             .text p {
-                font-size: 1.5rem;
+                font-size: 1.25rem;
                 font-weight: 300;
-                margin-bottom: 1.5rem;
+                margin-bottom: 1rem;
                 line-height: 1.5;
             }
             
             .text p.subtitle {
-                font-size: 1.125rem;
+                font-size: 1rem;
                 max-width: 32rem;
                 margin: 0 auto;
             }
@@ -145,13 +149,36 @@
                 background-color: #717171;
             }
             
-            /* On smaller screens, adjust height */
+            /* On smaller screens, adjust height and text sizes */
             @media only screen and (max-width: 768px) {
                 .slideshow-container {
-                    height: 400px;
+                    height: 500px;
+                }
+                .text h1 {
+                    font-size: 2rem;
+                }
+                .text h1.welcome-top {
+                    font-size: 1.5rem;
+                }
+                .text h1.welcome-center {
+                    font-size: 3rem;
                 }
                 .text h1.welcome-center img {
-                    height: 3.5rem;
+                    height: 3rem;
+                }
+                .text h1.welcome-bottom {
+                    font-size: 1.5rem;
+                }
+                .text p {
+                    font-size: 1rem;
+                }
+                .text p.subtitle {
+                    font-size: 0.875rem;
+                }
+                .nav-button {
+                    padding: 0.75rem 1.5rem;
+                    font-size: 1rem;
+                    margin-top: 1rem;
                 }
             }
             
@@ -290,7 +317,7 @@
                     <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                         <!-- Men's Kit Package -->
                         <div class="card bg-white overflow-hidden relative">
-                            <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/img/menkit.jpeg');"></div>
+                            <div class="absolute inset-0 bg-contain bg-center bg-no-repeat" style="background-image: url('/img/menkit.jpeg');"></div>
                             <div class="absolute inset-0 bg-black bg-opacity-50"></div>
                             <div class="px-4 py-5 sm:p-6 relative z-10">
                                 <h3 class="text-lg font-medium text-white">Hajj & Umrah Kit for Men</h3>
@@ -307,7 +334,7 @@
 
                         <!-- Women's Kit Package -->
                         <div class="card bg-white overflow-hidden relative">
-                            <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/img/womenkit.jpeg');"></div>
+                            <div class="absolute inset-0 bg-contain bg-center bg-no-repeat" style="background-image: url('/img/womenkit.jpeg');"></div>
                             <div class="absolute inset-0 bg-black bg-opacity-50"></div>
                             <div class="px-4 py-5 sm:p-6 relative z-10">
                                 <h3 class="text-lg font-medium text-white">Hajj & Umrah Kit for Women</h3>

@@ -252,3 +252,37 @@ Apply Kit images on homepage
 To be fixed:
 Fix Hero images to be responsive on all pages
 Admin - Set Prices
+
+------------------------------------
+Discussed on Zoom Call 24/5/25:
+All images should fit properly and maintain ratio without being cropped 
+- All pages (men's kit, women's kit, men's mini kit, women's mini kit, individual package, Tohfa-e-Khulus, trolley bag rental, and Janamaz collection) will have consistent hero section behavior, showing the full images without cropping while maintaining the desired height.
+
+Homepage:
+Make font bigger on homepage
+- "Welcome to" text consistent with the other slides while making the Eshal text image much more prominent.
+-Make the "Welcome to" text consistent with the other slides while making the Eshal text image much more prominent.
+Make kaaba image move up.
+- Kaaba image is cropped to display more.
+Make Eshal logo a bit bigger
+- Eshal logo will now be more prominent in the navigation bar while still looking professional and maintaining its proportions. 
+
+Eshal's Hajj & Umrah Kit for Women
+Change prayer cap to hijab cap - Added a new hijab cap item under Eshal's Hajj & Umrah Kit for Women, Eshal's Umrah Kit for Women and
+
+Remove following items from Individual:
+Zam Zam water (60 ml)
+Khajur (4 pcs)
+- Khajur and Zam Zam Water products will not appear on the individual page. All other products will continue to be displayed as before. The Janamaz category exclusion is maintained
+
+Trolley-Bag:
+Change title to booking system. - Renamed
+Change download button to View Form with * for information purposes
+- Download Rental Form button is replaced with View Rental Form. A professional disclaimer text is added under the View Rental Form button.
+Change Proprietor to Director - Renamed
+
+Pending information to be provided:
+Additional items to be added only under Individual - Item list to be provided
+Tohfa-E-Khulus - Replace Napkin with Big Rumal -image to be provided.
+View Form button on Trolley-Bag-On-Rent page to be provide.
+Razorpay registration to be done.

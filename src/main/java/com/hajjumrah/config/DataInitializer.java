@@ -68,6 +68,7 @@ initializeProduct("namaz-dupatta", "Namaz Dupatta", "Elegant and lightweight pra
 initializeProduct("soap", "Odourless Soap", "Gentle, fragrance-free soap made from natural ingredients, perfect for maintaining cleanliness during Ihram and other religious activities.", 20, "/img/women/soap.jpg", "Women's Items");
 initializeProduct("socks", "Ladies Socks", "Comfortable, breathable socks designed specifically for women, providing protection and comfort during prayers and walking rituals.", 20, "/img/women/socks.jpg", "Women's Items");
 initializeProduct("tawaf-tasbeeh", "Tawaf Tasbeeh", "Beautiful prayer beads (Tasbeeh) specifically designed for women, made with high-quality materials and perfect for counting dhikr during Tawaf.", 20, "/img/women/women2.jpg", "Women's Items");
+initializeProduct("hijabcap", "Hijab Cap", "Elegant and comfortable prayer cap (Hijab Cap) designed specifically for women, made from soft, breathable fabric. Perfect for maintaining modesty during prayers and religious activities, this cap provides a secure base for wearing hijab while ensuring comfort throughout the day.", 20, "/img/women/hijabcap.webp", "Women's Items");
 
 //Common Items
 initializeProduct("guide", "Hajj & Umrah Guide", "Comprehensive guidebook with step-by-step instructions for Hajj and Umrah rituals, including maps and important information.", 20, "/img/common/guide.jpg", "Common Items");
@@ -82,8 +83,8 @@ initializeProduct("travel-janamaz", "Travel Janamaz with Compass", "Portable, li
 initializeProduct("universal-adaptor", "Universal Travel Adaptor", "Multi-country travel adaptor compatible with various plug types used in Saudi Arabia and other countries.", 20, "/img/common/universal-adaptor1.jpg", "Common Items");
 
 //Tohfa-E-Khulus
-initializeProduct("khajur", "Khajur (Dates)", "Premium quality dates from Madinah", 299, "/img/tohfaekhulus/khajur.jpg", "Tohfa-E-Khulus");
-initializeProduct("zamzam", "Zam Zam Water", "Blessed water from the holy well of Zam Zam", 499, "/img/tohfaekhulus/zamzam.jpg", "Tohfa-E-Khulus");
+initializeProduct("khajur", "Khajur (Dates - 4 pcs)", "Premium quality dates from Madinah", 299, "/img/tohfaekhulus/khajur.jpg", "Tohfa-E-Khulus");
+initializeProduct("zamzam", "Zam Zam Water (60 ml)", "Blessed water from the holy well of Zam Zam", 499, "/img/tohfaekhulus/zamzam.jpg", "Tohfa-E-Khulus");
 
 //Men's Mini Kit
 initializeProduct("mens-mini-kit-001", "Men's Umrah Mini Kit", "Essential collection of items for men performing Umrah, including Ihram, prayer cap, miswak, and other necessary items for a complete spiritual journey.", 1000, "/img/umrahminikit/men-kit.jpeg", "Men's Mini Kit");
