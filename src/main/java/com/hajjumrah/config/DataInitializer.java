@@ -62,7 +62,7 @@ initializeProduct("miswak", "Miswak", "Natural tooth cleaning stick (Siwak) from
 initializeProduct("ittar", "Ittar", "Traditional Arabian fragrance made without alcohol, perfect for maintaining a pleasant scent during your journey.", 20, "/img/men/perfume.jpg", "Men's Items");
 
 //Women's Items
-initializeProduct("hand-gloves", "Hand Gloves", "High-quality cotton gloves designed for women during Hajj & Umrah, providing comfort and protection while maintaining modesty requirements.", 20, "/img/women/hand-gloves.jpg", "Women's Items");
+initializeProduct("hand-gloves", "Ladies Hand Gloves", "High-quality cotton gloves designed for women during Hajj & Umrah, providing comfort and protection while maintaining modesty requirements.", 20, "/img/women/hand-gloves.jpg", "Women's Items");
 initializeProduct("makhani", "Makhani", "Traditional prayer cap (Makhani) made from premium quality fabric, perfect for maintaining modesty during prayers and religious activities.", 20, "/img/women/makhani.jpg", "Women's Items");
 initializeProduct("namaz-dupatta", "Namaz Dupatta", "Elegant and lightweight prayer scarf made from breathable fabric, designed specifically for women's prayers with appropriate length and coverage.", 20, "/img/women/namaz-dupatta.jpg", "Women's Items");
 initializeProduct("soap", "Odourless Soap", "Gentle, fragrance-free soap made from natural ingredients, perfect for maintaining cleanliness during Ihram and other religious activities.", 20, "/img/women/soap.jpg", "Women's Items");
@@ -74,7 +74,7 @@ initializeProduct("hijabcap", "Hijab Cap", "Elegant and comfortable prayer cap (
 initializeProduct("guide", "Hajj & Umrah Guide", "Comprehensive guidebook with step-by-step instructions for Hajj and Umrah rituals, including maps and important information.", 20, "/img/common/guide.jpg", "Common Items");
 initializeProduct("dua-cards", "Hajj & Umrah Dua Cards", "Set of laminated cards containing essential duas and supplications for different stages of Hajj and Umrah.", 20, "/img/common/dua-cards.jpg", "Common Items");
 initializeProduct("tasbeeh", "Tasbeeh", "High-quality prayer beads (Tasbeeh) for counting dhikr and prayers, made with durable materials.", 20, "/img/common/prayer-beads.jpg", "Common Items");
-initializeProduct("digital-tasbeeh", "Digital Tasbeeh", "Digital Tasbeeh for keeping track of dhikr and prayers, with easy-to-use buttons and clear display.", 20, "/img/common/finger-counter2.jpg", "Common Items");
+initializeProduct("digital-tasbeeh", "Finger Counter", "Finger Counter for keeping track of dhikr and prayers, with easy-to-use buttons and clear display.", 20, "/img/common/finger-counter2.jpg", "Common Items");
 initializeProduct("napkin", "Cotton Napkin", "Soft, absorbent cotton napkin for personal hygiene and comfort during your journey.", 20, "/img/common/napkin.jpg", "Common Items");
 initializeProduct("surma", "Surma", "Traditional kohl (Surma) for eye care, made from natural ingredients following traditional methods.", 20, "/img/common/surma.jpg", "Common Items");
 initializeProduct("shoe-bag", "Shoe Bag", "Durable, lightweight shoe bag with secure closure, designed to keep your footwear clean and organized during mosque visits and prayers.", 20, "/img/common/shoe-bag.jpg", "Common Items");
