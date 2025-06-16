@@ -34,15 +34,16 @@
                         </div>
                         <div class="p-4">
                             <h3 class="text-lg font-semibold mb-2 text-primary" th:text="${product.name}" th:data-description="${product.description}">Product Name</h3>
-                            <p class="text-text-secondary mb-2" th:text="'₹' + ${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}">₹0</p>
-                            <div class="flex items-center space-x-2 mb-4">
+                            <p th:if="${!#strings.contains(product.name, 'Janamaz')}" class="text-text-secondary mb-2" th:text="'₹' + ${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}">₹0</p>
+                            <div th:if="${!#strings.contains(product.name, 'Janamaz')}" class="flex items-center space-x-2 mb-4">
                                 <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
                                 <span class="quantity-value text-lg font-semibold text-primary">1</span>
                                 <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
                             </div>
                             <div class="flex space-x-2">
-                                <button class="select-item flex-1 py-2 px-4 bg-gray-100 text-primary font-semibold rounded-lg transition duration-300 hover:bg-gray-200 uppercase tracking-wider">Select</button>
-                                <button class="view-details py-2 px-4 bg-gray-100 text-primary font-semibold rounded-lg transition duration-300 hover:bg-gray-200 uppercase tracking-wider">View</button>
+                                <button th:if="${!#strings.contains(product.name, 'Janamaz')}" class="select-item flex-1 py-2 px-4 bg-gray-100 text-primary font-semibold rounded-lg transition duration-300 hover:bg-gray-200 uppercase tracking-wider">Select</button>
+                                <button th:if="${!#strings.contains(product.name, 'Janamaz')}" class="view-details py-2 px-4 bg-gray-100 text-primary font-semibold rounded-lg transition duration-300 hover:bg-gray-200 uppercase tracking-wider">View</button>
+                                <a th:if="${#strings.contains(product.name, 'Janamaz')}" href="/janamaz" class="w-full py-2 px-4 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider text-center">View More Items</a>
                             </div>
                         </div>
                     </div>
@@ -158,7 +159,7 @@
                     <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-6 sticky bottom-0 bg-white pt-4 pb-2">
                         <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
                             <p id="modalPrice" class="text-xl font-semibold text-primary"></p>
-                            <div class="flex items-center space-x-4">
+                            <div class="flex items-center space-x-4 quantity-controls">
                                 <button class="quantity-decrease bg-gray-100 text-primary px-3 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
                                 <span class="quantity-value text-xl font-semibold text-primary">1</span>
                                 <button class="quantity-increase bg-gray-100 text-primary px-3 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
@@ -350,24 +351,57 @@
 
                 function updateModalContent(card) {
                     const productName = card.querySelector('h3').textContent;
-                    const productPrice = card.querySelector('p').textContent;
                     const productImage = card.querySelector('img').src;
                     const productDescription = card.querySelector('h3').getAttribute('data-description');
                     const productId = card.dataset.productId;
+                    const isJanamaz = productName.includes('Janamaz');
                     
                     modalImage.src = productImage;
                     modalTitle.textContent = productName;
-                    modalPrice.textContent = productPrice;
                     modalDescription.textContent = productDescription;
                     
-                    // Update modal quantity and selection state
-                    const modalQuantitySpan = modal.querySelector('.quantity-value');
-                    if (modalQuantitySpan) {
-                        const quantity = cardQuantities.get(productId) || 1;
-                        modalQuantitySpan.textContent = quantity;
-                    }
+                    // Handle price and quantity controls based on product type
+                    const modalPrice = modal.querySelector('#modalPrice');
+                    const modalQuantityControls = modal.querySelector('.quantity-controls');
+                    const modalSelectBtn = modal.querySelector('.select-item');
                     
-                    updateModalSelectionState(card);
+                    if (isJanamaz) {
+                        // Hide price and quantity controls for Janamaz
+                        if (modalPrice) modalPrice.style.display = 'none';
+                        if (modalQuantityControls) modalQuantityControls.style.display = 'none';
+                        if (modalSelectBtn) modalSelectBtn.style.display = 'none';
+                        
+                        // Add View More Items button if it doesn't exist
+                        let viewMoreBtn = modal.querySelector('.view-more-items');
+                        if (!viewMoreBtn) {
+                            viewMoreBtn = document.createElement('a');
+                            viewMoreBtn.href = '/janamaz';
+                            viewMoreBtn.className = 'view-more-items w-full py-3 px-6 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider text-center';
+                            viewMoreBtn.textContent = 'View More Items';
+                            modal.querySelector('.flex.flex-col.md\\:flex-row').appendChild(viewMoreBtn);
+                        }
+                    } else {
+                        // Show price and quantity controls for non-Janamaz items
+                        if (modalPrice) {
+                            modalPrice.style.display = 'block';
+                            modalPrice.textContent = card.querySelector('p').textContent;
+                        }
+                        if (modalQuantityControls) modalQuantityControls.style.display = 'flex';
+                        if (modalSelectBtn) modalSelectBtn.style.display = 'block';
+                        
+                        // Remove View More Items button if it exists
+                        const viewMoreBtn = modal.querySelector('.view-more-items');
+                        if (viewMoreBtn) viewMoreBtn.remove();
+                        
+                        // Update modal quantity and selection state
+                        const modalQuantitySpan = modal.querySelector('.quantity-value');
+                        if (modalQuantitySpan) {
+                            const quantity = cardQuantities.get(productId) || 1;
+                            modalQuantitySpan.textContent = quantity;
+                        }
+                        
+                        updateModalSelectionState(card);
+                    }
                 }
 
                 function updateSummaryModal() {
