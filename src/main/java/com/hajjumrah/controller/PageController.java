@@ -33,6 +33,7 @@ public class PageController {
         List<String> productIds = Arrays.asList(
             "ehram",           // Ehram
             "ehram-belt",            // Ehram Belt
+            "ehram-lock-button",     // Ehram Lock Button
             "travel-janamaz",            // Travel Janamaz
             "universal-adaptor",     // Universal Adaptor
             "soap",                  // Odourless Soap
@@ -72,6 +73,7 @@ public class PageController {
         List<String> productIds = Arrays.asList(
             "ehram",           // Ehram
             "ehram-belt",      // Ehram Belt
+            "ehram-lock-button", // Ehram Lock Button
             "tawaf-tasbeeh",   // Tawaf Tasbeeh
             "soap",            // Odourless Soap
             "digital-tasbeeh", // Digital Tasbeeh
@@ -182,6 +184,7 @@ public class PageController {
                 "digital-tasbeeh",  // Digital tasbeeh
                 "zamzam",           // Zamzam water bottle (60 ml)
                 "khajur",           // Khajur (4 nos.)
+                "safa",             // Big Rumal(Safa)
                 "surma",            // Surma
                 "makhani",          // Makhani
                 "namaz-dupatta",    // Namaj Dupatta

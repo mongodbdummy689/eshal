@@ -107,14 +107,20 @@ public class CartController {
     }
 
     @PutMapping("/{itemId}")
-    public ResponseEntity<?> updateCartItem(@PathVariable String itemId, @RequestBody Map<String, Integer> update, 
+    public ResponseEntity<?> updateCartItem(@PathVariable String itemId, @RequestBody Map<String, Object> update, 
                                           Authentication authentication, HttpSession session) {
         try {
+            Integer quantity = (Integer) update.get("quantity");
+            Double price = update.get("price") != null ? ((Number) update.get("price")).doubleValue() : null;
+
             if (authentication != null && authentication.isAuthenticated()) {
                 // Update for authenticated user
                 CartItem cartItem = cartItemRepository.findById(itemId)
                         .orElseThrow(() -> new RuntimeException("Cart item not found"));
-                cartItem.setQuantity(update.get("quantity"));
+                cartItem.setQuantity(quantity);
+                if (price != null) {
+                    cartItem.setPrice(price);
+                }
                 cartItemRepository.save(cartItem);
             } else {
                 // Update for guest user
@@ -124,7 +130,12 @@ public class CartController {
                     guestCart.stream()
                             .filter(item -> item.getId().equals(itemId))
                             .findFirst()
-                            .ifPresent(item -> item.setQuantity(update.get("quantity")));
+                            .ifPresent(item -> {
+                                item.setQuantity(quantity);
+                                if (price != null) {
+                                    item.setPrice(price);
+                                }
+                            });
                     session.setAttribute(GUEST_CART_KEY, guestCart);
                 }
             }
