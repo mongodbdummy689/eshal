@@ -177,7 +177,7 @@ public class PageController {
         try {
             // Get specific products by IDs in the requested order
             List<String> specificIds = Arrays.asList(
-                "janamaz-001",      // Janamaz
+                "15570",            // Janamaz
                 "tasbeeh",          // Tasbeeh
                 "prayer-cap",       // Namaj Cap
                 "miswak",           // Miswak
