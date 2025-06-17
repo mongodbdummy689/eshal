@@ -34,16 +34,16 @@
                         </div>
                         <div class="p-4">
                             <h3 class="text-lg font-semibold mb-2 text-primary" th:text="${product.name}" th:data-description="${product.description}">Product Name</h3>
-                            <p th:if="${!#strings.contains(product.name, 'Janamaz')}" class="text-text-secondary mb-2" th:text="'₹' + ${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}">₹0</p>
-                            <div th:if="${!#strings.contains(product.name, 'Janamaz')}" class="flex items-center space-x-2 mb-4">
+                            <p th:if="${!#strings.contains(product.imageUrl, '/img/janamaz/')}" class="text-text-secondary mb-2" th:text="'₹' + ${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}">₹0</p>
+                            <div th:if="${!#strings.contains(product.imageUrl, '/img/janamaz/')}" class="flex items-center space-x-2 mb-4">
                                 <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
                                 <span class="quantity-value text-lg font-semibold text-primary">1</span>
                                 <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
                             </div>
                             <div class="flex space-x-2">
-                                <button th:if="${!#strings.contains(product.name, 'Janamaz')}" class="select-item flex-1 py-2 px-4 bg-gray-100 text-primary font-semibold rounded-lg transition duration-300 hover:bg-gray-200 uppercase tracking-wider">Select</button>
-                                <button th:if="${!#strings.contains(product.name, 'Janamaz')}" class="view-details py-2 px-4 bg-gray-100 text-primary font-semibold rounded-lg transition duration-300 hover:bg-gray-200 uppercase tracking-wider">View</button>
-                                <a th:if="${#strings.contains(product.name, 'Janamaz')}" href="/janamaz" class="w-full py-2 px-4 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider text-center">View More Items</a>
+                                <button th:if="${!#strings.contains(product.imageUrl, '/img/janamaz/')}" class="select-item flex-1 py-2 px-4 bg-gray-100 text-primary font-semibold rounded-lg transition duration-300 hover:bg-gray-200 uppercase tracking-wider">Select</button>
+                                <button th:if="${!#strings.contains(product.imageUrl, '/img/janamaz/')}" class="view-details py-2 px-4 bg-gray-100 text-primary font-semibold rounded-lg transition duration-300 hover:bg-gray-200 uppercase tracking-wider">View</button>
+                                <a th:if="${#strings.contains(product.imageUrl, '/img/janamaz/')}" href="/janamaz" class="w-full py-2 px-4 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider text-center">View More Items</a>
                             </div>
                         </div>
                     </div>
@@ -354,7 +354,7 @@
                     const productImage = card.querySelector('img').src;
                     const productDescription = card.querySelector('h3').getAttribute('data-description');
                     const productId = card.dataset.productId;
-                    const isJanamaz = productName.includes('Janamaz');
+                    const isJanamaz = productImage.includes('/img/janamaz/');
                     
                     modalImage.src = productImage;
                     modalTitle.textContent = productName;
