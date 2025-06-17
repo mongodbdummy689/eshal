@@ -86,7 +86,7 @@ initializeProduct("universal-adaptor", "Universal Travel Adaptor", "Multi-countr
 //Tohfa-E-Khulus
 initializeProduct("khajur", "Khajur (Dates - 4 pcs)", "Premium quality dates from Madinah", 299, "/img/tohfaekhulus/khajur.jpg", "Tohfa-E-Khulus");
 initializeProduct("zamzam", "Zam Zam Water (60 ml)", "Blessed water from the holy well of Zam Zam", 499, "/img/tohfaekhulus/zamzam.jpg", "Tohfa-E-Khulus");
-initializeProduct("safa", "Big Rumal(Safa)", "Traditional prayer scarf made from premium quality fabric, perfect for maintaining modesty during prayers and religious activities", 499, "/img/tohfaekhulus/safa.jpeg", "Tohfa-E-Khulus");
+initializeProduct("safa", "Big Rumal(Safa)", "Traditional prayer scarf made from premium quality fabric, perfect for maintaining modesty during prayers and religious activities", 150, "/img/tohfaekhulus/safa.jpeg", "Tohfa-E-Khulus");
 
 //Men's Mini Kit
 initializeProduct("mens-mini-kit-001", "Men's Umrah Mini Kit", "Essential collection of items for men performing Umrah, including Ihram, prayer cap, miswak, and other necessary items for a complete spiritual journey.", 1000, "/img/umrahminikit/men-kit.jpeg", "Men's Mini Kit");
