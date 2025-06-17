@@ -16,4 +16,9 @@ public class Product {
     private String category;
     private boolean inStock;
     private int stockQuantity;
+    
+    // Additional fields for Janamaz products
+    private Double pricePerPiece;
+    private Double pricePerDozen;
+    private String size;
 } 
