@@ -32,7 +32,7 @@ public class DataInitializer implements CommandLineRunner {
             mensKit.setId("mens-kit-001");
             mensKit.setName("Eshal's Hajj & Umrah Kit for Men");
             mensKit.setDescription("Everything you need for your Hajj & Umrah journey in one comprehensive package");
-            mensKit.setPrice(300);
+            mensKit.setPrice(1800);
             mensKit.setImageUrl("/img/menkit.jpeg");
             mensKit.setCategory("Hajj & Umrah Kits");
             mensKit.setInStock(true);
@@ -46,7 +46,7 @@ public class DataInitializer implements CommandLineRunner {
             womensKit.setId("womens-kit-001");
             womensKit.setName("Eshal's Hajj & Umrah Kit for Women");
             womensKit.setDescription("Everything you need for your Hajj & Umrah journey in one comprehensive package");
-            womensKit.setPrice(350);
+            womensKit.setPrice(1600);
             womensKit.setImageUrl("/img/womenkit.jpeg");
             womensKit.setCategory("Hajj & Umrah Kits");
             womensKit.setInStock(true);
