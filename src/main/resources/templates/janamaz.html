@@ -35,24 +35,379 @@
         <div class="max-w-7xl mx-auto px-4 py-16">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 <!-- Product Cards -->
-                <div th:each="product : ${products}" class="card bg-white overflow-hidden" th:data-product-id="${product.id}" th:data-price="${product.price}">
+                <div th:each="product : ${products}" th:if="${product.category == 'Janamaz'}" class="card bg-white overflow-hidden" th:data-product-id="${product.id}" th:data-price="${product.pricePerPiece}">
                     <div class="relative h-48">
                         <img th:src="${product.imageUrl}" th:alt="${product.name}" class="w-full h-full object-cover">
                     </div>
                     <div class="p-4">
                         <h3 class="text-lg font-semibold mb-2 text-primary" th:text="${product.name}">Product Name</h3>
-                        <p class="text-text-secondary mb-2" th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 2)}">$0.00</p>
-                        <p class="text-sm text-gray-600 mb-4" th:text="${product.description}">Product Description</p>
+                        <p class="text-sm text-gray-600 mb-2" th:text="${product.description}">Product Description</p>
+                        <p class="text-sm text-gray-600 mb-2">Code: <span th:text="${product.id}">Code</span></p>
+                        <p class="text-sm text-gray-600 mb-2">Size: <span th:text="${product.size}">Size</span></p>
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="text-text-secondary" th:text="'₹' + ${#numbers.formatDecimal(product.pricePerPiece, 1, 2)} + ' /pc'">₹0.00 /pc</p>
+                            <p class="text-text-secondary" th:text="'₹' + ${#numbers.formatDecimal(product.pricePerDozen, 1, 2)} + ' /dozen'">₹0.00 /dozen</p>
+                        </div>
                         <div class="flex items-center space-x-2 mb-4">
                             <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
                             <span class="quantity-value text-lg font-semibold text-primary">1</span>
                             <button class="quantity-increase bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                            <button class="quantity-dozen bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">Dozen</button>
                         </div>
-                        <button class="add-to-cart w-full py-3 px-6 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider">Add to Cart</button>
+                        <div class="flex space-x-2">
+                            <button class="add-to-cart w-1/2 py-3 px-6 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider">Add to Cart</button>
+                            <button class="view-details w-1/2 py-3 px-6 bg-gray-100 text-primary font-semibold rounded-lg transition duration-300 hover:bg-gray-200 uppercase tracking-wider">View</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Item Details Modal -->
+        <div id="itemModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 overflow-y-auto">
+            <div class="bg-white rounded-lg p-6 w-[95%] md:w-[85%] lg:w-[75%] xl:w-[65%] mx-4 my-8 relative max-h-[90vh] flex flex-col">
+                <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 z-10" onclick="closeModal()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+                <div class="flex flex-col space-y-6 overflow-y-auto pr-2">
+                    <!-- Title -->
+                    <div class="text-center sticky top-0 bg-white pt-2 pb-4">
+                        <h3 id="modalTitle" class="text-2xl font-bold text-primary"></h3>
+                    </div>
+                    
+                    <!-- Image -->
+                    <div class="relative w-full max-w-2xl mx-auto">
+                        <button id="prevItem" class="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-primary p-2 rounded-full shadow-lg transition-all duration-300 -translate-x-1/2 z-10">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <img id="modalImage" src="" alt="Product Image" class="w-full h-auto rounded-lg shadow-lg object-contain max-h-[50vh]">
+                        <button id="nextItem" class="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-primary p-2 rounded-full shadow-lg transition-all duration-300 translate-x-1/2 z-10">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="text-center max-w-2xl mx-auto">
+                        <p id="modalDescription" class="text-gray-600 text-lg"></p>
+                        <p id="modalCode" class="text-sm text-gray-600 mt-2"></p>
+                        <p id="modalSize" class="text-sm text-gray-600 mt-1"></p>
+                    </div>
+                    
+                    <!-- Quantity Controls, Price and Add to Cart Button -->
+                    <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-6 sticky bottom-0 bg-white pt-4 pb-2">
+                        <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
+                            <div class="flex flex-col items-center">
+                                <p id="modalPricePerPiece" class="text-xl font-semibold text-primary"></p>
+                                <p id="modalPricePerDozen" class="text-sm text-gray-600"></p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <button class="quantity-decrease bg-gray-100 text-primary px-3 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
+                                <span class="quantity-value text-xl font-semibold text-primary">1</span>
+                                <button class="quantity-increase bg-gray-100 text-primary px-3 py-1 rounded hover:bg-gray-200 transition duration-300">+</button>
+                                <button class="quantity-dozen bg-gray-100 text-primary px-3 py-1 rounded hover:bg-gray-200 transition duration-300">Dozen</button>
+                            </div>
+                        </div>
+                        <button class="add-to-cart w-full md:w-auto min-w-[200px] py-3 px-6 bg-[#FFD700] text-black font-semibold rounded-lg transition duration-300 hover:bg-white hover:shadow-lg uppercase tracking-wider">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script th:inline="javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                const modal = document.getElementById('itemModal');
+                const modalTitle = document.getElementById('modalTitle');
+                const modalImage = document.getElementById('modalImage');
+                const modalDescription = document.getElementById('modalDescription');
+                const modalCode = document.getElementById('modalCode');
+                const modalSize = document.getElementById('modalSize');
+                const modalPricePerPiece = document.getElementById('modalPricePerPiece');
+                const modalPricePerDozen = document.getElementById('modalPricePerDozen');
+                const prevButton = document.getElementById('prevItem');
+                const nextButton = document.getElementById('nextItem');
+                const modalQuantityDecrease = modal.querySelector('.quantity-decrease');
+                const modalQuantityIncrease = modal.querySelector('.quantity-increase');
+                const modalQuantitySpan = modal.querySelector('.quantity-value');
+                const modalQuantityDozen = modal.querySelector('.quantity-dozen');
+                const modalAddToCartBtn = modal.querySelector('.add-to-cart');
+
+                // Get products from Thymeleaf
+                const products = /*[[${products}]]*/ [];
+                const itemDetails = {};
+                let currentItemIndex = -1;
+                
+                // Convert products array to itemDetails object while maintaining the sequence
+                products.forEach(product => {
+                    if (product.category === 'Janamaz') {
+                        itemDetails[product.id] = {
+                            title: product.name,
+                            image: product.imageUrl,
+                            description: product.description,
+                            code: product.id,
+                            size: product.size,
+                            pricePerPiece: product.pricePerPiece,
+                            pricePerDozen: product.pricePerDozen
+                        };
+                    }
+                });
+
+                // Get array of item IDs for navigation (maintaining the sequence from the controller)
+                const itemIds = products.filter(p => p.category === 'Janamaz').map(product => product.id);
+
+                function showItem(itemId) {
+                    const item = itemDetails[itemId];
+                    if (item) {
+                        modalTitle.textContent = item.title;
+                        modalImage.src = item.image;
+                        modalDescription.textContent = item.description;
+                        modalCode.textContent = 'Code: ' + item.code;
+                        modalSize.textContent = 'Size: ' + item.size;
+                        modalPricePerPiece.textContent = '₹' + item.pricePerPiece.toFixed(2) + ' /pc';
+                        modalPricePerDozen.textContent = '₹' + item.pricePerDozen.toFixed(2) + ' /dozen';
+                    }
+                }
+
+                function navigateToItem(direction) {
+                    if (currentItemIndex === -1) return;
+                    
+                    let newIndex = currentItemIndex + direction;
+                    
+                    // Handle circular navigation
+                    if (newIndex >= itemIds.length) {
+                        newIndex = 0; // Loop to first item
+                    } else if (newIndex < 0) {
+                        newIndex = itemIds.length - 1; // Loop to last item
+                    }
+                    
+                    currentItemIndex = newIndex;
+                    showItem(itemIds[currentItemIndex]);
+                }
+
+                // Add event listeners for navigation buttons
+                prevButton.addEventListener('click', () => navigateToItem(-1));
+                nextButton.addEventListener('click', () => navigateToItem(1));
+
+                // Add keyboard navigation
+                document.addEventListener('keydown', (event) => {
+                    if (!modal.classList.contains('hidden')) {
+                        if (event.key === 'ArrowLeft') {
+                            navigateToItem(-1);
+                        } else if (event.key === 'ArrowRight') {
+                            navigateToItem(1);
+                        } else if (event.key === 'Escape') {
+                            closeModal();
+                        }
+                    }
+                });
+
+                // Modal quantity controls
+                if (modalQuantityDecrease && modalQuantityIncrease && modalQuantitySpan) {
+                    modalQuantityDecrease.addEventListener('click', () => {
+                        const currentQuantity = parseInt(modalQuantitySpan.textContent);
+                        if (currentQuantity > 1) {
+                            modalQuantitySpan.textContent = currentQuantity - 1;
+                        }
+                    });
+
+                    modalQuantityIncrease.addEventListener('click', () => {
+                        const currentQuantity = parseInt(modalQuantitySpan.textContent);
+                        modalQuantitySpan.textContent = currentQuantity + 1;
+                    });
+
+                    modalQuantityDozen.addEventListener('click', () => {
+                        modalQuantitySpan.textContent = '12';
+                    });
+                }
+
+                // Initialize all cards
+                const cards = document.querySelectorAll('.card');
+                let isAddingToCart = false;
+
+                // Function to update quantity display
+                function updateQuantityDisplay(quantitySpan, newQuantity) {
+                    if (quantitySpan) {
+                        console.log('Updating quantity from', quantitySpan.textContent, 'to', newQuantity);
+                        quantitySpan.textContent = newQuantity;
+                        quantitySpan.dataset.quantity = newQuantity;
+                    }
+                }
+
+                // Function to handle adding to cart
+                async function handleAddToCart(card, event) {
+                    if (event) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+                    }
+
+                    if (isAddingToCart) {
+                        console.log('Already adding to cart, ignoring request');
+                        return;
+                    }
+                    
+                    isAddingToCart = true;
+                    try {
+                        const quantitySpan = card.querySelector('.quantity-value');
+                        if (!quantitySpan) {
+                            throw new Error('Quantity span not found');
+                        }
+
+                        // Get quantity from data attribute first, then fall back to text content
+                        const quantityText = quantitySpan.dataset.quantity || quantitySpan.textContent.trim();
+                        console.log('Quantity from data attribute:', quantitySpan.dataset.quantity);
+                        console.log('Raw quantity text:', quantityText);
+                        const quantity = parseInt(quantityText);
+                        console.log('Parsed quantity:', quantity);
+
+                        if (isNaN(quantity) || quantity < 1) {
+                            throw new Error('Invalid quantity value');
+                        }
+
+                        const productId = card.dataset.productId;
+                        const item = itemDetails[productId];
+                        
+                        // Calculate price based on quantity
+                        let price;
+                        if (quantity === 12) {
+                            price = item.pricePerDozen;
+                            console.log('Using dozen price:', price);
+                        } else {
+                            price = item.pricePerPiece * quantity;
+                            console.log('Using per-piece price:', price, 'for quantity:', quantity);
+                        }
+                        
+                        console.log('Adding to cart:', {
+                            productId,
+                            quantity,
+                            price,
+                            isDozen: quantity === 12,
+                            pricePerPiece: item.pricePerPiece,
+                            pricePerDozen: item.pricePerDozen,
+                            quantitySpanText: quantityText
+                        });
+                        
+                        await addToCart(productId, quantity, price);
+                    } catch (error) {
+                        console.error('Error adding to cart:', error);
+                        alert('Failed to add item to cart. Please try again.');
+                    } finally {
+                        isAddingToCart = false;
+                    }
+                }
+
+                // Initialize cards with event handlers
+                cards.forEach(card => {
+                    const decreaseBtn = card.querySelector('.quantity-decrease');
+                    const increaseBtn = card.querySelector('.quantity-increase');
+                    const quantitySpan = card.querySelector('.quantity-value');
+                    const viewDetailsBtn = card.querySelector('.view-details');
+                    const dozenBtn = card.querySelector('.quantity-dozen');
+                    const addToCartBtn = card.querySelector('.add-to-cart');
+                    
+                    // Initialize quantity
+                    if (quantitySpan) {
+                        updateQuantityDisplay(quantitySpan, '1');
+                    }
+                    
+                    // Quantity controls
+                    if (decreaseBtn) {
+                        decreaseBtn.onclick = (event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            const currentQuantity = parseInt(quantitySpan.textContent);
+                            if (currentQuantity > 1) {
+                                updateQuantityDisplay(quantitySpan, currentQuantity - 1);
+                            }
+                        };
+                    }
+
+                    if (increaseBtn) {
+                        increaseBtn.onclick = (event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            const currentQuantity = parseInt(quantitySpan.textContent);
+                            updateQuantityDisplay(quantitySpan, currentQuantity + 1);
+                        };
+                    }
+
+                    // Add Dozen button functionality
+                    if (dozenBtn) {
+                        dozenBtn.onclick = (event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            updateQuantityDisplay(quantitySpan, '12');
+                        };
+                    }
+
+                    // Add to Cart button functionality
+                    if (addToCartBtn) {
+                        addToCartBtn.onclick = (event) => handleAddToCart(card, event);
+                    }
+
+                    // View details functionality
+                    if (viewDetailsBtn) {
+                        viewDetailsBtn.onclick = (event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            
+                            currentItemIndex = Array.from(cards).indexOf(card);
+                            const productId = card.dataset.productId;
+                            showItem(productId);
+                            
+                            modal.classList.remove('hidden');
+                            modal.classList.add('flex');
+                        };
+                    }
+                });
+
+                // Add to Cart functionality for modal
+                if (modalAddToCartBtn) {
+                    modalAddToCartBtn.onclick = async (event) => {
+                        if (isAddingToCart) return;
+                        
+                        event.preventDefault();
+                        event.stopPropagation();
+                        
+                        isAddingToCart = true;
+                        try {
+                            if (currentItemIndex !== -1) {
+                                const card = cards[currentItemIndex];
+                                const productId = itemIds[currentItemIndex];
+                                const item = itemDetails[productId];
+                                const quantity = parseInt(modalQuantitySpan.textContent);
+                                const price = quantity === 12 ? item.pricePerDozen : item.pricePerPiece * quantity;
+                                await addToCart(productId, quantity, price);
+                                closeModal();
+                            }
+                        } catch (error) {
+                            console.error('Error adding to cart:', error);
+                            alert('Failed to add item to cart. Please try again.');
+                        } finally {
+                            isAddingToCart = false;
+                        }
+                    };
+                }
+
+                // Close modal function
+                window.closeModal = function() {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                };
+
+                // Close modal when clicking outside
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        closeModal();
+                    }
+                });
+            });
+        </script>
     </div>
 </body>
 </html> 
