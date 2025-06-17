@@ -82,25 +82,52 @@ function updateCartUI(cartItems) {
         return;
     }
 
-    if (cartItems.length === 0) {
+    if (!cartItems || cartItems.length === 0) {
         cartItemsContainer.innerHTML = '';
         emptyCartDiv.classList.remove('hidden');
         cartSummaryDiv.classList.add('hidden');
-        subtotalElement.textContent = '$0.00';
-        shippingElement.textContent = '$0.00';
-        totalElement.textContent = '$0.00';
+        subtotalElement.textContent = '₹0.00';
+        shippingElement.textContent = '₹0.00';
+        totalElement.textContent = '₹0.00';
         return;
     }
 
     emptyCartDiv.classList.add('hidden');
     cartSummaryDiv.classList.remove('hidden');
-    cartItemsContainer.innerHTML = cartItems.map(item => `
+    cartItemsContainer.innerHTML = cartItems.map(item => {
+        // Calculate prices based on product type
+        let displayPrice = 0, itemTotal = 0;
+        
+        if (item.product) {
+            if (item.product.category === 'Janamaz') {
+                // Handle Janamaz products
+                if (item.quantity === 12) {
+                    displayPrice = item.product.pricePerDozen || 0;
+                    itemTotal = displayPrice;
+                } else {
+                    displayPrice = item.product.pricePerPiece || 0;
+                    itemTotal = displayPrice * item.quantity;
+                }
+            } else {
+                // Handle regular products
+                displayPrice = item.product.price || 0;
+                itemTotal = displayPrice * item.quantity;
+            }
+        }
+
+        const priceDisplay = displayPrice > 0 ? `₹${displayPrice.toFixed(2)} ${item.product?.category === 'Janamaz' && item.quantity === 12 ? '/dozen' : '/pc'}` : '';
+        const totalDisplay = itemTotal > 0 ? `₹${itemTotal.toFixed(2)}` : '';
+
+        return `
         <div class="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4" data-item-id="${item.id}">
-            <img src="${item.product.imageUrl}" alt="${item.product.name}" class="w-24 h-24 object-cover rounded-lg">
+            <img src="${item.product?.imageUrl || ''}" alt="${item.product?.name || 'Product'}" class="w-24 h-24 object-cover rounded-lg">
             <div class="flex-1">
-                <h3 class="font-semibold">${item.product.name}</h3>
+                <h3 class="font-semibold">${item.product?.name || 'Product'}</h3>
                 <div class="flex justify-between items-center">
-                    <p class="text-gray-600">$${item.price.toFixed(2)}</p>
+                    <div class="text-gray-600">
+                        ${priceDisplay ? `<p>${priceDisplay}</p>` : ''}
+                        ${totalDisplay ? `<p class="font-semibold">Total: ${totalDisplay}</p>` : ''}
+                    </div>
                     <div class="flex items-center space-x-4">
                         <div class="flex items-center space-x-2">
                             <button class="quantity-btn" onclick="updateQuantity('${item.id}', ${Math.max(1, item.quantity - 1)})">-</button>
@@ -116,21 +143,47 @@ function updateCartUI(cartItems) {
                 </div>
             </div>
         </div>
-    `).join('');
+    `}).join('');
 
     // Update totals
-    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const subtotal = cartItems.reduce((sum, item) => {
+        if (!item || !item.product) return sum;
+        
+        if (item.product.category === 'Janamaz') {
+            if (item.quantity === 12) {
+                return sum + (item.product.pricePerDozen || 0);
+            } else {
+                return sum + ((item.product.pricePerPiece || 0) * item.quantity);
+            }
+        } else {
+            return sum + ((item.product.price || 0) * item.quantity);
+        }
+    }, 0);
+    
     const shipping = subtotal > 0 ? 10 : 0; // Example shipping cost
     const total = subtotal + shipping;
 
-    subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
-    shippingElement.textContent = `$${shipping.toFixed(2)}`;
-    totalElement.textContent = `$${total.toFixed(2)}`;
+    subtotalElement.textContent = `₹${subtotal.toFixed(2)}`;
+    shippingElement.textContent = `₹${shipping.toFixed(2)}`;
+    totalElement.textContent = `₹${total.toFixed(2)}`;
 }
 
 // Update item quantity
 async function updateQuantity(itemId, newQuantity) {
     try {
+        const item = cartItemsCache.find(item => item.id === itemId);
+        if (!item) return;
+
+        // Calculate new price based on quantity
+        let newPrice = item.price;
+        if (item.product.category === 'Janamaz') {
+            // For Janamaz products, use dozen price when quantity is 12
+            newPrice = newQuantity === 12 ? item.product.pricePerDozen : item.product.pricePerPiece * newQuantity;
+        } else {
+            // For other products, multiply by quantity
+            newPrice = item.product.pricePerPiece * newQuantity;
+        }
+
         const response = await fetch(`/api/cart/${itemId}`, {
             method: 'PUT',
             headers: {
@@ -138,7 +191,7 @@ async function updateQuantity(itemId, newQuantity) {
                 'X-Requested-With': 'XMLHttpRequest'
             },
             credentials: 'include',
-            body: JSON.stringify({ quantity: newQuantity })
+            body: JSON.stringify({ quantity: newQuantity, price: newPrice })
         });
 
         if (!response.ok) {
@@ -149,6 +202,7 @@ async function updateQuantity(itemId, newQuantity) {
         const itemIndex = cartItemsCache.findIndex(item => item.id === itemId);
         if (itemIndex !== -1) {
             cartItemsCache[itemIndex].quantity = newQuantity;
+            cartItemsCache[itemIndex].price = newPrice;
             updateCartUI(cartItemsCache);
             await updateCartCount();
         }
