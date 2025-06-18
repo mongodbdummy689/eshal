@@ -33,7 +33,6 @@ public class PageController {
         List<String> productIds = Arrays.asList(
             "ehram",           // Ehram
             "ehram-belt",            // Ehram Belt
-            "ehram-lock-button",     // Ehram Lock Button
             "travel-janamaz",            // Travel Janamaz
             "universal-adaptor",     // Universal Adaptor
             "soap",                  // Odourless Soap
