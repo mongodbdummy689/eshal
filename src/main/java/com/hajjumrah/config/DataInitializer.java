@@ -162,6 +162,25 @@ initializeProduct("ladies-ehram-cotton-white", "Ladies ehram - cotton white", "A
 initializeProduct("ladies-ehram-swiss-cotton", "Ladies ehram - swiss cotton", "A premium Swiss cotton Ehram for ladies, offering superior comfort.", 365, "/img/individual/Ladies-ihram-swiss-cotton.jpeg", "Individual Items");
 initializeProduct("ladies-ehram-hosiery", "Ladies ehram - hosiery", "A hosiery Ehram for ladies, providing flexibility and a snug fit.", 380, "/img/individual/hosiery-ladies-ihram.jpeg", "Individual Items");
 
+// Kid's Ehram with variants
+if (!productRepository.existsById("kids-ehram")) {
+    Product kidsEhram = new Product();
+    kidsEhram.setId("kids-ehram");
+    kidsEhram.setName("Kid's Ehram");
+    kidsEhram.setDescription("Comfortable and appropriately sized Ehram designed specifically for children, ensuring they can participate in religious activities with proper attire.");
+    kidsEhram.setImageUrl("/img/individual/Kids-ihram.jpeg");
+    kidsEhram.setCategory("Individual Items");
+    kidsEhram.setPriceType("variant");
+    kidsEhram.setVariants(Arrays.asList(
+        new ProductVariant("Small", 320),
+        new ProductVariant("Large", 450)
+    ));
+    kidsEhram.setPrice(320); // Set default price to the smaller variant
+    kidsEhram.setInStock(true);
+    kidsEhram.setStockQuantity(100);
+    productRepository.save(kidsEhram);
+}
+
 // Janamaz
 initializeJanamazProduct("janamaz-ibadat-15570", "Eshal Ibadat", "High-quality prayer mat.", 600, 7200, "70x110", "/img/janamaz/Eshal-Ibadat.png");
 initializeJanamazProduct("janamaz-platinum-15571", "Eshal Platinum", "High-quality prayer mat.", 455, 5400, "70x110", "/img/janamaz/Eshal-Platinum.png");
