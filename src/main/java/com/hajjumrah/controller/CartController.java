@@ -37,6 +37,14 @@ public class CartController {
             Product product = productRepository.findById(cartItem.getProductId())
                     .orElseThrow(() -> new RuntimeException("Product not found"));
 
+            // Set the price based on variant if available, otherwise use product price
+            if (cartItem.getSelectedVariant() != null && cartItem.getVariantPrice() != null) {
+                cartItem.setPrice(cartItem.getVariantPrice());
+            } else if (cartItem.getPrice() == null) {
+                // If no price is set, use the product's base price
+                cartItem.setPrice(product.getPrice());
+            }
+
             if (authentication != null && authentication.isAuthenticated()) {
                 // Handle authenticated user
                 User user = userRepository.findByEmail(authentication.getName())
@@ -51,14 +59,30 @@ public class CartController {
                     guestCart = new ArrayList<>();
                 }
 
-                // Check if item already exists in cart
+                // Check if item already exists in cart (considering variants)
                 Optional<CartItem> existingItem = guestCart.stream()
-                        .filter(item -> item.getProductId().equals(cartItem.getProductId()))
+                        .filter(item -> {
+                            // For products with variants, check both productId and selectedVariant
+                            if (cartItem.getSelectedVariant() != null) {
+                                return item.getProductId().equals(cartItem.getProductId()) && 
+                                       cartItem.getSelectedVariant().equals(item.getSelectedVariant());
+                            } else {
+                                // For regular products, just check productId
+                                return item.getProductId().equals(cartItem.getProductId());
+                            }
+                        })
                         .findFirst();
 
                 if (existingItem.isPresent()) {
                     // Update quantity if item exists
                     existingItem.get().setQuantity(existingItem.get().getQuantity() + cartItem.getQuantity());
+                    // Update price if variant price is provided
+                    if (cartItem.getVariantPrice() != null) {
+                        existingItem.get().setVariantPrice(cartItem.getVariantPrice());
+                        existingItem.get().setPrice(cartItem.getVariantPrice());
+                    } else if (cartItem.getPrice() != null) {
+                        existingItem.get().setPrice(cartItem.getPrice());
+                    }
                 } else {
                     // Add new item if it doesn't exist
                     cartItem.setId(UUID.randomUUID().toString());
@@ -89,12 +113,20 @@ public class CartController {
                 cartItems = guestCart != null ? guestCart : new ArrayList<>();
             }
 
-            // Enrich cart items with product details
+            // Enrich cart items with product details and ensure price is set
             cartItems = cartItems.stream()
                     .map(item -> {
                         Product product = productRepository.findById(item.getProductId()).orElse(null);
                         if (product != null) {
                             item.setProduct(product);
+                            // Ensure price is set - use variant price if available, otherwise product price
+                            if (item.getPrice() == null) {
+                                if (item.getSelectedVariant() != null && item.getVariantPrice() != null) {
+                                    item.setPrice(item.getVariantPrice());
+                                } else {
+                                    item.setPrice(product.getPrice());
+                                }
+                            }
                         }
                         return item;
                     })
@@ -107,14 +139,20 @@ public class CartController {
     }
 
     @PutMapping("/{itemId}")
-    public ResponseEntity<?> updateCartItem(@PathVariable String itemId, @RequestBody Map<String, Integer> update, 
+    public ResponseEntity<?> updateCartItem(@PathVariable String itemId, @RequestBody Map<String, Object> update, 
                                           Authentication authentication, HttpSession session) {
         try {
+            Integer quantity = (Integer) update.get("quantity");
+            Double price = update.get("price") != null ? ((Number) update.get("price")).doubleValue() : null;
+
             if (authentication != null && authentication.isAuthenticated()) {
                 // Update for authenticated user
                 CartItem cartItem = cartItemRepository.findById(itemId)
                         .orElseThrow(() -> new RuntimeException("Cart item not found"));
-                cartItem.setQuantity(update.get("quantity"));
+                cartItem.setQuantity(quantity);
+                if (price != null) {
+                    cartItem.setPrice(price);
+                }
                 cartItemRepository.save(cartItem);
             } else {
                 // Update for guest user
@@ -124,7 +162,12 @@ public class CartController {
                     guestCart.stream()
                             .filter(item -> item.getId().equals(itemId))
                             .findFirst()
-                            .ifPresent(item -> item.setQuantity(update.get("quantity")));
+                            .ifPresent(item -> {
+                                item.setQuantity(quantity);
+                                if (price != null) {
+                                    item.setPrice(price);
+                                }
+                            });
                     session.setAttribute(GUEST_CART_KEY, guestCart);
                 }
             }
@@ -181,15 +224,28 @@ public class CartController {
                     dbCartItem.setProductId(guestItem.getProductId());
                     dbCartItem.setQuantity(guestItem.getQuantity());
                     dbCartItem.setPrice(guestItem.getPrice());
+                    dbCartItem.setSelectedVariant(guestItem.getSelectedVariant());
+                    dbCartItem.setVariantPrice(guestItem.getVariantPrice());
 
-                    // Check if item already exists in user's cart
+                    // Check if item already exists in user's cart (considering variants)
                     Optional<CartItem> existingItem = cartItemRepository.findByUserIdAndProductId(user.getId(), guestItem.getProductId());
                     
                     if (existingItem.isPresent()) {
-                        // Update quantity if item exists
-                        CartItem item = existingItem.get();
-                        item.setQuantity(item.getQuantity() + guestItem.getQuantity());
-                        cartItemRepository.save(item);
+                        // For products with variants, check if the same variant exists
+                        CartItem existing = existingItem.get();
+                        if (guestItem.getSelectedVariant() != null && 
+                            guestItem.getSelectedVariant().equals(existing.getSelectedVariant())) {
+                            // Same variant exists, update quantity
+                            existing.setQuantity(existing.getQuantity() + guestItem.getQuantity());
+                            cartItemRepository.save(existing);
+                        } else if (guestItem.getSelectedVariant() == null && existing.getSelectedVariant() == null) {
+                            // Same regular product exists, update quantity
+                            existing.setQuantity(existing.getQuantity() + guestItem.getQuantity());
+                            cartItemRepository.save(existing);
+                        } else {
+                            // Different variant or regular vs variant, save as new item
+                            cartItemRepository.save(dbCartItem);
+                        }
                     } else {
                         // Save new item if it doesn't exist
                         cartItemRepository.save(dbCartItem);
@@ -200,6 +256,24 @@ public class CartController {
                 session.removeAttribute(GUEST_CART_KEY);
             }
 
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/clear")
+    public ResponseEntity<?> clearCart(Authentication authentication, HttpSession session) {
+        try {
+            if (authentication != null && authentication.isAuthenticated()) {
+                // Clear cart for authenticated user
+                User user = userRepository.findByEmail(authentication.getName())
+                        .orElseThrow(() -> new RuntimeException("User not found"));
+                cartItemRepository.deleteByUserId(user.getId());
+            } else {
+                // Clear cart for guest user
+                session.removeAttribute(GUEST_CART_KEY);
+            }
             return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));

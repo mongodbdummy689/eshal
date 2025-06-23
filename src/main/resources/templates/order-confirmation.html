@@ -15,24 +15,116 @@
         <div class="container mx-auto px-4 py-8">
             <div class="max-w-2xl mx-auto">
                 <div class="bg-white rounded-lg shadow-md p-8">
-                    <div class="text-center mb-8">
-                        <svg class="mx-auto h-16 w-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <h1 class="text-2xl font-bold text-gray-900 mt-4">Order Placed Successfully!</h1>
-                        <p class="text-gray-600 mt-2">Your order has been placed and is being processed.</p>
+                    <!-- Error Message -->
+                    <div th:if="${error}" class="mb-8">
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                            <div class="flex items-start">
+                                <svg class="h-5 w-5 text-red-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                </svg>
+                                <div>
+                                    <p class="text-red-800 font-medium" th:text="${error}"></p>
+                                    <p class="text-red-700 text-sm mt-1">Please check your order ID or contact support if you believe this is an error.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="border-t border-gray-200 pt-6">
-                        <h2 class="text-lg font-semibold text-gray-900 mb-4">Order Details</h2>
-                        <div class="space-y-4">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Order ID:</span>
-                                <span class="font-medium" th:text="${orderId}"></span>
+                    <!-- Success Content -->
+                    <div th:if="${order != null}">
+                        <div class="text-center mb-8">
+                            <svg class="mx-auto h-16 w-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <h1 class="text-2xl font-bold text-gray-900 mt-4">Order Placed Successfully!</h1>
+                            <p class="text-gray-600 mt-2">Your order has been placed and is being processed.</p>
+                        </div>
+
+                        <div class="border-t border-gray-200 pt-6">
+                            <h2 class="text-lg font-semibold text-gray-900 mb-4">Order Details</h2>
+                            <div class="space-y-4">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Order ID:</span>
+                                    <span class="font-medium" th:text="${order?.orderId != null ? order.orderId : orderId}"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Status:</span>
+                                    <span class="font-medium text-green-600">Processing</span>
+                                </div>
+                                <div class="flex justify-between" th:if="${order?.transactionId}">
+                                    <span class="text-gray-600">Transaction ID:</span>
+                                    <span class="font-medium" th:text="${order.transactionId}"></span>
+                                </div>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Status:</span>
-                                <span class="font-medium text-green-600">Processing</span>
+                        </div>
+
+                        <!-- Customer Information -->
+                        <div class="border-t border-gray-200 pt-6 mt-6">
+                            <h2 class="text-lg font-semibold text-gray-900 mb-4">Customer Information</h2>
+                            <div class="space-y-4">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Full Name:</span>
+                                    <span class="font-medium" th:text="${order?.fullName}"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Email:</span>
+                                    <span class="font-medium" th:text="${order?.email}"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Contact Number:</span>
+                                    <span class="font-medium" th:text="${order?.contactNumber}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shipping Address -->
+                        <div class="border-t border-gray-200 pt-6 mt-6">
+                            <h2 class="text-lg font-semibold text-gray-900 mb-4">Shipping Address</h2>
+                            <div class="space-y-4">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Flat/Unit No:</span>
+                                    <span class="font-medium" th:text="${order?.flatNo}"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Apartment/Building Name:</span>
+                                    <span class="font-medium" th:text="${order?.apartmentName}"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Floor:</span>
+                                    <span class="font-medium" th:text="${order?.floor}"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Street Name:</span>
+                                    <span class="font-medium" th:text="${order?.streetName}"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Nearby Landmark:</span>
+                                    <span class="font-medium" th:text="${order?.nearbyLandmark}"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">City:</span>
+                                    <span class="font-medium" th:text="${order?.city}"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Pincode:</span>
+                                    <span class="font-medium" th:text="${order?.pincode}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shipping Information -->
+                        <div class="border-t border-gray-200 pt-6 mt-6">
+                            <h2 class="text-lg font-semibold text-gray-900 mb-4">Shipping Information</h2>
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <div class="flex items-start">
+                                    <svg class="h-5 w-5 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="text-blue-800 font-medium">Your product will be shipped within 24 hours and will be delivered within 5-7 days.</p>
+                                        <p class="text-blue-700 text-sm mt-1">Your courier tracking ID will be provided once the product is shipped.</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -49,5 +141,11 @@
 
     <!-- Footer -->
     <footer th:replace="~{layout/main :: footer}"></footer>
+
+    <!-- Cart Script (needed for clearCart function) -->
+    <script th:src="@{/js/cart.js}"></script>
+    
+    <!-- Order Confirmation Script -->
+    <script th:src="@{/js/order-confirmation.js}"></script>
 </body>
 </html> 

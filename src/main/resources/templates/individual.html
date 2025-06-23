@@ -41,7 +41,20 @@
                     </div>
                     <div class="p-4">
                         <h3 class="text-lg font-semibold mb-2 text-primary" th:text="${product.name}" th:data-description="${product.description}">Product Name</h3>
-                        <p class="text-text-secondary mb-2" th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 2)}">$0.00</p>
+                        
+                        <!-- Variant Selection -->
+                        <div th:if="${product.priceType == 'variant' and product.variants != null and not #lists.isEmpty(product.variants)}" class="mb-2">
+                            <select class="variant-select w-full p-2 border rounded">
+                                <option th:each="variant : ${product.variants}"
+                                        th:value="${variant.price}"
+                                        th:text="${variant.size + ' - ₹' + #numbers.formatDecimal(variant.price, 1, 2)}"></option>
+                            </select>
+                        </div>
+
+                        <p class="text-text-secondary mb-2" 
+                           th:classappend="${product.priceType == 'variant'} ? 'price-display'"
+                           th:text="'₹' + ${#numbers.formatDecimal(product.price, 1, 2)}">₹0.00</p>
+                        
                         <div class="flex items-center space-x-2 mb-4">
                             <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
                             <span class="quantity-value text-lg font-semibold text-primary">1</span>
@@ -123,6 +136,17 @@
                 let currentItemIndex = -1;
                 let isAddingToCart = false;
 
+                // Handle variant selection change
+                document.querySelectorAll('.variant-select').forEach(select => {
+                    select.addEventListener('change', function() {
+                        const card = this.closest('.card');
+                        const priceDisplay = card.querySelector('.price-display');
+                        const newPrice = parseFloat(this.value);
+                        priceDisplay.textContent = '₹' + newPrice.toFixed(2);
+                        card.dataset.price = newPrice;
+                    });
+                });
+
                 // Function to handle add to cart
                 async function handleAddToCart(productId, quantity, price, event) {
                     // Prevent event bubbling
@@ -141,7 +165,27 @@
                     try {
                         console.log('Starting add to cart operation');
                         isAddingToCart = true;
-                        await addToCart(productId, quantity, price);
+                        
+                        // Get selected variant if available
+                        let selectedVariant = null;
+                        let variantPrice = null;
+                        const card = document.querySelector(`.card[data-product-id="${productId}"]`);
+                        if (card) {
+                            const variantSelect = card.querySelector('.variant-select');
+                            if (variantSelect && variantSelect.value) {
+                                // Get the selected option text to extract variant name
+                                const selectedOption = variantSelect.options[variantSelect.selectedIndex];
+                                if (selectedOption) {
+                                    // Extract variant name from option text (e.g., "Wafa - ₹200.00" -> "Wafa")
+                                    const optionText = selectedOption.text;
+                                    selectedVariant = optionText.split(' - ')[0];
+                                    // Get the variant price from the option value
+                                    variantPrice = parseFloat(variantSelect.value);
+                                }
+                            }
+                        }
+                        
+                        await addToCart(productId, quantity, price, selectedVariant, variantPrice);
                         console.log('Add to cart operation completed');
                     } catch (error) {
                         console.error('Error adding to cart:', error);
@@ -248,6 +292,23 @@
                             
                             const productId = card.dataset.productId;
                             const price = parseFloat(card.dataset.price);
+                            
+                            // Get selected variant if available
+                            let selectedVariant = null;
+                            let variantPrice = null;
+                            const variantSelect = card.querySelector('.variant-select');
+                            if (variantSelect && variantSelect.value) {
+                                // Get the selected option text to extract variant name
+                                const selectedOption = variantSelect.options[variantSelect.selectedIndex];
+                                if (selectedOption) {
+                                    // Extract variant name from option text (e.g., "Wafa - ₹200.00" -> "Wafa")
+                                    const optionText = selectedOption.text;
+                                    selectedVariant = optionText.split(' - ')[0];
+                                    // Get the variant price from the option value
+                                    variantPrice = parseFloat(variantSelect.value);
+                                }
+                            }
+                            
                             await handleAddToCart(productId, modalQuantity, price, event);
                         }
                     };

@@ -202,6 +202,50 @@
                 transform: translateY(-2px);
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             }
+
+            /* New styles for side-by-side layout */
+            .mySlides.side-by-side {
+                display: flex;
+                flex-direction: row;
+                align-items: stretch;
+            }
+
+            /* Only apply these styles when the slide has side-by-side class */
+            .mySlides.side-by-side .image-container {
+                flex: 1;
+                height: 100%;
+                position: relative;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(0, 0, 0, 0.7);
+            }
+
+            .mySlides.side-by-side .image-container img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                object-position: center;
+            }
+
+            .mySlides.side-by-side .text {
+                flex: 1;
+                position: relative;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+                min-width: 50%;
+            }
+
+            /* Ensure first slide's image remains unchanged */
+            .mySlides:not(.side-by-side) img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
             </style>
                         
             <div class="slideshow-container">
@@ -217,9 +261,11 @@
                     </div>
                 </div>
                 
-                <div class="mySlides next">
+                <div class="mySlides next side-by-side">
                     <div class="numbertext">2 / 3</div>
-                    <img src="/img/menkit.jpeg" alt="Men's Kit">
+                    <div class="image-container">
+                        <img src="/img/menkit.jpeg" alt="Men's Kit">
+                    </div>
                     <div class="text">
                         <div class="text-content">
                             <h1>Hajj & Umrah Kit for Men</h1>
@@ -230,9 +276,11 @@
                     </div>
                 </div>
                 
-                <div class="mySlides next">
+                <div class="mySlides next side-by-side">
                     <div class="numbertext">3 / 3</div>
-                    <img src="/img/womenkit.jpeg" alt="Women's Kit">
+                    <div class="image-container">
+                        <img src="/img/womenkit.jpeg" alt="Women's Kit">
+                    </div>
                     <div class="text">
                         <div class="text-content">
                             <h1>Hajj & Umrah Kit for Women</h1>
@@ -260,7 +308,8 @@
             function showSlides(n) {
                 // Remove all classes first
                 for (let i = 0; i < slides.length; i++) {
-                    slides[i].className = "mySlides";
+                    // Keep side-by-side class for slides 2 and 3
+                    slides[i].className = "mySlides" + (i > 0 ? " side-by-side" : "");
                     dots[i].className = "dot";
                 }
                 
@@ -269,18 +318,18 @@
                 if (n < 1) {slideIndex = slides.length}
                 
                 // Set current slide as active
-                slides[slideIndex-1].className = "mySlides active";
+                slides[slideIndex-1].className = "mySlides active" + (slideIndex-1 > 0 ? " side-by-side" : "");
                 dots[slideIndex-1].className = "dot active";
                 
                 // Set next slide
                 let nextIndex = slideIndex;
                 if (nextIndex >= slides.length) nextIndex = 0;
-                slides[nextIndex].className = "mySlides next";
+                slides[nextIndex].className = "mySlides next" + (nextIndex > 0 ? " side-by-side" : "");
                 
                 // Set previous slide
                 let prevIndex = slideIndex - 2;
                 if (prevIndex < 0) prevIndex = slides.length - 1;
-                slides[prevIndex].className = "mySlides prev";
+                slides[prevIndex].className = "mySlides prev" + (prevIndex > 0 ? " side-by-side" : "");
             }
             
             function currentSlide(n) {
@@ -299,6 +348,12 @@
             // Initialize slideshow
             showSlides(slideIndex);
             startSlideInterval();
+
+            // Add event listener for when the page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                // Ensure proper initial state
+                showSlides(slideIndex);
+            });
             </script>
 
         <!-- Featured Packages Section -->

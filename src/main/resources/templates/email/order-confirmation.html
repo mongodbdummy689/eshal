@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #1a4d2e;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo {
+            max-width: 200px;
+            height: auto;
+        }
+        .order-id {
+            background-color: #1a4d2e;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .section {
+            margin: 25px 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .section h3 {
+            color: #1a4d2e;
+            margin-top: 0;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .item:last-child {
+            border-bottom: none;
+        }
+        .item-name {
+            font-weight: bold;
+        }
+        .item-details {
+            color: #666;
+            font-size: 14px;
+        }
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a4d2e;
+            text-align: right;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #1a4d2e;
+        }
+        .shipping-info {
+            background-color: #e8f5e8;
+            border-left: 4px solid #1a4d2e;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 14px;
+        }
+        .contact-info {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1 style="color: #1a4d2e; margin-bottom: 10px;">Eshal Hajj & Umrah Store</h1>
+            <p style="color: #666; margin: 0;">Your order has been confirmed!</p>
+        </div>
+
+        <div class="order-id">
+            Order #<span th:text="${orderId}">123456</span>
+        </div>
+
+        <div class="section" th:if="${transactionId != null and !transactionId.isEmpty()}">
+            <h3>Payment Information</h3>
+            <div style="background-color: #e8f5e8; padding: 15px; border-radius: 5px; border-left: 4px solid #1a4d2e;">
+                <p style="margin: 0;"><strong>Transaction ID:</strong> <span th:text="${transactionId}">TXN123456789</span></p>
+                <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">Payment Status: <span th:text="${paymentStatus}">PAID</span></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Order Details</h3>
+            <div th:if="${orderItems != null}">
+                <div th:each="item : ${orderItems}" class="item">
+                    <div>
+                        <div class="item-name" th:text="${item.productName}">Product Name</div>
+                        <div class="item-details" th:if="${item.selectedVariant != null}">
+                            Variant: <span th:text="${item.selectedVariant}">Variant</span>
+                        </div>
+                        <div class="item-details">
+                            Quantity: <span th:text="${item.quantity}">1</span>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: bold;" th:text="'₹' + ${#numbers.formatDecimal(item.price, 1, 2)}">₹100.00</div>
+                    </div>
+                </div>
+            </div>
+            <div class="total">
+                Total Amount: <span th:text="${totalAmount}">₹0.00</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Shipping Address</h3>
+            <div style="white-space: pre-line;" th:text="${shippingAddress}">
+                Customer Name
+                Flat/Unit: 123
+                Apartment: Building Name
+                Floor: 2nd
+                Street Name
+                Near: Landmark
+                City, State - Pincode
+                Country
+            </div>
+        </div>
+
+        <div class="shipping-info">
+            <h4 style="margin-top: 0; color: #1a4d2e;">🚚 Shipping Information</h4>
+            <p style="margin-bottom: 10px;"><strong>Your product will be shipped within 24 hours and will be delivered within 5-7 days.</strong></p>
+            <p style="margin: 0; font-size: 14px;">Your courier tracking ID will be provided once the product is shipped.</p>
+        </div>
+
+        <div class="contact-info">
+            <h4 style="margin-top: 0; color: #1a4d2e;">📞 Contact Information</h4>
+            <p style="margin: 5px 0;"><strong>Phone:</strong> 9923067286 / 9764417286 / 7030890979</p>
+            <p style="margin: 5px 0;"><strong>Address:</strong> Shop No. 5, Building No. 5, HM Royal Society, Near Talab Masjid, Kondhwa, Pune - 411 048</p>
+        </div>
+
+        <div class="footer">
+            <p>Thank you for choosing Hajj & Umrah Store!</p>
+            <p>If you have any questions, please don't hesitate to contact us.</p>
+            <p style="margin-top: 20px; font-size: 12px; color: #999;">
+                This is an automated email. Please do not reply to this message.
+            </p>
+        </div>
+    </div>
+</body>
+</html> 

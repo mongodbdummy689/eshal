@@ -275,14 +275,48 @@ Zam Zam water (60 ml)
 Khajur (4 pcs)
 - Khajur and Zam Zam Water products will not appear on the individual page. All other products will continue to be displayed as before. The Janamaz category exclusion is maintained
 
+Updated Individual page to display image, item description in a better format when user clicks on View button. 
+
 Trolley-Bag:
 Change title to booking system. - Renamed
 Change download button to View Form with * for information purposes
 - Download Rental Form button is replaced with View Rental Form. A professional disclaimer text is added under the View Rental Form button.
 Change Proprietor to Director - Renamed
 
-Pending information to be provided:
-Additional items to be added only under Individual - Item list to be provided
-Tohfa-E-Khulus - Replace Napkin with Big Rumal -image to be provided.
-View Form button on Trolley-Bag-On-Rent page to be provide.
+------------------------------------
+Changes for 16/6/25:
+Images on hero page to be shifted to right and content on left - Done
+Rename Digital Tabeeh to Finger Counter, Hand Gloves - Ladies Hand Gloves - Done
+Tohfa-E-Khulus page - Janamaz should display view more items - land on Janamaz page - Done
+Button change View Rental Form - Guidelines, add one more button for Form which will be provided - Done
+Add images on About - Done
+Men's mini kit, Women's mini kit - Hajj since it's just for Umrah, New Item - Ehram Lock Button
+Add Umrah cards to Individual as well.
+
+Changes for 17/6/25:
+
+Added new item Big Rumal (Safa) under Tohfa-E-Khulus page.
+Added Trolley Bag Form under Trolley-Bag-On-Rent page.
+Added Ehram Lock button under Men's kit and Men's Mini Kit page. - Not to be included in Men's Kit, include in Men's mini kit
+Added Janamaz details under Janamaz page. Images will be added soon. - Images, remove other details
+
+Clarifications required regarding prices. Please check the following list.
+
 Razorpay registration to be done.
+eshalumrahessentials@gmail.com
+eshal@0102
+
+Key Id - rzp_test_rHeXGgREOmWbE4
+Key Secret - dh1PIyAAgE7odUXe60uszFlP
+
+Men's Kit Page Ehram 20 Ehram (Cotton) 700 Mismatch Men's Kit/Men's Mini Kit/Individual
+Common Items for Men/Women Hajj & Umrah Guide 20 Umrah Guide 100 Mismatch Men's/Women's Mini Kit/Individual
+Common Items for Men/Women Dua Cards 20 Umrah Dua card 190 Mismatch Men's/Women's Mini Kit/Individual
+
+Individual Page Zamzam empty bottle 60 ml 4 - Tohfa-E-Khulus/Individual
+Individual Page Plastic pouch for khajur pani 4x6-100 nos. 150 - Tohfa-E-Khulus/Individual
+Individual Page Plastic pouch for khajur pani 5x7-100 nos. 200 - Tohfa-E-Khulus/Individual
+
+As discussed please find the list of items that require images.
+Please also send Janamaz images on mail.
+

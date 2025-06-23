@@ -2,6 +2,8 @@ package com.hajjumrah.controller;
 
 import com.hajjumrah.model.*;
 import com.hajjumrah.repository.*;
+import com.hajjumrah.service.OrderIdGenerator;
+import com.hajjumrah.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -13,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.math.BigDecimal;
 
 @Controller
 @RequestMapping("/api/orders")
@@ -30,6 +33,12 @@ public class OrderController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private OrderIdGenerator orderIdGenerator;
+
+    @Autowired
+    private EmailService emailService;
+
     @GetMapping("/{orderId}")
     public Object viewOrder(@PathVariable String orderId,
                           @RequestParam(required = false) String email,
@@ -38,8 +47,17 @@ public class OrderController {
                           Model model,
                           @RequestHeader(value = "Accept", required = false) String accept) {
         try {
-            Order order = orderRepository.findById(orderId)
-                    .orElseThrow(() -> new RuntimeException("Order not found"));
+            // First try to find by the 6-digit orderId
+            Optional<Order> orderOpt = orderRepository.findByOrderId(orderId);
+            Order order;
+            
+            if (orderOpt.isPresent()) {
+                order = orderOpt.get();
+            } else {
+                // Fallback to MongoDB ObjectId for backward compatibility
+                order = orderRepository.findById(orderId)
+                        .orElseThrow(() -> new RuntimeException("Order not found"));
+            }
 
             // If order has no userId, it's a guest order - allow access with email or phone verification
             if (order.getUserId() == null) {
@@ -79,7 +97,7 @@ public class OrderController {
             }
 
             // For view requests, return the template
-            model.addAttribute("orderId", orderId);
+            model.addAttribute("orderId", order.getOrderId() != null ? order.getOrderId() : order.getId());
             model.addAttribute("order", order);
             return "order-confirmation";
 
@@ -93,34 +111,95 @@ public class OrderController {
     }
 
     @PostMapping("/place")
-    public ResponseEntity<?> placeOrder(@RequestBody Map<String, Object> orderDetails) {
+    public ResponseEntity<?> placeOrder(@RequestBody Map<String, Object> requestBody) {
         try {
-            // Generate a unique order ID
-            String orderId = java.util.UUID.randomUUID().toString();
+            Map<String, String> customerDetails = (Map<String, String>) requestBody.get("customerDetails");
+            List<Map<String, Object>> cartItems = (List<Map<String, Object>>) requestBody.get("cartItems");
+            String paymentMethod = (String) requestBody.get("paymentMethod");
+
+            List<OrderItem> orderItems = new ArrayList<>();
+            BigDecimal totalAmount = BigDecimal.ZERO;
+
+            for (Map<String, Object> itemMap : cartItems) {
+                Product product = productRepository.findById((String) itemMap.get("productId"))
+                        .orElseThrow(() -> new RuntimeException("Product not found for ID: " + itemMap.get("productId")));
+
+                BigDecimal price = new BigDecimal(itemMap.get("price").toString());
+                int quantity = (int) itemMap.get("quantity");
+                
+                OrderItem orderItem = new OrderItem(
+                    product.getId(), 
+                    product.getName(), 
+                    product.getImageUrl(), 
+                    (String) itemMap.get("selectedVariant"), 
+                    price, 
+                    quantity
+                );
+                orderItems.add(orderItem);
+                totalAmount = totalAmount.add(price.multiply(new BigDecimal(quantity)));
+            }
             
-            // Create new order
             Order order = new Order();
-            order.setId(orderId);
-            order.setUserId((String) orderDetails.get("userId"));
-            order.setTotalAmount(Double.parseDouble(orderDetails.get("totalAmount").toString()));
-            order.setStatus("PENDING");
+            
+            // Generate unique 6-digit order ID
+            String generatedOrderId = orderIdGenerator.generateOrderId();
+            order.setOrderId(generatedOrderId);
+            
+            order.setUserId(customerDetails.get("userId"));
+            order.setItems(orderItems);
+            order.setTotalAmount(totalAmount.doubleValue());
+            order.setStatus("CONFIRMED");
             order.setOrderDate(LocalDateTime.now());
-            order.setShippingAddress((String) orderDetails.get("shippingAddress"));
-            order.setContactNumber((String) orderDetails.get("contactNumber"));
-            order.setEmail((String) orderDetails.get("email"));
-            order.setPaymentStatus("PENDING");
-            order.setPaymentMethod((String) orderDetails.get("paymentMethod"));
             
-            // Save order to database
-            orderRepository.save(order);
+            // Set enhanced address fields
+            order.setFullName(customerDetails.get("fullName"));
+            order.setFlatNo(customerDetails.get("flatNo"));
+            order.setApartmentName(customerDetails.get("apartmentName"));
+            order.setFloor(customerDetails.get("floor"));
+            order.setStreetName(customerDetails.get("streetName"));
+            order.setNearbyLandmark(customerDetails.get("nearbyLandmark"));
+            order.setCity(customerDetails.get("city"));
+            order.setPincode(customerDetails.get("pincode"));
+            order.setState(customerDetails.get("state"));
+            order.setCountry(customerDetails.get("country"));
             
+            // Set legacy fields for backward compatibility
+            order.setShippingAddress(customerDetails.get("shippingAddress"));
+            order.setContactNumber(customerDetails.get("contactNumber"));
+            order.setEmail(customerDetails.get("email"));
+            order.setPaymentStatus("PAID");
+            order.setPaymentMethod(paymentMethod);
+            
+            // Set transaction ID if available from payment details
+            if (requestBody.containsKey("paymentDetails")) {
+                Map<String, Object> paymentDetails = (Map<String, Object>) requestBody.get("paymentDetails");
+                if (paymentDetails.containsKey("razorpay_payment_id")) {
+                    order.setTransactionId((String) paymentDetails.get("razorpay_payment_id"));
+                }
+            }
+            
+            Order savedOrder = orderRepository.save(order);
+            
+            // Send email notification
+            try {
+                emailService.sendOrderConfirmationEmail(savedOrder);
+            } catch (Exception e) {
+                // Log but don't fail the order placement if email fails
+                System.err.println("Failed to send order confirmation email: " + e.getMessage());
+            }
+            
+            // Optional: Clear the user's cart after successful order placement
+            // cartItemRepository.deleteAllByUser(....);
+
             Map<String, Object> response = new HashMap<>();
-            response.put("orderId", orderId);
+            response.put("orderId", savedOrder.getOrderId()); // Return the 6-digit orderId
             response.put("status", "success");
             
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            // Log the exception for debugging
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body(Map.of("error", "Error placing order: " + e.getMessage()));
         }
     }
 

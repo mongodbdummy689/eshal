@@ -2,9 +2,9 @@
 let cartItemsCache = [];
 
 // Make addToCart available globally
-window.addToCart = async function(productId, quantity = 1, price = null) {
+window.addToCart = async function(productId, quantity = 1, price = null, selectedVariant = null, variantPrice = null) {
     try {
-        const requestBody = { productId, quantity, price };
+        const requestBody = { productId, quantity, price, selectedVariant, variantPrice };
         console.log('Sending request to /api/cart/add with body:', requestBody);
 
         const response = await fetch('/api/cart/add', {
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize checkout button
     const checkoutBtn = document.getElementById('checkoutBtn');
     if (checkoutBtn) {
-        checkoutBtn.addEventListener('click', handleCheckout);
+        checkoutBtn.addEventListener('click', proceedToCheckout);
     }
 });
 
@@ -82,25 +82,70 @@ function updateCartUI(cartItems) {
         return;
     }
 
-    if (cartItems.length === 0) {
+    if (!cartItems || cartItems.length === 0) {
         cartItemsContainer.innerHTML = '';
         emptyCartDiv.classList.remove('hidden');
         cartSummaryDiv.classList.add('hidden');
-        subtotalElement.textContent = '$0.00';
-        shippingElement.textContent = '$0.00';
-        totalElement.textContent = '$0.00';
+        subtotalElement.textContent = '₹0.00';
+        shippingElement.textContent = '₹0.00';
+        totalElement.textContent = '₹0.00';
         return;
     }
 
     emptyCartDiv.classList.add('hidden');
     cartSummaryDiv.classList.remove('hidden');
-    cartItemsContainer.innerHTML = cartItems.map(item => `
+    cartItemsContainer.innerHTML = cartItems.map(item => {
+        // Calculate prices based on product type
+        let displayPrice = 0, itemTotal = 0;
+        
+        if (item.product) {
+            if (item.product.category === 'Janamaz') {
+                // Handle Janamaz products
+                if (item.quantity === 12) {
+                    displayPrice = item.product.pricePerDozen || 0;
+                    itemTotal = displayPrice;
+                } else {
+                    displayPrice = item.product.pricePerPiece || 0;
+                    itemTotal = displayPrice * item.quantity;
+                }
+            } else {
+                // Handle regular products and products with variants
+                if (item.selectedVariant && item.variantPrice) {
+                    // Use variant price if available
+                    displayPrice = item.variantPrice;
+                    itemTotal = displayPrice * item.quantity;
+                } else if (item.price) {
+                    // Use stored price (which should be variant price if variant was selected)
+                    displayPrice = item.price;
+                    itemTotal = displayPrice * item.quantity;
+                } else {
+                    // Use product price as fallback
+                    displayPrice = item.product.price || 0;
+                    itemTotal = displayPrice * item.quantity;
+                }
+            }
+        }
+
+        const priceDisplay = displayPrice > 0 ? `₹${displayPrice.toFixed(2)} ${item.product?.category === 'Janamaz' && item.quantity === 12 ? '/dozen' : '/pc'}` : '';
+        const totalDisplay = itemTotal > 0 ? `₹${itemTotal.toFixed(2)}` : '';
+        
+        // Create variant display text
+        let variantDisplay = '';
+        if (item.selectedVariant) {
+            variantDisplay = `<p class="text-sm text-gray-500">Variant: ${item.selectedVariant}</p>`;
+        }
+
+        return `
         <div class="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4" data-item-id="${item.id}">
-            <img src="${item.product.imageUrl}" alt="${item.product.name}" class="w-24 h-24 object-cover rounded-lg">
+            <img src="${item.product?.imageUrl || ''}" alt="${item.product?.name || 'Product'}" class="w-24 h-24 object-cover rounded-lg">
             <div class="flex-1">
-                <h3 class="font-semibold">${item.product.name}</h3>
+                <h3 class="font-semibold">${item.product?.name || 'Product'}</h3>
+                ${variantDisplay}
                 <div class="flex justify-between items-center">
-                    <p class="text-gray-600">$${item.price.toFixed(2)}</p>
+                    <div class="text-gray-600">
+                        ${priceDisplay ? `<p>${priceDisplay}</p>` : ''}
+                        ${totalDisplay ? `<p class="font-semibold">Total: ${totalDisplay}</p>` : ''}
+                    </div>
                     <div class="flex items-center space-x-4">
                         <div class="flex items-center space-x-2">
                             <button class="quantity-btn" onclick="updateQuantity('${item.id}', ${Math.max(1, item.quantity - 1)})">-</button>
@@ -116,21 +161,63 @@ function updateCartUI(cartItems) {
                 </div>
             </div>
         </div>
-    `).join('');
+    `}).join('');
 
     // Update totals
-    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const subtotal = cartItems.reduce((sum, item) => {
+        if (!item || !item.product) return sum;
+        
+        if (item.product.category === 'Janamaz') {
+            if (item.quantity === 12) {
+                return sum + (item.product.pricePerDozen || 0);
+            } else {
+                return sum + ((item.product.pricePerPiece || 0) * item.quantity);
+            }
+        } else {
+            // Handle products with variants
+            if (item.selectedVariant && item.variantPrice) {
+                return sum + (item.variantPrice * item.quantity);
+            } else if (item.price) {
+                // Use stored price (which should be variant price if variant was selected)
+                return sum + (item.price * item.quantity);
+            } else {
+                return sum + ((item.product.price || 0) * item.quantity);
+            }
+        }
+    }, 0);
+    
     const shipping = subtotal > 0 ? 10 : 0; // Example shipping cost
     const total = subtotal + shipping;
 
-    subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
-    shippingElement.textContent = `$${shipping.toFixed(2)}`;
-    totalElement.textContent = `$${total.toFixed(2)}`;
+    subtotalElement.textContent = `₹${subtotal.toFixed(2)}`;
+    shippingElement.textContent = `₹${shipping.toFixed(2)}`;
+    totalElement.textContent = `₹${total.toFixed(2)}`;
 }
 
 // Update item quantity
 async function updateQuantity(itemId, newQuantity) {
     try {
+        const item = cartItemsCache.find(item => item.id === itemId);
+        if (!item) return;
+
+        // Calculate new price based on quantity and variant
+        let newPrice = item.price;
+        if (item.product.category === 'Janamaz') {
+            // For Janamaz products, use dozen price when quantity is 12
+            newPrice = newQuantity === 12 ? item.product.pricePerDozen : item.product.pricePerPiece * newQuantity;
+        } else {
+            // For products with variants, use variant price
+            if (item.selectedVariant && item.variantPrice) {
+                newPrice = item.variantPrice * newQuantity;
+            } else if (item.price) {
+                // Use stored price (which should be variant price if variant was selected)
+                newPrice = item.price * newQuantity;
+            } else {
+                // For regular products, multiply by quantity
+                newPrice = item.product.price * newQuantity;
+            }
+        }
+
         const response = await fetch(`/api/cart/${itemId}`, {
             method: 'PUT',
             headers: {
@@ -138,23 +225,18 @@ async function updateQuantity(itemId, newQuantity) {
                 'X-Requested-With': 'XMLHttpRequest'
             },
             credentials: 'include',
-            body: JSON.stringify({ quantity: newQuantity })
+            body: JSON.stringify({ quantity: newQuantity, price: newPrice })
         });
 
         if (!response.ok) {
             throw new Error('Failed to update quantity');
         }
 
-        // Update local cache
-        const itemIndex = cartItemsCache.findIndex(item => item.id === itemId);
-        if (itemIndex !== -1) {
-            cartItemsCache[itemIndex].quantity = newQuantity;
-            updateCartUI(cartItemsCache);
-            await updateCartCount();
-        }
+        // Reload cart items to reflect changes
+        await loadCartItems();
     } catch (error) {
         console.error('Error updating quantity:', error);
-        alert('Failed to update quantity. Please try again.');
+        showError('Failed to update quantity. Please try again.');
     }
 }
 
@@ -187,44 +269,13 @@ async function removeItem(itemId) {
     }
 }
 
-// Handle checkout
-async function handleCheckout() {
-    try {
-        // Check if user is authenticated
-        const response = await fetch('/api/auth/status', {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            credentials: 'include'
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to check authentication status');
-        }
-
-        const data = await response.json();
-        console.log('Auth status:', data);
-
-        if (!data.authenticated) {
-            // Show login modal
-            const loginModal = document.getElementById('loginModal');
-            if (loginModal) {
-                loginModal.classList.remove('hidden');
-            } else {
-                window.location.href = '/login';
-            }
-            return;
-        }
-
-        // Proceed to checkout
-        window.location.href = '/checkout';
-    } catch (error) {
-        console.error('Error handling checkout:', error);
-        alert('Failed to proceed to checkout. Please try again.');
-    }
+// Renamed from handleCheckout to avoid conflicts
+async function proceedToCheckout() {
+    // This function's purpose is to navigate the user to the checkout page.
+    window.location.href = '/checkout';
 }
 
-// Show error message
+// Function to display a generic error message
 function showError(message) {
     alert(message);
 }
@@ -420,4 +471,44 @@ async function viewGuestOrder(orderId, email, phone) {
 }
 
 // Make viewGuestOrder available globally
-window.viewGuestOrder = viewGuestOrder; 
+window.viewGuestOrder = viewGuestOrder;
+
+// Clear entire cart
+async function clearCart() {
+    try {
+        const response = await fetch('/api/cart/clear', {
+            method: 'DELETE',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            console.log('Cart cleared successfully');
+            
+            // Clear local cache
+            cartItemsCache = [];
+            
+            // Update UI
+            updateCartUI([]);
+            await updateCartCount();
+            
+            // Clear localStorage cart data if it exists
+            if (localStorage.getItem('guestCart')) {
+                localStorage.removeItem('guestCart');
+            }
+            
+            return true;
+        } else {
+            console.error('Failed to clear cart');
+            return false;
+        }
+    } catch (error) {
+        console.error('Error clearing cart:', error);
+        return false;
+    }
+}
+
+// Make clearCart available globally
+window.clearCart = clearCart; 

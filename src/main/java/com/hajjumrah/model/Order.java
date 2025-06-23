@@ -10,16 +10,33 @@ import java.util.List;
 @Document(collection = "orders")
 public class Order {
     @Id
-    private String id;
+    private String id; // MongoDB ObjectId
+    
+    private String orderId; // 6-digit system generated order ID
     
     private String userId;
     private List<OrderItem> items;
     private double totalAmount;
     private String status; // PENDING, PROCESSING, SHIPPED, DELIVERED, CANCELLED
     private LocalDateTime orderDate;
+    
+    // Enhanced address fields
+    private String fullName;
+    private String flatNo;
+    private String apartmentName;
+    private String floor;
+    private String streetName;
+    private String nearbyLandmark;
+    private String city;
+    private String pincode;
+    private String state;
+    private String country;
+    
+    // Legacy field for backward compatibility
     private String shippingAddress;
     private String contactNumber;
     private String email;
     private String paymentStatus; // PENDING, PAID, FAILED
     private String paymentMethod;
+    private String transactionId; // Payment transaction ID
 } 

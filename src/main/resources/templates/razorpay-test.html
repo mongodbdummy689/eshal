@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Razorpay Test - Hajj Umrah</title>
+</head>
+<body class="bg-gray-50">
+    <!-- Include auth modals -->
+    <div th:replace="~{layout/auth-modals :: auth-modals}"></div>
+
+    <!-- Navbar -->
+    <nav th:replace="~{layout/main :: nav}"></nav>
+
+    <!-- Main Content -->
+    <div class="pt-32 md:pt-24">
+        <div class="container mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold mb-8 text-primary-dark">Razorpay Payment Test</h1>
+
+            <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4 text-primary-dark">Test Payment</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label for="amount" class="block text-sm font-medium text-gray-700">Amount (₹)</label>
+                        <input type="number" id="amount" value="100" min="1" step="1"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+                    </div>
+                    
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="email" value="test@example.com"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+                    </div>
+                    
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                        <input type="tel" id="phone" value="9876543210" pattern="[0-9]{10}"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+                    </div>
+                    
+                    <button onclick="testRazorpayPayment()" 
+                        class="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                        Test Payment
+                    </button>
+                </div>
+                
+                <div id="result" class="mt-4 p-4 rounded-md hidden">
+                    <!-- Results will be shown here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{layout/main :: footer}"></footer>
+
+    <!-- Scripts -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        async function testRazorpayPayment() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const resultDiv = document.getElementById('result');
+            
+            if (!amount || amount <= 0) {
+                showResult('Please enter a valid amount', 'error');
+                return;
+            }
+            
+            if (!email || !phone) {
+                showResult('Please fill in all fields', 'error');
+                return;
+            }
+            
+            try {
+                // Create Razorpay order
+                const orderResponse = await fetch('/api/payments/razorpay/create-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        amount: amount,
+                        currency: 'INR'
+                    })
+                });
+
+                const orderData = await orderResponse.json();
+                
+                if (!orderResponse.ok) {
+                    showResult('Failed to create order: ' + orderData.message, 'error');
+                    return;
+                }
+
+                if (!orderData.success || !orderData.data) {
+                    showResult('Invalid order response from server', 'error');
+                    return;
+                }
+
+                // Initialize Razorpay payment
+                const options = {
+                    key: orderData.data.keyId,
+                    amount: orderData.data.amount,
+                    currency: orderData.data.currency,
+                    name: 'Hajj Umrah',
+                    description: 'Test Payment',
+                    order_id: orderData.data.orderId,
+                    handler: function (response) {
+                        console.log('Payment successful:', response);
+                        verifyPayment(response);
+                    },
+                    prefill: {
+                        name: email.split('@')[0],
+                        email: email,
+                        contact: phone
+                    },
+                    theme: {
+                        color: '#1f2937'
+                    },
+                    modal: {
+                        ondismiss: function() {
+                            showResult('Payment cancelled by user', 'info');
+                        }
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.open();
+
+            } catch (error) {
+                console.error('Payment error:', error);
+                showResult('Error: ' + error.message, 'error');
+            }
+        }
+
+        async function verifyPayment(response) {
+            try {
+                const verifyResponse = await fetch('/api/payments/razorpay/verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature
+                    })
+                });
+
+                const verifyData = await verifyResponse.json();
+
+                if (verifyResponse.ok && verifyData.success) {
+                    showResult('Payment successful! Payment ID: ' + response.razorpay_payment_id, 'success');
+                } else {
+                    showResult('Payment verification failed: ' + verifyData.message, 'error');
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                showResult('Error verifying payment: ' + error.message, 'error');
+            }
+        }
+
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = 'mt-4 p-4 rounded-md';
+            
+            let bgColor = 'bg-gray-100';
+            let textColor = 'text-gray-800';
+            
+            if (type === 'success') {
+                bgColor = 'bg-green-100';
+                textColor = 'text-green-800';
+            } else if (type === 'error') {
+                bgColor = 'bg-red-100';
+                textColor = 'text-red-800';
+            } else if (type === 'info') {
+                bgColor = 'bg-blue-100';
+                textColor = 'text-blue-800';
+            }
+            
+            resultDiv.className += ' ' + bgColor + ' ' + textColor;
+            resultDiv.innerHTML = message;
+            resultDiv.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html> 
