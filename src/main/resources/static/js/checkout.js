@@ -96,17 +96,20 @@ async function loadOrderSummary() {
 
         orderSummary.innerHTML = cartItems.map(item => {
             // Calculate prices based on product type
-            let displayPrice = 0, itemTotal = 0;
+            let displayPrice = 0, itemTotal = 0, priceUnit = '';
             
             if (item.product) {
                 if (item.product.category === 'Janamaz') {
                     // Handle Janamaz products
-                    if (item.quantity === 12) {
+                    if (item.quantity > 0 && item.quantity % 12 === 0) {
+                        const dozens = item.quantity / 12;
                         displayPrice = item.product.pricePerDozen || 0;
-                        itemTotal = displayPrice;
+                        itemTotal = displayPrice * dozens;
+                        priceUnit = '/dozen';
                     } else {
                         displayPrice = item.product.pricePerPiece || 0;
-                        itemTotal = displayPrice * item.quantity;
+                        itemTotal = displayPrice * (item.quantity || 1);
+                        priceUnit = '/pc';
                     }
                 } else {
                     // Handle regular products and products with variants
@@ -123,7 +126,7 @@ async function loadOrderSummary() {
                 }
             }
 
-            const priceString = displayPrice > 0 ? `₹${displayPrice.toFixed(2)} ${item.product?.category === 'Janamaz' && item.quantity === 12 ? '/dozen' : ''}` : 'N/A';
+            const priceString = displayPrice > 0 ? `₹${displayPrice.toFixed(2)} ${priceUnit}`.trim() : 'N/A';
             const totalString = itemTotal > 0 ? `₹${itemTotal.toFixed(2)}` : 'N/A';
             
             let variantText = '';
@@ -203,22 +206,33 @@ async function handlePlaceOrder(event) {
     
     // Calculate total amount with better error handling
     const totalAmount = cartItems.reduce((sum, item) => {
-        let itemPrice = 0;
-        
-        // Try to get price from different sources
-        if (item.price) {
-            itemPrice = item.price;
-        } else if (item.variantPrice) {
-            itemPrice = item.variantPrice;
-        } else if (item.product && item.product.price) {
-            itemPrice = item.product.price;
-        } else {
-            console.warn('No price found for item:', item);
-            itemPrice = 0;
+        let itemTotal = 0;
+        if (item.product && item.product.category === 'Janamaz' && item.quantity > 0) {
+            if (item.quantity % 12 === 0) {
+                const dozens = item.quantity / 12;
+                itemTotal = (item.product.pricePerDozen || 0) * dozens;
+            } else {
+                itemTotal = (item.product.pricePerPiece || 0) * item.quantity;
+            }
+        } else if (item.product) {
+            let itemPrice = 0;
+            
+            // Try to get price from different sources
+            if (item.price) {
+                itemPrice = item.price;
+            } else if (item.variantPrice) {
+                itemPrice = item.variantPrice;
+            } else if (item.product.price) {
+                itemPrice = item.product.price;
+            } else {
+                console.warn('No price found for item:', item);
+                itemPrice = 0;
+            }
+            
+            const quantity = item.quantity || 1;
+            itemTotal = itemPrice * quantity;
         }
-        
-        const quantity = item.quantity || 1;
-        return sum + (itemPrice * quantity);
+        return sum + itemTotal;
     }, 0);
     
     console.log('Calculated total amount:', totalAmount);

@@ -96,17 +96,20 @@ function updateCartUI(cartItems) {
     cartSummaryDiv.classList.remove('hidden');
     cartItemsContainer.innerHTML = cartItems.map(item => {
         // Calculate prices based on product type
-        let displayPrice = 0, itemTotal = 0;
+        let displayPrice = 0, itemTotal = 0, priceUnit = '';
         
         if (item.product) {
             if (item.product.category === 'Janamaz') {
                 // Handle Janamaz products
-                if (item.quantity === 12) {
+                if (item.quantity > 0 && item.quantity % 12 === 0) {
+                    const dozens = item.quantity / 12;
                     displayPrice = item.product.pricePerDozen || 0;
-                    itemTotal = displayPrice;
+                    itemTotal = displayPrice * dozens;
+                    priceUnit = '/dozen';
                 } else {
                     displayPrice = item.product.pricePerPiece || 0;
                     itemTotal = displayPrice * item.quantity;
+                    priceUnit = '/pc';
                 }
             } else {
                 // Handle regular products and products with variants
@@ -126,7 +129,7 @@ function updateCartUI(cartItems) {
             }
         }
 
-        const priceDisplay = displayPrice > 0 ? `₹${displayPrice.toFixed(2)} ${item.product?.category === 'Janamaz' && item.quantity === 12 ? '/dozen' : '/pc'}` : '';
+        const priceDisplay = displayPrice > 0 ? `₹${displayPrice.toFixed(2)} ${priceUnit}`.trim() : '';
         const totalDisplay = itemTotal > 0 ? `₹${itemTotal.toFixed(2)}` : '';
         
         // Create variant display text
@@ -167,23 +170,26 @@ function updateCartUI(cartItems) {
     const subtotal = cartItems.reduce((sum, item) => {
         if (!item || !item.product) return sum;
         
+        let itemTotal = 0;
         if (item.product.category === 'Janamaz') {
-            if (item.quantity === 12) {
-                return sum + (item.product.pricePerDozen || 0);
+            if (item.quantity > 0 && item.quantity % 12 === 0) {
+                const dozens = item.quantity / 12;
+                itemTotal = (item.product.pricePerDozen || 0) * dozens;
             } else {
-                return sum + ((item.product.pricePerPiece || 0) * item.quantity);
+                itemTotal = (item.product.pricePerPiece || 0) * item.quantity;
             }
         } else {
             // Handle products with variants
             if (item.selectedVariant && item.variantPrice) {
-                return sum + (item.variantPrice * item.quantity);
+                itemTotal = item.variantPrice * item.quantity;
             } else if (item.price) {
                 // Use stored price (which should be variant price if variant was selected)
-                return sum + (item.price * item.quantity);
+                itemTotal = item.price * item.quantity;
             } else {
-                return sum + ((item.product.price || 0) * item.quantity);
+                itemTotal = (item.product.price || 0) * item.quantity;
             }
         }
+        return sum + itemTotal;
     }, 0);
     
     const shipping = subtotal > 0 ? 10 : 0; // Example shipping cost
@@ -201,10 +207,14 @@ async function updateQuantity(itemId, newQuantity) {
         if (!item) return;
 
         // Calculate new price based on quantity and variant
-        let newPrice = item.price;
+        let newPrice;
         if (item.product.category === 'Janamaz') {
-            // For Janamaz products, use dozen price when quantity is 12
-            newPrice = newQuantity === 12 ? item.product.pricePerDozen : item.product.pricePerPiece * newQuantity;
+            if (newQuantity > 0 && newQuantity % 12 === 0) {
+                const dozens = newQuantity / 12;
+                newPrice = (item.product.pricePerDozen || 0) * dozens;
+            } else {
+                newPrice = (item.product.pricePerPiece || 0) * newQuantity;
+            }
         } else {
             // For products with variants, use variant price
             if (item.selectedVariant && item.variantPrice) {
@@ -214,7 +224,7 @@ async function updateQuantity(itemId, newQuantity) {
                 newPrice = item.price * newQuantity;
             } else {
                 // For regular products, multiply by quantity
-                newPrice = item.product.price * newQuantity;
+                newPrice = (item.product.price || 0) * newQuantity;
             }
         }
 
