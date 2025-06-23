@@ -161,6 +161,16 @@ initializeProduct("plain-lycra-makhani-half", "Plain Lycra Makhani (Half)", "A h
 initializeProduct("ladies-ehram-cotton-white", "Ladies ehram - cotton white", "A white cotton Ehram designed for ladies.", 350, "/img/individual/ladies-Cotton-ihram.jpeg", "Individual Items");
 initializeProduct("ladies-ehram-swiss-cotton", "Ladies ehram - swiss cotton", "A premium Swiss cotton Ehram for ladies, offering superior comfort.", 365, "/img/individual/Ladies-ihram-swiss-cotton.jpeg", "Individual Items");
 initializeProduct("ladies-ehram-hosiery", "Ladies ehram - hosiery", "A hosiery Ehram for ladies, providing flexibility and a snug fit.", 380, "/img/individual/hosiery-ladies-ihram.jpeg", "Individual Items");
+
+// Janamaz
+initializeJanamazProduct("janamaz-ibadat-15570", "Eshal Ibadat", "High-quality prayer mat.", 600, 7200, "70x110", "/img/janamaz/Eshal-Ibadat.png");
+initializeJanamazProduct("janamaz-platinum-15571", "Eshal Platinum", "High-quality prayer mat.", 455, 5400, "70x110", "/img/janamaz/Eshal-Platinum.png");
+initializeJanamazProduct("janamaz-gold-8570", "Eshal Gold", "High-quality prayer mat.", 250, 2950, "70x110", "/img/janamaz/Eshal-Gold.png");
+initializeJanamazProduct("janamaz-silver-9170", "Eshal Silver", "High-quality prayer mat.", 200, 2380, "70x110", "/img/janamaz/Eshal-Silver1.png");
+initializeJanamazProduct("janamaz-jasmin-8270", "Eshal Jasmin", "High-quality prayer mat.", 190, 2250, "70x110", "/img/janamaz/Eshal-Jasmin1.png");
+initializeJanamazProduct("janamaz-lily-7970", "Eshal Lily", "High-quality prayer mat.", 210, 2500, "70x110", "/img/janamaz/Eshal-Lily1.png");
+initializeJanamazProduct("janamaz-lotus-5870", "Eshal Lotus", "High-quality prayer mat.", 170, 2000, "70x110", "/img/janamaz/Eshal-Lotus1.png");
+
 // Delete old lungi products if they exist
 productRepository.deleteById("lungi-ehram-46");
 productRepository.deleteById("ehram-belt-wafa");
