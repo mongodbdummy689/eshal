@@ -114,7 +114,13 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
             "http://localhost:8080",
-            "https://*.ngrok-free.app"
+            "https://*.ngrok-free.app",
+            "http://eshalhajjumrahkit.com",
+            "https://eshalhajjumrahkit.com",
+            "http://www.eshalhajjumrahkit.com",
+            "https://www.eshalhajjumrahkit.com",
+            "http://168.231.103.72:8080",
+            "http://168.231.103.72"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
