@@ -33,6 +33,8 @@ public class EmailService {
 
     public void sendOrderConfirmationEmail(Order order) {
         try {
+            System.out.println("Starting email sending process for order: " + (order.getOrderId() != null ? order.getOrderId() : order.getId()));
+            
             if (order.getEmail() == null || order.getEmail().isEmpty()) {
                 System.out.println("No email address found for order: " + order.getOrderId());
                 return;
@@ -43,6 +45,8 @@ public class EmailService {
                 System.out.println("Email notification skipped - Email not configured. Order: " + order.getOrderId());
                 return;
             }
+
+            System.out.println("Email configuration looks good. From: " + fromEmail + ", To: " + order.getEmail());
 
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -59,16 +63,29 @@ public class EmailService {
             helper.setSubject("Order Confirmation - Order #" + (order.getOrderId() != null ? order.getOrderId() : order.getId()));
 
             // Create email content using Thymeleaf template
-            String emailContent = createOrderConfirmationEmailContent(order);
+            System.out.println("Creating email content...");
+            String emailContent;
+            try {
+                emailContent = createOrderConfirmationEmailContent(order);
+                System.out.println("Email content created successfully. Length: " + emailContent.length());
+            } catch (Exception e) {
+                System.err.println("Error creating email content: " + e.getMessage());
+                e.printStackTrace();
+                return; // Don't proceed if template processing fails
+            }
+            
             helper.setText(emailContent, true);
 
+            System.out.println("Sending email...");
             mailSender.send(message);
             System.out.println("Order confirmation email sent successfully to: " + order.getEmail());
 
         } catch (MessagingException e) {
             System.err.println("Failed to send order confirmation email: " + e.getMessage());
+            e.printStackTrace();
         } catch (Exception e) {
             System.err.println("Error sending email: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -78,7 +95,24 @@ public class EmailService {
         // Add order data to template context
         context.setVariable("order", order);
         context.setVariable("orderId", order.getOrderId() != null ? order.getOrderId() : order.getId());
-        context.setVariable("totalAmount", String.format("₹%.2f", order.getTotalAmount()));
+        context.setVariable("totalAmount", order.getTotalAmount());
+        
+        // Add shipping cost information with null checks
+        Double subtotalAmount = order.getSubtotalAmount();
+        Double shippingAmount = order.getShippingAmount();
+        
+        // If subtotalAmount is null (old orders), use totalAmount as fallback
+        if (subtotalAmount == null) {
+            subtotalAmount = order.getTotalAmount();
+        }
+        
+        // If shippingAmount is null (old orders), set to 0
+        if (shippingAmount == null) {
+            shippingAmount = 0.0;
+        }
+        
+        context.setVariable("subtotalAmount", subtotalAmount);
+        context.setVariable("shippingAmount", shippingAmount);
         
         // Add transaction information
         context.setVariable("transactionId", order.getTransactionId());

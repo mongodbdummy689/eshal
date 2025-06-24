@@ -8,7 +8,7 @@ public class OrderItem {
     private String productName;
     private String imageUrl;
     private String selectedVariant;
-    private BigDecimal price;
+    private BigDecimal price; // Total price for this item (not unit price)
     private int quantity;
 
     // Constructors, Getters, and Setters

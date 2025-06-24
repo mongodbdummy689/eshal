@@ -168,8 +168,10 @@ async function loadOrderSummary() {
         const cartItems = await getCheckoutCart();
         
         const orderSummary = document.getElementById('orderSummary');
+        const orderSubtotal = document.getElementById('orderSubtotal');
+        const orderShipping = document.getElementById('orderShipping');
         const orderTotal = document.getElementById('orderTotal');
-        let total = 0;
+        let subtotal = 0;
 
         if (!orderSummary) {
             return;
@@ -177,6 +179,8 @@ async function loadOrderSummary() {
 
         if (!cartItems || cartItems.length === 0) {
             orderSummary.innerHTML = '<p class="text-gray-500">Your cart is empty</p>';
+            if (orderSubtotal) orderSubtotal.textContent = '₹0.00';
+            if (orderShipping) orderShipping.textContent = '₹0.00';
             if (orderTotal) orderTotal.textContent = '₹0.00';
             return;
         }
@@ -221,7 +225,7 @@ async function loadOrderSummary() {
                 variantText = `Variant: ${item.selectedVariant}`;
             }
 
-            total += itemTotal;
+            subtotal += itemTotal;
 
             return `
                 <div class="bg-white rounded-xl shadow p-4 flex items-start space-x-4 animate-fade-in">
@@ -243,6 +247,12 @@ async function loadOrderSummary() {
             `;
         }).join('');
 
+        // Calculate shipping and total
+        const shipping = subtotal > 0 ? 10 : 0; // Same shipping logic as cart
+        const total = subtotal + shipping;
+
+        if (orderSubtotal) orderSubtotal.textContent = `₹${subtotal.toFixed(2)}`;
+        if (orderShipping) orderShipping.textContent = `₹${shipping.toFixed(2)}`;
         if (orderTotal) orderTotal.textContent = `₹${total.toFixed(2)}`;
     } catch (error) {
         console.error('Error loading order summary:', error);
@@ -292,7 +302,7 @@ async function handlePlaceOrder(event) {
     }
     
     // Calculate total amount with better error handling
-    const totalAmount = cartItems.reduce((sum, item) => {
+    const subtotalAmount = cartItems.reduce((sum, item) => {
         let itemTotal = 0;
         if (item.product && item.product.category === 'Janamaz' && item.quantity > 0) {
             if (item.quantity % 12 === 0) {
@@ -322,7 +332,13 @@ async function handlePlaceOrder(event) {
         return sum + itemTotal;
     }, 0);
     
-    console.log('Calculated total amount:', totalAmount);
+    // Calculate shipping and total (same logic as cart page)
+    const shippingAmount = subtotalAmount > 0 ? 10 : 0;
+    const totalAmount = subtotalAmount + shippingAmount;
+    
+    console.log('Calculated subtotal:', subtotalAmount);
+    console.log('Shipping amount:', shippingAmount);
+    console.log('Total amount with shipping:', totalAmount);
     
     if (totalAmount <= 0) {
         console.error('Total amount is zero or negative!');
@@ -399,10 +415,79 @@ async function handlePlaceOrder(event) {
 async function createFinalOrder(fullOrderDetails) {
     try {
         console.log('Creating final order with details:', fullOrderDetails);
+        
+        // Calculate shipping and total amounts, and prepare cart items with correct total prices
+        const cartItems = fullOrderDetails.cartItems;
+        const subtotalAmount = cartItems.reduce((sum, item) => {
+            let itemTotal = 0;
+            if (item.product && item.product.category === 'Janamaz' && item.quantity > 0) {
+                if (item.quantity % 12 === 0) {
+                    const dozens = item.quantity / 12;
+                    itemTotal = (item.product.pricePerDozen || 0) * dozens;
+                } else {
+                    itemTotal = (item.product.pricePerPiece || 0) * item.quantity;
+                }
+            } else if (item.product) {
+                let itemPrice = 0;
+                if (item.price) {
+                    itemPrice = item.price;
+                } else if (item.variantPrice) {
+                    itemPrice = item.variantPrice;
+                } else if (item.product.price) {
+                    itemPrice = item.product.price;
+                }
+                const quantity = item.quantity || 1;
+                itemTotal = itemPrice * quantity;
+            }
+            return sum + itemTotal;
+        }, 0);
+        
+        const shippingAmount = subtotalAmount > 0 ? 10 : 0;
+        const totalAmount = subtotalAmount + shippingAmount;
+        
+        // Prepare cart items with correct total prices for each item
+        const preparedCartItems = cartItems.map(item => {
+            let itemTotalPrice = 0;
+            if (item.product && item.product.category === 'Janamaz' && item.quantity > 0) {
+                if (item.quantity % 12 === 0) {
+                    const dozens = item.quantity / 12;
+                    itemTotalPrice = (item.product.pricePerDozen || 0) * dozens;
+                } else {
+                    itemTotalPrice = (item.product.pricePerPiece || 0) * item.quantity;
+                }
+            } else if (item.product) {
+                let itemPrice = 0;
+                if (item.price) {
+                    itemPrice = item.price;
+                } else if (item.variantPrice) {
+                    itemPrice = item.variantPrice;
+                } else if (item.product.price) {
+                    itemPrice = item.product.price;
+                }
+                const quantity = item.quantity || 1;
+                itemTotalPrice = itemPrice * quantity;
+            }
+            
+            // Return item with the total price as the 'price' field
+            return {
+                ...item,
+                price: itemTotalPrice // This is now the total price for this item
+            };
+        });
+        
+        // Add shipping information to the order details
+        const orderDataWithShipping = {
+            ...fullOrderDetails,
+            cartItems: preparedCartItems, // Use the prepared cart items with correct total prices
+            subtotalAmount: subtotalAmount,
+            shippingAmount: shippingAmount,
+            totalAmount: totalAmount
+        };
+        
         const response = await fetch('/api/orders/place', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(fullOrderDetails)
+            body: JSON.stringify(orderDataWithShipping)
         });
 
         const orderData = await response.json();

@@ -118,13 +118,13 @@ public class OrderController {
             String paymentMethod = (String) requestBody.get("paymentMethod");
 
             List<OrderItem> orderItems = new ArrayList<>();
-            BigDecimal totalAmount = BigDecimal.ZERO;
+            BigDecimal subtotalAmount = BigDecimal.ZERO;
 
             for (Map<String, Object> itemMap : cartItems) {
                 Product product = productRepository.findById((String) itemMap.get("productId"))
                         .orElseThrow(() -> new RuntimeException("Product not found for ID: " + itemMap.get("productId")));
 
-                BigDecimal price = new BigDecimal(itemMap.get("price").toString());
+                BigDecimal totalPrice = new BigDecimal(itemMap.get("price").toString());
                 int quantity = (int) itemMap.get("quantity");
                 
                 OrderItem orderItem = new OrderItem(
@@ -132,12 +132,17 @@ public class OrderController {
                     product.getName(), 
                     product.getImageUrl(), 
                     (String) itemMap.get("selectedVariant"), 
-                    price, 
+                    totalPrice,
                     quantity
                 );
                 orderItems.add(orderItem);
-                totalAmount = totalAmount.add(price.multiply(new BigDecimal(quantity)));
+                subtotalAmount = subtotalAmount.add(totalPrice);
             }
+            
+            // Calculate shipping cost (same logic as frontend)
+            BigDecimal shippingAmount = subtotalAmount.compareTo(BigDecimal.ZERO) > 0 ? 
+                new BigDecimal("10.00") : BigDecimal.ZERO;
+            BigDecimal totalAmount = subtotalAmount.add(shippingAmount);
             
             Order order = new Order();
             
@@ -147,6 +152,8 @@ public class OrderController {
             
             order.setUserId(customerDetails.get("userId"));
             order.setItems(orderItems);
+            order.setSubtotalAmount(subtotalAmount.doubleValue());
+            order.setShippingAmount(shippingAmount.doubleValue());
             order.setTotalAmount(totalAmount.doubleValue());
             order.setStatus("CONFIRMED");
             order.setOrderDate(LocalDateTime.now());
@@ -182,10 +189,14 @@ public class OrderController {
             
             // Send email notification
             try {
+                System.out.println("Attempting to send order confirmation email for order: " + savedOrder.getOrderId());
+                System.out.println("Customer email: " + savedOrder.getEmail());
                 emailService.sendOrderConfirmationEmail(savedOrder);
+                System.out.println("Email service call completed successfully");
             } catch (Exception e) {
                 // Log but don't fail the order placement if email fails
                 System.err.println("Failed to send order confirmation email: " + e.getMessage());
+                e.printStackTrace();
             }
             
             // Optional: Clear the user's cart after successful order placement
@@ -218,6 +229,41 @@ public class OrderController {
 
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/test-email")
+    public ResponseEntity<?> testEmail() {
+        try {
+            System.out.println("Testing email service...");
+            
+            // Create a test order
+            Order testOrder = new Order();
+            testOrder.setOrderId("TEST123");
+            testOrder.setEmail("mongodbdummy689@gmail.com"); // Use the configured email
+            testOrder.setFullName("Test Customer");
+            testOrder.setTotalAmount(100.0);
+            testOrder.setSubtotalAmount(90.0);
+            testOrder.setShippingAmount(10.0);
+            testOrder.setContactNumber("1234567890");
+            testOrder.setFlatNo("123");
+            testOrder.setApartmentName("Test Building");
+            testOrder.setFloor("1st");
+            testOrder.setStreetName("Test Street");
+            testOrder.setNearbyLandmark("Test Landmark");
+            testOrder.setCity("Test City");
+            testOrder.setState("Test State");
+            testOrder.setCountry("Test Country");
+            testOrder.setPincode("123456");
+            
+            // Send test email
+            emailService.sendOrderConfirmationEmail(testOrder);
+            
+            return ResponseEntity.ok(Map.of("message", "Test email sent successfully"));
+        } catch (Exception e) {
+            System.err.println("Test email failed: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(Map.of("error", "Test email failed: " + e.getMessage()));
         }
     }
 } 

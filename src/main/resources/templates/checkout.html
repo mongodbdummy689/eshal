@@ -32,8 +32,16 @@
                         <div id="orderSummary" class="space-y-4">
                             <!-- Order items will be loaded here -->
                         </div>
-                        <div class="border-t-2 border-gray-200 pt-4 mt-4">
-                            <div class="flex justify-between items-center font-bold text-lg">
+                        <div class="border-t-2 border-gray-200 pt-4 mt-4 space-y-2">
+                            <div class="flex justify-between items-center text-gray-600">
+                                <span>Subtotal:</span>
+                                <span id="orderSubtotal">₹0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center text-gray-600">
+                                <span>Shipping:</span>
+                                <span id="orderShipping">₹0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center font-bold text-lg border-t border-gray-200 pt-2">
                                 <span class="text-gray-800">Total:</span>
                                 <span id="orderTotal" class="text-primary-dark">₹0.00</span>
                             </div>

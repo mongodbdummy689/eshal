@@ -77,6 +77,44 @@
                             </div>
                         </div>
 
+                        <!-- Order Items -->
+                        <div class="border-t border-gray-200 pt-6 mt-6">
+                            <h2 class="text-lg font-semibold text-gray-900 mb-4">Order Items</h2>
+                            <div class="space-y-4">
+                                <div th:each="item : ${order?.items}" class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+                                    <img th:src="${item.imageUrl}" th:alt="${item.productName}" class="w-16 h-16 object-cover rounded-lg">
+                                    <div class="flex-1">
+                                        <h3 class="font-medium text-gray-900" th:text="${item.productName}"></h3>
+                                        <p class="text-sm text-gray-500" th:if="${item.selectedVariant}" th:text="'Variant: ' + ${item.selectedVariant}"></p>
+                                        <p class="text-sm text-gray-500" th:text="'Quantity: ' + ${item.quantity}"></p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium text-gray-900" th:text="'₹' + ${#numbers.formatDecimal(item.price, 1, 2)}"></p>
+                                        <p class="text-sm text-gray-500" th:text="'Quantity: ' + ${item.quantity}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cost Breakdown -->
+                        <div class="border-t border-gray-200 pt-6 mt-6">
+                            <h2 class="text-lg font-semibold text-gray-900 mb-4">Cost Breakdown</h2>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Subtotal:</span>
+                                    <span class="font-medium" th:text="'₹' + ${#numbers.formatDecimal(order?.subtotalAmount != null ? order.subtotalAmount : order.totalAmount, 1, 2)}"></span>
+                                </div>
+                                <div class="flex justify-between" th:if="${order?.shippingAmount != null}">
+                                    <span class="text-gray-600">Shipping:</span>
+                                    <span class="font-medium" th:text="'₹' + ${#numbers.formatDecimal(order.shippingAmount, 1, 2)}"></span>
+                                </div>
+                                <div class="flex justify-between border-t border-gray-200 pt-3">
+                                    <span class="text-lg font-semibold text-gray-900">Total:</span>
+                                    <span class="text-lg font-semibold text-gray-900" th:text="'₹' + ${#numbers.formatDecimal(order?.totalAmount, 1, 2)}"></span>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Shipping Address -->
                         <div class="border-t border-gray-200 pt-6 mt-6">
                             <h2 class="text-lg font-semibold text-gray-900 mb-4">Shipping Address</h2>

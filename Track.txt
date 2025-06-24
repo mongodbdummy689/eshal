@@ -246,6 +246,14 @@ write :wq (write & quit)
 then press enter
 git push origin HEAD:main
 
+git status
+git pull
+git fetch
+git status
+git add .
+git commit -m "message"
+git push origin HEAD:main
+
 Fixed:
 Tohfa-E-Khulus page UI fix
 Apply Kit images on homepage
@@ -336,6 +344,7 @@ Admin Panel to display orders for registered users and guest users.
 Admin to be able to add new products on the Individual page.
 
 Deployment on 6/24/25
+Credentials to access Admin Panel - admin@eshal.com / admin123
 Admin Dashboard - to display cart items for registered users.
 Track Orders - to display orders for registered users and guest users.
 Add Product - Admin to be able to add new products on the Individual page.

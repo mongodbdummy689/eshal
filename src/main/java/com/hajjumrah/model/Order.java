@@ -16,7 +16,9 @@ public class Order {
     
     private String userId;
     private List<OrderItem> items;
-    private double totalAmount;
+    private double subtotalAmount; // Amount before shipping
+    private double shippingAmount; // Shipping cost
+    private double totalAmount; // Total amount including shipping
     private String status; // PENDING, PROCESSING, SHIPPED, DELIVERED, CANCELLED
     private LocalDateTime orderDate;
     
