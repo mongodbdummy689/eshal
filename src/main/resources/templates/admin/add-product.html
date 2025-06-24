@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Add Product - Admin Dashboard</title>
+    <style>
+        .form-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+        .form-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+        }
+        .form-content {
+            padding: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-color-dark);
+        }
+        .btn-primary:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        .file-input {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .file-input input[type=file] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .file-input-label {
+            display: block;
+            padding: 0.75rem;
+            border: 2px dashed #d1d5db;
+            border-radius: 0.5rem;
+            text-align: center;
+            color: #6b7280;
+            transition: border-color 0.2s;
+            cursor: pointer;
+        }
+        .file-input-label:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        .file-input input[type=file]:focus + .file-input-label {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+    </style>
+</head>
+<body th:replace="~{layout/main :: body}">
+    <div th:fragment="content">
+        <div class="max-w-4xl mx-auto px-4 py-12">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-extrabold text-primary sm:text-5xl mb-4 mt-16">Add New Product</h1>
+                <p class="text-lg text-text-secondary">Create a new product for your store</p>
+            </div>
+
+            <div class="form-card">
+                <div class="form-header">
+                    <h2 class="text-2xl font-semibold">Product Information</h2>
+                </div>
+                <div class="form-content">
+                    <form id="addProductForm" class="space-y-6">
+                        <!-- Basic Information -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="form-group">
+                                <label for="productId" class="form-label">Product ID *</label>
+                                <input type="text" id="productId" name="productId" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="form-label">Product Name *</label>
+                                <input type="text" id="name" name="name" class="form-input" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea id="description" name="description" class="form-input form-textarea" rows="4"></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="form-group">
+                                <label for="category" class="form-label">Category *</label>
+                                <select id="category" name="category" class="form-input form-select" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Men's Kit">Men's Kit</option>
+                                    <option value="Women's Kit">Women's Kit</option>
+                                    <option value="Men's Mini Kit">Men's Mini Kit</option>
+                                    <option value="Women's Mini Kit">Women's Mini Kit</option>
+                                    <option value="Individual">Individual</option>
+                                    <option value="Tohfa-e-Khulus">Tohfa-e-Khulus</option>
+                                    <option value="Janamaz">Janamaz</option>
+                                    <option value="Trolley-Bag-On-Rent">Trolley-Bag-On-Rent</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="price" class="form-label">Base Price (₹) *</label>
+                                <input type="number" id="price" name="price" class="form-input" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="image" class="form-label">Product Image</label>
+                                <div class="file-input">
+                                    <input type="file" id="image" name="image" accept="image/*">
+                                    <label for="image" class="file-input-label">Choose File</label>
+                                </div>
+                                <div id="imagePreview" class="mt-2 hidden">
+                                    <img id="previewImg" class="w-20 h-20 object-cover rounded border" src="" alt="Preview">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="flex justify-end">
+                            <button type="submit" class="btn-primary" id="submitBtn">
+                                Add Product
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Image preview functionality
+            document.getElementById('image').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                const preview = document.getElementById('imagePreview');
+                const previewImg = document.getElementById('previewImg');
+                const label = document.querySelector('.file-input-label');
+                
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImg.src = e.target.result;
+                        preview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                    label.textContent = file.name;
+                } else {
+                    preview.classList.add('hidden');
+                    label.textContent = 'Choose File';
+                }
+            });
+
+            // Form submission
+            document.getElementById('addProductForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Adding Product...';
+                
+                try {
+                    const formData = new FormData(this);
+                    
+                    const response = await fetch('/admin/products/add', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        alert('Product added successfully!');
+                        if (result.imageUrl) {
+                            console.log('Image uploaded to:', result.imageUrl);
+                        }
+                        this.reset();
+                        document.getElementById('imagePreview').classList.add('hidden');
+                        document.querySelector('.file-input-label').textContent = 'Choose File';
+                    } else {
+                        const error = await response.json();
+                        alert('Error adding product: ' + error.message);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error adding product. Please try again.');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Add Product';
+                }
+            });
+        </script>
+    </div>
+</body>
+</html> 

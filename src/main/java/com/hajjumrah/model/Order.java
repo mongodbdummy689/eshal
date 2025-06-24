@@ -39,4 +39,21 @@ public class Order {
     private String paymentStatus; // PENDING, PAID, FAILED
     private String paymentMethod;
     private String transactionId; // Payment transaction ID
+    
+    // Getter methods for template compatibility
+    public String getCustomerName() {
+        return fullName != null ? fullName : "Guest User";
+    }
+    
+    public String getCustomerEmail() {
+        return email != null ? email : "N/A";
+    }
+    
+    public String getCustomerMobile() {
+        return contactNumber != null ? contactNumber : "N/A";
+    }
+    
+    public List<OrderItem> getOrderItems() {
+        return items;
+    }
 } 

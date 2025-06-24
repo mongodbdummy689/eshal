@@ -320,3 +320,24 @@ Individual Page Plastic pouch for khajur pani 5x7-100 nos. 200 - Tohfa-E-Khulus/
 As discussed please find the list of items that require images.
 Please also send Janamaz images on mail.
 
+Deployment on 6/23/25
+Kindly review all the changes that were discussed and have been deployed - https://hajjumrah.onrender.com
+Please find below the list of changes with this deployment:
+Implemented Razorpay integration for the checkout process.
+Implemented email notifications on order confirmation to users' and admin's email IDs.
+Additional items added on the Individual page with their respective prices.
+Added Janamaz details on the Janamaz page along with the calculation per piece and per dozen.
+
+We require a shipment pricing list according to the pincodes for completing the proper checkout process. As of now, a default value of ₹10 is applied for shipment.
+
+I'm working on the following functionalities:
+Admin Panel to display cart items for registered users.
+Admin Panel to display orders for registered users and guest users.
+Admin to be able to add new products on the Individual page.
+
+Deployment on 6/24/25
+Admin Dashboard - to display cart items for registered users.
+Track Orders - to display orders for registered users and guest users.
+Add Product - Admin to be able to add new products on the Individual page.
+
+Test - Dozen amount on payment, shipping amount on payment

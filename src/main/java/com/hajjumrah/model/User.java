@@ -15,4 +15,15 @@ public class User {
     private String mobileNumber;
     private String password;
     private String role = "USER";
+    
+    // Shipping Address fields
+    private String flatNo;
+    private String apartmentName;
+    private String floor;
+    private String streetName;
+    private String nearbyLandmark;
+    private String city;
+    private String state;
+    private String country;
+    private String pincode;
 } 

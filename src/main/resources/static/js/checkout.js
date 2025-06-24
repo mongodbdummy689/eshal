@@ -22,6 +22,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Load cart items and update order summary
         loadOrderSummary();
         
+        // Initialize input formatting first
+        initializeInputFormatting();
+        
+        // Pre-populate form with user data if logged in (after input formatting)
+        setTimeout(() => {
+            populateUserData();
+        }, 200);
+        
         // Initialize form submission
         if (checkoutForm) {
             console.log('Adding submit event listener to checkout form');
@@ -44,15 +52,94 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Checkout form not found!');
         }
 
-        // Initialize input formatting
-        initializeInputFormatting();
-
         // Initialize payment method toggle
         initializePaymentMethodToggle();
     } else {
         console.log('Not on checkout page, skipping checkout initialization');
     }
 });
+
+// Pre-populate checkout form with user data
+async function populateUserData() {
+    try {
+        console.log('Fetching user data for checkout...');
+        const response = await fetch('/api/auth/user', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'include'
+        });
+        
+        console.log('User data response status:', response.status);
+        
+        if (response.ok) {
+            const userData = await response.json();
+            console.log('User data for checkout:', userData);
+            
+            // Pre-populate form fields with user data
+            const fields = {
+                'checkoutFullName': userData.fullName || '',
+                'checkout-email': userData.email || '',
+                'phone': userData.mobileNumber || '',
+                'checkoutFlatNo': userData.flatNo || '',
+                'checkoutApartmentName': userData.apartmentName || '',
+                'checkoutFloor': userData.floor || '',
+                'checkoutStreetName': userData.streetName || '',
+                'checkoutNearbyLandmark': userData.nearbyLandmark || '',
+                'checkoutCity': userData.city || '',
+                'checkoutState': userData.state || '',
+                'checkoutCountry': userData.country || '',
+                'checkoutPincode': userData.pincode || ''
+            };
+            
+            console.log('Fields to populate:', fields);
+            
+            Object.keys(fields).forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                console.log(`Looking for field with ID: ${fieldId}, found:`, !!field);
+                if (field) {
+                    console.log(`Setting ${fieldId} to:`, fields[fieldId]);
+                    field.value = fields[fieldId];
+                    
+                    // Trigger input event to ensure CSS styling is applied
+                    field.dispatchEvent(new Event('input', { bubbles: true }));
+                    field.dispatchEvent(new Event('change', { bubbles: true }));
+                    
+                    // Also trigger focus and blur to ensure label positioning
+                    field.dispatchEvent(new Event('focus', { bubbles: true }));
+                    field.dispatchEvent(new Event('blur', { bubbles: true }));
+                    
+                    // Force the label to move up if there's a value
+                    if (fields[fieldId]) {
+                        field.classList.add('has-value');
+                        const label = document.querySelector(`label[for="${fieldId}"]`);
+                        if (label) {
+                            // Force the label to stay up when there's a value
+                            label.style.top = '-14px';
+                            label.style.fontSize = '14px';
+                            label.style.color = '#4B5563'; // text-gray-600
+                        }
+                    }
+                    
+                    console.log(`Field ${fieldId} value after setting:`, field.value);
+                    
+                    // Test if the value is actually visible
+                    setTimeout(() => {
+                        console.log(`Field ${fieldId} final value:`, field.value);
+                        console.log(`Field ${fieldId} computed style:`, window.getComputedStyle(field));
+                        console.log(`Field ${fieldId} is visible:`, field.offsetParent !== null);
+                    }, 100);
+                } else {
+                    console.log(`Field with ID ${fieldId} not found in DOM`);
+                }
+            });
+        } else {
+            console.error('Failed to fetch user data, status:', response.status);
+        }
+    } catch (error) {
+        console.error('Error fetching user data for checkout:', error);
+    }
+}
 
 // Initialize payment method toggle
 function initializePaymentMethodToggle() {
@@ -394,7 +481,7 @@ function initializeInputFormatting() {
         });
     }
 
-    const pincodeInput = document.getElementById('pincode');
+    const pincodeInput = document.getElementById('checkoutPincode');
     if (pincodeInput) {
         pincodeInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');

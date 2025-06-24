@@ -11,15 +11,29 @@ async function login(email, password) {
             body: JSON.stringify({ email, password })
         });
 
+        console.log('Login response status:', response.status);
+        console.log('Login response headers:', response.headers);
+
+        // Check if response has content
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            console.error('Non-JSON response received:', contentType);
+            throw new Error('Server returned an invalid response format');
+        }
+
         const data = await response.json();
+        console.log('Login response data:', data);
 
         if (!response.ok) {
-            throw new Error(data.error || 'Login failed');
+            throw new Error(data.message || data.error || `Login failed with status ${response.status}`);
         }
 
         return data;
     } catch (error) {
         console.error('Login error:', error);
+        if (error.name === 'SyntaxError') {
+            throw new Error('Server returned an invalid response. Please try again.');
+        }
         throw error;
     }
 }
@@ -39,10 +53,22 @@ async function logout() {
             throw new Error('Logout failed');
         }
         
-        window.location.reload();
+        // Try to parse JSON response first
+        try {
+            const data = await response.json();
+            if (data.success && data.redirect) {
+                window.location.href = data.redirect;
+            } else {
+                window.location.href = '/';
+            }
+        } catch (e) {
+            // If not JSON, just redirect to home
+            window.location.href = '/';
+        }
     } catch (error) {
         console.error('Logout error:', error);
-        throw error;
+        // Even if there's an error, redirect to home to clear the session
+        window.location.href = '/';
     }
 }
 
@@ -83,7 +109,7 @@ async function isAdmin() {
     }
 }
 
-async function register(fullName, email, mobileNumber, password) {
+async function register(userData) {
     try {
         const response = await fetch('/api/auth/register', {
             method: 'POST',
@@ -92,7 +118,7 @@ async function register(fullName, email, mobileNumber, password) {
                 'X-Requested-With': 'XMLHttpRequest'
             },
             credentials: 'include',
-            body: JSON.stringify({ fullName, email, mobileNumber, password })
+            body: JSON.stringify(userData)
         });
 
         const data = await response.json();
@@ -166,16 +192,16 @@ async function checkAuthStatus() {
         
         // If we have user data, check for admin role
         if (data.user && data.user.role === 'ADMIN') {
-            console.log('User is admin, showing admin dashboard link');
-            const adminDashboardLink = document.getElementById('adminDashboardLink');
-            const mobileAdminDashboardLink = document.getElementById('mobileAdminDashboardLink');
-            if (adminDashboardLink) {
-                console.log('Found admin dashboard link, showing it');
-                adminDashboardLink.classList.remove('hidden');
+            console.log('User is admin, showing admin dropdown');
+            const adminDropdown = document.getElementById('adminDropdown');
+            const mobileAdminMenu = document.getElementById('mobileAdminMenu');
+            if (adminDropdown) {
+                console.log('Found admin dropdown, showing it');
+                adminDropdown.classList.remove('hidden');
             }
-            if (mobileAdminDashboardLink) {
-                console.log('Found mobile admin dashboard link, showing it');
-                mobileAdminDashboardLink.classList.remove('hidden');
+            if (mobileAdminMenu) {
+                console.log('Found mobile admin menu, showing it');
+                mobileAdminMenu.classList.remove('hidden');
             }
         }
         
@@ -192,8 +218,8 @@ function updateAuthUI(isAuthenticated) {
     const loginRegisterLink = document.getElementById('loginRegisterLink');
     const logoutLink = document.getElementById('logoutLink');
     const cartLink = document.getElementById('cartLink');
-    const adminDashboardLink = document.getElementById('adminDashboardLink');
-    const mobileAdminDashboardLink = document.getElementById('mobileAdminDashboardLink');
+    const adminDropdown = document.getElementById('adminDropdown');
+    const mobileAdminMenu = document.getElementById('mobileAdminMenu');
     
     if (loginRegisterLink && logoutLink) {
         if (isAuthenticated) {
@@ -202,8 +228,8 @@ function updateAuthUI(isAuthenticated) {
         } else {
             loginRegisterLink.classList.remove('hidden');
             logoutLink.classList.add('hidden');
-            if (adminDashboardLink) adminDashboardLink.classList.add('hidden');
-            if (mobileAdminDashboardLink) mobileAdminDashboardLink.classList.add('hidden');
+            if (adminDropdown) adminDropdown.classList.add('hidden');
+            if (mobileAdminMenu) mobileAdminMenu.classList.add('hidden');
         }
     }
 
@@ -333,18 +359,44 @@ document.addEventListener('DOMContentLoaded', async function() {
             registerBtn.disabled = true;
             registerBtn.textContent = 'Registering...';
             
-            const fullName = document.getElementById('fullName').value;
-            const email = document.getElementById('registerEmail').value;
-            const mobileNumber = document.getElementById('mobileNumber').value;
-            const password = document.getElementById('registerPassword').value;
+            // Get all form data
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('registerEmail').value,
+                mobileNumber: document.getElementById('mobileNumber').value,
+                password: document.getElementById('registerPassword').value,
+                flatNo: document.getElementById('flatNo').value,
+                apartmentName: document.getElementById('apartmentName').value,
+                floor: document.getElementById('floor').value,
+                streetName: document.getElementById('streetName').value,
+                nearbyLandmark: document.getElementById('nearbyLandmark').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                country: document.getElementById('country').value,
+                pincode: document.getElementById('pincode').value
+            };
 
             // Validate mobile number format
-            if (!/^[0-9]{10}$/.test(mobileNumber)) {
+            if (!/^[0-9]{10}$/.test(formData.mobileNumber)) {
                 const errorMessage = document.createElement('div');
                 errorMessage.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4';
                 errorMessage.textContent = 'Please enter a valid 10-digit mobile number';
                 
-                const formContainer = registerBtn.closest('.space-y-4');
+                const formContainer = registerBtn.closest('form');
+                formContainer.insertBefore(errorMessage, formContainer.firstChild);
+                
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Register';
+                return;
+            }
+
+            // Validate pincode format
+            if (!/^[0-9]{6}$/.test(formData.pincode)) {
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4';
+                errorMessage.textContent = 'Please enter a valid 6-digit pincode';
+                
+                const formContainer = registerBtn.closest('form');
                 formContainer.insertBefore(errorMessage, formContainer.firstChild);
                 
                 registerBtn.disabled = false;
@@ -353,7 +405,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
             
             try {
-                await register(fullName, email, mobileNumber, password);
+                await register(formData);
                 
                 // Show success message
                 const successMessage = document.createElement('div');
@@ -361,14 +413,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                 successMessage.textContent = 'Successfully registered. Please login.';
                 
                 // Insert success message before the form
-                const formContainer = registerBtn.closest('.space-y-4');
+                const formContainer = registerBtn.closest('form');
                 formContainer.insertBefore(successMessage, formContainer.firstChild);
                 
                 // Clear form
-                document.getElementById('fullName').value = '';
-                document.getElementById('registerEmail').value = '';
-                document.getElementById('mobileNumber').value = '';
-                document.getElementById('registerPassword').value = '';
+                document.getElementById('registerForm').reset();
                 
                 // Hide register modal and show login modal after a short delay
                 setTimeout(() => {
@@ -387,13 +436,22 @@ document.addEventListener('DOMContentLoaded', async function() {
                 errorMessage.textContent = error.message || 'Registration failed. Please try again.';
                 
                 // Insert error message before the form
-                const formContainer = registerBtn.closest('.space-y-4');
+                const formContainer = registerBtn.closest('form');
                 formContainer.insertBefore(errorMessage, formContainer.firstChild);
                 
                 // Re-enable register button
                 registerBtn.disabled = false;
                 registerBtn.textContent = 'Register';
             }
+        });
+    }
+
+    // Add form submit handler for registration
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            registerBtn.click(); // Trigger the same logic as the button click
         });
     }
 }); 

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Track Orders - Admin Dashboard</title>
+    <style>
+        .order-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid #e5e7eb;
+        }
+        .order-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+        }
+        .order-header:hover {
+            background: var(--primary-color-dark);
+            cursor: grab;
+        }
+        .order-header * {
+            pointer-events: none;
+        }
+        .order-content {
+            padding: 1rem;
+            display: none;
+            transition: all 0.3s ease;
+        }
+        .order-content.show {
+            display: block;
+        }
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        .toggle-icon.expanded {
+            transform: rotate(180deg);
+        }
+        .order-item {
+            background: #f9fafb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e5e7eb;
+        }
+        .stats-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+        .stats-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        .stats-label {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        .status-confirmed {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        .status-shipped {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .status-delivered {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+    </style>
+</head>
+<body th:replace="~{layout/main :: body}">
+    <div th:fragment="content">
+        <div class="max-w-7xl mx-auto px-4 py-12">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-extrabold text-primary sm:text-5xl mb-4 mt-16">Track Orders</h1>
+                <p class="text-lg text-text-secondary">Monitor and manage all customer orders</p>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+                <div class="stats-card">
+                    <div class="stats-number" th:text="${totalOrders}">0</div>
+                    <div class="stats-label">Total Orders</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-number" th:text="${pendingOrders}">0</div>
+                    <div class="stats-label">Pending Orders</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-number" th:text="${confirmedOrders}">0</div>
+                    <div class="stats-label">Confirmed Orders</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-number" th:text="${deliveredOrders}">0</div>
+                    <div class="stats-label">Delivered Orders</div>
+                </div>
+            </div>
+
+            <!-- Orders List -->
+            <div class="space-y-8">
+                <div th:each="order : ${orders}" class="order-card">
+                    <div class="order-header" th:data-order-id="${order.orderId}">
+                        <div class="flex items-center justify-between w-full">
+                            <div>
+                                <h2 class="text-xl font-semibold">Order #<span th:text="${order.orderId}">123456</span></h2>
+                                <p class="text-sm opacity-75" th:text="${order.customerName}">Customer Name</p>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="text-right">
+                                    <div class="status-badge" th:classappend="${'status-' + order.status.toLowerCase()}" th:text="${order.status}">PENDING</div>
+                                    <p class="text-sm opacity-75 mt-1" th:text="${#temporals.format(order.orderDate, 'dd MMM yyyy HH:mm')}">01 Jan 2024 12:00</p>
+                                </div>
+                                <svg class="toggle-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-content" th:id="'order-content-' + ${order.orderId}" style="display: none;">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                            <div>
+                                <h3 class="font-semibold mb-2">Customer Details</h3>
+                                <p class="text-sm text-gray-600" th:text="${order.customerName}">Customer Name</p>
+                                <p class="text-sm text-gray-600" th:text="${order.customerEmail}">customer@email.com</p>
+                                <p class="text-sm text-gray-600" th:text="${order.customerMobile}">+1234567890</p>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-2">Order Summary</h3>
+                                <p class="text-sm text-gray-600">Total Amount: <span class="font-semibold" th:text="'₹' + ${#numbers.formatDecimal(order.totalAmount, 1, 2)}">₹0.00</span></p>
+                                <p class="text-sm text-gray-600">Payment Method: <span th:text="${order.paymentMethod}">Cash on Delivery</span></p>
+                                <p class="text-sm text-gray-600">Order Date: <span th:text="${#temporals.format(order.orderDate, 'dd MMM yyyy HH:mm')}">01 Jan 2024 12:00</span></p>
+                            </div>
+                        </div>
+                        
+                        <div th:if="${order.orderItems != null && !order.orderItems.isEmpty()}">
+                            <h3 class="font-semibold mb-2">Order Items</h3>
+                            <div class="space-y-2">
+                                <div th:each="item : ${order.orderItems}" class="order-item">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="font-medium" th:text="${item.productName}">Product Name</p>
+                                            <p class="text-sm text-gray-600" th:if="${item.selectedVariant != null}">Variant: <span th:text="${item.selectedVariant}">Variant</span></p>
+                                            <p class="text-sm text-gray-600">Quantity: <span th:text="${item.quantity}">1</span></p>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="font-semibold" th:text="'₹' + ${#numbers.formatDecimal(item.price, 1, 2)}">₹0.00</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div th:if="${order.shippingAddress != null}">
+                            <h3 class="font-semibold mb-2 mt-4">Shipping Address</h3>
+                            <p class="text-sm text-gray-600 whitespace-pre-line" th:text="${order.shippingAddress}">Shipping Address</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- No Orders Message -->
+            <div th:if="${orders.isEmpty()}" class="text-center py-12">
+                <p class="text-gray-500 text-lg">No orders found.</p>
+            </div>
+        </div>
+
+        <script th:inline="javascript">
+            window.onload = function() {
+                console.log('Orders page loaded, initializing toggle functionality');
+                
+                // First, ensure all order contents are hidden
+                document.querySelectorAll('.order-content').forEach(content => {
+                    content.style.display = 'none';
+                });
+                
+                const headers = document.getElementsByClassName('order-header');
+                console.log('Found order headers:', headers.length);
+                
+                Array.from(headers).forEach(header => {
+                    header.onclick = function() {
+                        console.log('Order header clicked');
+                        const orderId = this.getAttribute('data-order-id');
+                        console.log('Order ID:', orderId);
+                        
+                        const orderContent = document.getElementById('order-content-' + orderId);
+                        const toggleIcon = this.querySelector('.toggle-icon');
+                        
+                        console.log('Order content element:', orderContent);
+                        console.log('Toggle icon element:', toggleIcon);
+                        
+                        if (orderContent && toggleIcon) {
+                            // Toggle display directly
+                            if (orderContent.style.display === 'none') {
+                                orderContent.style.display = 'block';
+                                toggleIcon.classList.add('expanded');
+                            } else {
+                                orderContent.style.display = 'none';
+                                toggleIcon.classList.remove('expanded');
+                            }
+                            console.log('Order display toggled');
+                        }
+                    };
+                });
+            };
+        </script>
+    </div>
+</body>
+</html> 

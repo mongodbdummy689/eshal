@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface OrderRepository extends MongoRepository<Order, String> {
     List<Order> findByUserId(String userId);
     List<Order> findByUserIdOrderByOrderDateDesc(String userId);
+    List<Order> findAllByOrderByOrderDateDesc();
     
     // Find order by the 6-digit orderId
     Optional<Order> findByOrderId(String orderId);

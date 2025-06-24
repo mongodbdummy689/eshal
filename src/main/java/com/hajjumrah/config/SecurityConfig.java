@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -41,10 +42,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
+            .authenticationProvider(authenticationProvider(userDetailsService))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/",
@@ -74,6 +76,13 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
+            .logout(logout -> logout
+                .logoutUrl("/api/auth/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessHandler(logoutSuccessHandler())
+            )
             .sessionManagement(session -> session
                 .maximumSessions(1)
                 .expiredUrl("/login?expired")
@@ -83,6 +92,21 @@ public class SecurityConfig {
             );
 
         return http.build();
+    }
+
+    @Bean
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        return (request, response, authentication) -> {
+            // For AJAX requests, return JSON response
+            if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"success\": true, \"redirect\": \"/\"}");
+            } else {
+                // For regular requests, redirect to home page
+                response.sendRedirect("/");
+            }
+        };
     }
 
     @Bean
