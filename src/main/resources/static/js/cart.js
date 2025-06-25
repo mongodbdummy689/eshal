@@ -95,41 +95,43 @@ function updateCartUI(cartItems) {
     emptyCartDiv.classList.add('hidden');
     cartSummaryDiv.classList.remove('hidden');
     cartItemsContainer.innerHTML = cartItems.map(item => {
-        // Calculate prices based on product type
-        let displayPrice = 0, itemTotal = 0, priceUnit = '';
+        // Calculate unit price and total price based on product type
+        let unitPrice = 0, itemTotal = 0, priceUnit = '';
         
         if (item.product) {
             if (item.product.category === 'Janamaz') {
-                // Handle Janamaz products
+                // Handle Janamaz products with dynamic pricing based on quantity
                 if (item.quantity > 0 && item.quantity % 12 === 0) {
+                    // When quantity is multiple of 12, use dozen pricing
+                    unitPrice = item.product.pricePerDozen || 0;
                     const dozens = item.quantity / 12;
-                    displayPrice = item.product.pricePerDozen || 0;
-                    itemTotal = displayPrice * dozens;
+                    itemTotal = unitPrice * dozens;
                     priceUnit = '/dozen';
                 } else {
-                    displayPrice = item.product.pricePerPiece || 0;
-                    itemTotal = displayPrice * item.quantity;
+                    // When quantity is not multiple of 12, use per-piece pricing
+                    unitPrice = item.product.pricePerPiece || 0;
+                    itemTotal = unitPrice * item.quantity;
                     priceUnit = '/pc';
                 }
             } else {
                 // Handle regular products and products with variants
                 if (item.selectedVariant && item.variantPrice) {
                     // Use variant price if available
-                    displayPrice = item.variantPrice;
-                    itemTotal = displayPrice * item.quantity;
+                    unitPrice = item.variantPrice;
+                    itemTotal = unitPrice * item.quantity;
                 } else if (item.price) {
-                    // Use stored price (which should be variant price if variant was selected)
-                    displayPrice = item.price;
-                    itemTotal = displayPrice * item.quantity;
+                    // Use stored price (which should be unit price)
+                    unitPrice = item.price;
+                    itemTotal = unitPrice * item.quantity;
                 } else {
                     // Use product price as fallback
-                    displayPrice = item.product.price || 0;
-                    itemTotal = displayPrice * item.quantity;
+                    unitPrice = item.product.price || 0;
+                    itemTotal = unitPrice * item.quantity;
                 }
             }
         }
 
-        const priceDisplay = displayPrice > 0 ? `₹${displayPrice.toFixed(2)} ${priceUnit}`.trim() : '';
+        const priceDisplay = unitPrice > 0 ? `₹${unitPrice.toFixed(2)} ${priceUnit}`.trim() : '';
         const totalDisplay = itemTotal > 0 ? `₹${itemTotal.toFixed(2)}` : '';
         
         // Create variant display text
@@ -166,16 +168,19 @@ function updateCartUI(cartItems) {
         </div>
     `}).join('');
 
-    // Update totals
+    // Update totals using the same calculation logic
     const subtotal = cartItems.reduce((sum, item) => {
         if (!item || !item.product) return sum;
         
         let itemTotal = 0;
         if (item.product.category === 'Janamaz') {
+            // Handle Janamaz products with dynamic pricing based on quantity
             if (item.quantity > 0 && item.quantity % 12 === 0) {
+                // When quantity is multiple of 12, use dozen pricing
                 const dozens = item.quantity / 12;
                 itemTotal = (item.product.pricePerDozen || 0) * dozens;
             } else {
+                // When quantity is not multiple of 12, use per-piece pricing
                 itemTotal = (item.product.pricePerPiece || 0) * item.quantity;
             }
         } else {
@@ -183,7 +188,7 @@ function updateCartUI(cartItems) {
             if (item.selectedVariant && item.variantPrice) {
                 itemTotal = item.variantPrice * item.quantity;
             } else if (item.price) {
-                // Use stored price (which should be variant price if variant was selected)
+                // Use stored price (which should be unit price)
                 itemTotal = item.price * item.quantity;
             } else {
                 itemTotal = (item.product.price || 0) * item.quantity;
@@ -206,25 +211,27 @@ async function updateQuantity(itemId, newQuantity) {
         const item = cartItemsCache.find(item => item.id === itemId);
         if (!item) return;
 
-        // Calculate new price based on quantity and variant
-        let newPrice;
+        // Calculate unit price (not total price) based on product type and variant
+        let unitPrice;
         if (item.product.category === 'Janamaz') {
+            // For Janamaz products, determine unit price based on new quantity
             if (newQuantity > 0 && newQuantity % 12 === 0) {
-                const dozens = newQuantity / 12;
-                newPrice = (item.product.pricePerDozen || 0) * dozens;
+                // When quantity is multiple of 12, use dozen pricing
+                unitPrice = item.product.pricePerDozen || 0;
             } else {
-                newPrice = (item.product.pricePerPiece || 0) * newQuantity;
+                // When quantity is not multiple of 12, use per-piece pricing
+                unitPrice = item.product.pricePerPiece || 0;
             }
         } else {
             // For products with variants, use variant price
             if (item.selectedVariant && item.variantPrice) {
-                newPrice = item.variantPrice * newQuantity;
+                unitPrice = item.variantPrice;
             } else if (item.price) {
-                // Use stored price (which should be variant price if variant was selected)
-                newPrice = item.price * newQuantity;
+                // Use stored price (which should be unit price)
+                unitPrice = item.price;
             } else {
-                // For regular products, multiply by quantity
-                newPrice = (item.product.price || 0) * newQuantity;
+                // For regular products, use product price
+                unitPrice = item.product.price || 0;
             }
         }
 
@@ -235,7 +242,7 @@ async function updateQuantity(itemId, newQuantity) {
                 'X-Requested-With': 'XMLHttpRequest'
             },
             credentials: 'include',
-            body: JSON.stringify({ quantity: newQuantity, price: newPrice })
+            body: JSON.stringify({ quantity: newQuantity, price: unitPrice })
         });
 
         if (!response.ok) {

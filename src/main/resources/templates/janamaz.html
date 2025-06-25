@@ -264,27 +264,27 @@
                         const productId = card.dataset.productId;
                         const item = itemDetails[productId];
                         
-                        // Calculate price based on quantity
-                        let price;
+                        // Calculate unit price based on quantity
+                        let unitPrice;
                         if (quantity === 12) {
-                            price = item.pricePerDozen;
-                            console.log('Using dozen price:', price);
+                            unitPrice = item.pricePerDozen; // Use dozen price as unit price when quantity is 12
+                            console.log('Using dozen unit price:', unitPrice);
                         } else {
-                            price = item.pricePerPiece * quantity;
-                            console.log('Using per-piece price:', price, 'for quantity:', quantity);
+                            unitPrice = item.pricePerPiece; // Use per-piece price as unit price
+                            console.log('Using per-piece unit price:', unitPrice);
                         }
                         
                         console.log('Adding to cart:', {
                             productId,
                             quantity,
-                            price,
+                            unitPrice,
                             isDozen: quantity === 12,
                             pricePerPiece: item.pricePerPiece,
                             pricePerDozen: item.pricePerDozen,
                             quantitySpanText: quantityText
                         });
                         
-                        await addToCart(productId, quantity, price);
+                        await addToCart(productId, quantity, unitPrice);
                     } catch (error) {
                         console.error('Error adding to cart:', error);
                         alert('Failed to add item to cart. Please try again.');
@@ -373,8 +373,8 @@
                                 const productId = itemIds[currentItemIndex];
                                 const item = itemDetails[productId];
                                 const quantity = parseInt(modalQuantitySpan.textContent);
-                                const price = quantity === 12 ? item.pricePerDozen : item.pricePerPiece * quantity;
-                                await addToCart(productId, quantity, price);
+                                const unitPrice = quantity === 12 ? item.pricePerDozen : item.pricePerPiece;
+                                await addToCart(productId, quantity, unitPrice);
                                 closeModal();
                             }
                         } catch (error) {

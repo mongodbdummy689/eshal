@@ -186,38 +186,40 @@ async function loadOrderSummary() {
         }
 
         orderSummary.innerHTML = cartItems.map(item => {
-            // Calculate prices based on product type
-            let displayPrice = 0, itemTotal = 0, priceUnit = '';
+            // Calculate unit price and total price based on product type
+            let unitPrice = 0, itemTotal = 0, priceUnit = '';
             
             if (item.product) {
                 if (item.product.category === 'Janamaz') {
-                    // Handle Janamaz products
+                    // Handle Janamaz products with dynamic pricing based on quantity
                     if (item.quantity > 0 && item.quantity % 12 === 0) {
+                        // When quantity is multiple of 12, use dozen pricing
+                        unitPrice = item.product.pricePerDozen || 0;
                         const dozens = item.quantity / 12;
-                        displayPrice = item.product.pricePerDozen || 0;
-                        itemTotal = displayPrice * dozens;
+                        itemTotal = unitPrice * dozens;
                         priceUnit = '/dozen';
                     } else {
-                        displayPrice = item.product.pricePerPiece || 0;
-                        itemTotal = displayPrice * (item.quantity || 1);
+                        // When quantity is not multiple of 12, use per-piece pricing
+                        unitPrice = item.product.pricePerPiece || 0;
+                        itemTotal = unitPrice * (item.quantity || 1);
                         priceUnit = '/pc';
                     }
                 } else {
                     // Handle regular products and products with variants
                     if (item.selectedVariant && item.variantPrice) {
-                        displayPrice = item.variantPrice;
-                        itemTotal = displayPrice * item.quantity;
+                        unitPrice = item.variantPrice;
+                        itemTotal = unitPrice * item.quantity;
                     } else if (item.price) {
-                        displayPrice = item.price;
-                        itemTotal = displayPrice * item.quantity;
+                        unitPrice = item.price;
+                        itemTotal = unitPrice * item.quantity;
                     } else {
-                        displayPrice = item.product.price || 0;
-                        itemTotal = displayPrice * item.quantity;
+                        unitPrice = item.product.price || 0;
+                        itemTotal = unitPrice * item.quantity;
                     }
                 }
             }
 
-            const priceString = displayPrice > 0 ? `₹${displayPrice.toFixed(2)} ${priceUnit}`.trim() : 'N/A';
+            const priceString = unitPrice > 0 ? `₹${unitPrice.toFixed(2)} ${priceUnit}`.trim() : 'N/A';
             const totalString = itemTotal > 0 ? `₹${itemTotal.toFixed(2)}` : 'N/A';
             
             let variantText = '';
@@ -304,12 +306,15 @@ async function handlePlaceOrder(event) {
     // Calculate total amount with better error handling
     const subtotalAmount = cartItems.reduce((sum, item) => {
         let itemTotal = 0;
-        if (item.product && item.product.category === 'Janamaz' && item.quantity > 0) {
-            if (item.quantity % 12 === 0) {
+        if (item.product && item.product.category === 'Janamaz') {
+            // Handle Janamaz products with dynamic pricing based on quantity
+            if (item.quantity > 0 && item.quantity % 12 === 0) {
+                // When quantity is multiple of 12, use dozen pricing
                 const dozens = item.quantity / 12;
                 itemTotal = (item.product.pricePerDozen || 0) * dozens;
             } else {
-                itemTotal = (item.product.pricePerPiece || 0) * item.quantity;
+                // When quantity is not multiple of 12, use per-piece pricing
+                itemTotal = (item.product.pricePerPiece || 0) * (item.quantity || 1);
             }
         } else if (item.product) {
             let itemPrice = 0;
@@ -420,12 +425,15 @@ async function createFinalOrder(fullOrderDetails) {
         const cartItems = fullOrderDetails.cartItems;
         const subtotalAmount = cartItems.reduce((sum, item) => {
             let itemTotal = 0;
-            if (item.product && item.product.category === 'Janamaz' && item.quantity > 0) {
-                if (item.quantity % 12 === 0) {
+            if (item.product && item.product.category === 'Janamaz') {
+                // Handle Janamaz products with dynamic pricing based on quantity
+                if (item.quantity > 0 && item.quantity % 12 === 0) {
+                    // When quantity is multiple of 12, use dozen pricing
                     const dozens = item.quantity / 12;
                     itemTotal = (item.product.pricePerDozen || 0) * dozens;
                 } else {
-                    itemTotal = (item.product.pricePerPiece || 0) * item.quantity;
+                    // When quantity is not multiple of 12, use per-piece pricing
+                    itemTotal = (item.product.pricePerPiece || 0) * (item.quantity || 1);
                 }
             } else if (item.product) {
                 let itemPrice = 0;
@@ -448,12 +456,15 @@ async function createFinalOrder(fullOrderDetails) {
         // Prepare cart items with correct total prices for each item
         const preparedCartItems = cartItems.map(item => {
             let itemTotalPrice = 0;
-            if (item.product && item.product.category === 'Janamaz' && item.quantity > 0) {
-                if (item.quantity % 12 === 0) {
+            if (item.product && item.product.category === 'Janamaz') {
+                // Handle Janamaz products with dynamic pricing based on quantity
+                if (item.quantity > 0 && item.quantity % 12 === 0) {
+                    // When quantity is multiple of 12, use dozen pricing
                     const dozens = item.quantity / 12;
                     itemTotalPrice = (item.product.pricePerDozen || 0) * dozens;
                 } else {
-                    itemTotalPrice = (item.product.pricePerPiece || 0) * item.quantity;
+                    // When quantity is not multiple of 12, use per-piece pricing
+                    itemTotalPrice = (item.product.pricePerPiece || 0) * (item.quantity || 1);
                 }
             } else if (item.product) {
                 let itemPrice = 0;
