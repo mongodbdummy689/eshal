@@ -349,4 +349,117 @@ Admin Dashboard - to display cart items for registered users.
 Track Orders - to display orders for registered users and guest users.
 Add Product - Admin to be able to add new products on the Individual page.
 
-Test - Dozen amount on payment, shipping amount on payment
+Test -
+Issue - Consider shipping amount during checkout and payment
+Issue - Dozen amount on payment is correct, not displaying correctly in mail.
+
+Following changes are available on https://hajjumrah.onrender.com/ :
+Admin Dashboard - to display cart items for registered users.
+Track Orders - to display orders for registered users and guest users.
+Add Product - Admin to be able to add new products on the Individual page.
+
+Please login with these credentials to access Admin Panel - admin@eshal.com / admin123
+
+Kindly confirm if the order confirmation mails should be received on this mail: eshalumrahessentials@gmail.com. If not, then please provide the email on which order confirmation email notifications should be received since that specific email id would require certain configurational changes.
+
+Gentle reminder to provide shipment pricing list according to the pincodes for completing the proper checkout process. As of now, a default value of ₹10 is applied for shipment.
+
+Configuration updates:
+Mongo db changes
+Email configuration
+
+Hostinger VPS Root: AtenarHost#1234
+
+# Check where you currently are
+pwd
+# List all directories in current location
+ls -la
+# If you see a directory that looks like your project, navigate to it
+cd directory-name
+Navigate to directory: cd /opt/eshal
+Stop the current containers: docker-compose down
+Pull the latest changes (if your GitHub Actions workflow doesn't do this automatically):    git pull origin main
+Rebuild and restart the containers:    docker-compose up --build -d
+
+Alternative one-liner: docker-compose down && git pull origin main && docker-compose up --build -d
+
+To check if it's working: 
+# Check if containers are running
+docker-compose ps
+# Check logs for any errors
+docker-compose logs -f app
+
+6/25/25
+Email configuration for Eshal 
+Email - eshalumrahessentials@gmail.com
+App password: goha odwn mymg qnsp
+
+Order confirmation emails are set up to be sent to eshalumrahessentials@gmail.com.
+Pending - Shipping implementation based on the final approach.
+Please let me know when we can meet to finalize the shipment pricing approach.
+
+Resolved pricing issues during checkout process.
+Deployed and tested on hostinger.
+Tested all products with different quantities for prices and now the prices are working fine.
+
+
+Meeting Minutes - 6/26/2025
+Action Items Required:
+1. Product Weight Information
+Please provide the weight list for all items in the following categories:
+- Individual products
+- Tohfa-E-Khulus products
+2. Product Dimensions
+Please provide dimensions for the following product categories:
+- Janamaz
+- Ihram
+- Kits (Men's and Women's)
+- Tohfa-E-Khulus
+3. Shipping Price Calculation Formula
+Will be using the following formula to calculate shipping costs:
+Length × Width × Height ÷ 4500 = Total Weight (derived from weight chart)
+Total Weight × Shipping Rate = Final Shipping Cost
+Shipping Rates:
+Maharashtra (In-state): ₹80 per kg
+Out of state: ₹120 per kg
+4. Product Images
+Please provide images for:
+- Men's Kit
+- Women's Kit
+5. Order Tracking
+The consignment ID will be sent directly to customers via WhatsApp by the owner for order tracking purposes.
+
+Made all the fields mandatory on Checkout form and Registration form.
+Added an indication to highlight items added from Tohfa-E-Khulus page.
+
+SMS/Watsapp - Pricing to be provided by developer.
+Popular SMS/WhatsApp Service Providers
+1. Twilio
+SMS Pricing (India):
+₹0.50 - ₹0.75 per SMS (domestic)
+₹1.50 - ₹2.50 per SMS (international)
+WhatsApp Business API: ₹0.30 - ₹0.50 per message
+Free Trial: $15-20 credit for new accounts
+2. MSG91 (Popular in India)
+SMS Pricing:
+₹0.12 - ₹0.18 per SMS (bulk)
+₹0.20 - ₹0.30 per SMS (transactional)
+WhatsApp Business API: ₹0.25 - ₹0.40 per message
+Minimum Recharge: ₹1,000
+3. TextLocal (India-focused)
+SMS Pricing:
+₹0.10 - ₹0.15 per SMS (bulk)
+₹0.18 - ₹0.25 per SMS (transactional)
+WhatsApp Business API: ₹0.20 - ₹0.35 per message
+Minimum Recharge: ₹500
+4. 2Factor (Indian Provider)
+SMS Pricing:
+₹0.08 - ₹0.12 per SMS (bulk)
+₹0.15 - ₹0.22 per SMS (transactional)
+WhatsApp Business API: ₹0.18 - ₹0.30 per message
+Minimum Recharge: ₹1,000
+5. Gupshup (WhatsApp Business Solution Provider)
+WhatsApp Business API:
+₹0.25 - ₹0.45 per message
+Setup Fee: ₹5,000 - ₹10,000
+Monthly Fee: ₹2,000 - ₹5,000

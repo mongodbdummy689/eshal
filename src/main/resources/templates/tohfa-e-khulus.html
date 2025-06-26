@@ -696,7 +696,7 @@
                         for (const [productId, quantity] of selectedItems) {
                             const card = document.querySelector(`.card[data-product-id="${productId}"]`);
                             if (card) {
-                                await addToCart(productId, quantity, parseFloat(card.dataset.price));
+                                await addToCart(productId, quantity, parseFloat(card.dataset.price), null, null, 'tohfa-e-khulus');
                             }
                         }
                         alert('Selected items added to cart successfully!');

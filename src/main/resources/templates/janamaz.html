@@ -224,7 +224,6 @@
                 // Function to update quantity display
                 function updateQuantityDisplay(quantitySpan, newQuantity) {
                     if (quantitySpan) {
-                        console.log('Updating quantity from', quantitySpan.textContent, 'to', newQuantity);
                         quantitySpan.textContent = newQuantity;
                         quantitySpan.dataset.quantity = newQuantity;
                     }
@@ -239,7 +238,6 @@
                     }
 
                     if (isAddingToCart) {
-                        console.log('Already adding to cart, ignoring request');
                         return;
                     }
                     
@@ -252,10 +250,7 @@
 
                         // Get quantity from data attribute first, then fall back to text content
                         const quantityText = quantitySpan.dataset.quantity || quantitySpan.textContent.trim();
-                        console.log('Quantity from data attribute:', quantitySpan.dataset.quantity);
-                        console.log('Raw quantity text:', quantityText);
                         const quantity = parseInt(quantityText);
-                        console.log('Parsed quantity:', quantity);
 
                         if (isNaN(quantity) || quantity < 1) {
                             throw new Error('Invalid quantity value');
@@ -268,21 +263,9 @@
                         let unitPrice;
                         if (quantity === 12) {
                             unitPrice = item.pricePerDozen; // Use dozen price as unit price when quantity is 12
-                            console.log('Using dozen unit price:', unitPrice);
                         } else {
                             unitPrice = item.pricePerPiece; // Use per-piece price as unit price
-                            console.log('Using per-piece unit price:', unitPrice);
                         }
-                        
-                        console.log('Adding to cart:', {
-                            productId,
-                            quantity,
-                            unitPrice,
-                            isDozen: quantity === 12,
-                            pricePerPiece: item.pricePerPiece,
-                            pricePerDozen: item.pricePerDozen,
-                            quantitySpanText: quantityText
-                        });
                         
                         await addToCart(productId, quantity, unitPrice);
                     } catch (error) {

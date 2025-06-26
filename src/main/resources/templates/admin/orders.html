@@ -164,6 +164,7 @@
                                             <p class="font-medium" th:text="${item.productName}">Product Name</p>
                                             <p class="text-sm text-gray-600" th:if="${item.selectedVariant != null}">Variant: <span th:text="${item.selectedVariant}">Variant</span></p>
                                             <p class="text-sm text-gray-600">Quantity: <span th:text="${item.quantity}">1</span></p>
+                                            <p th:if="${item.source == 'tohfa-e-khulus'}" class="text-sm text-[#FFD700] font-semibold">🌟 Tohfa-e-Khulus Kit</p>
                                         </div>
                                         <div class="text-right">
                                             <p class="font-semibold" th:text="'₹' + ${#numbers.formatDecimal(item.price, 1, 2)}">₹0.00</p>

@@ -87,6 +87,7 @@
                                         <h3 class="font-medium text-gray-900" th:text="${item.productName}"></h3>
                                         <p class="text-sm text-gray-500" th:if="${item.selectedVariant}" th:text="'Variant: ' + ${item.selectedVariant}"></p>
                                         <p class="text-sm text-gray-500" th:text="'Quantity: ' + ${item.quantity}"></p>
+                                        <p th:if="${item.source == 'tohfa-e-khulus'}" class="text-sm text-[#FFD700] font-semibold">🌟 Tohfa-e-Khulus Kit</p>
                                     </div>
                                     <div class="text-right">
                                         <p class="font-medium text-gray-900" th:text="'₹' + ${#numbers.formatDecimal(item.price, 1, 2)}"></p>

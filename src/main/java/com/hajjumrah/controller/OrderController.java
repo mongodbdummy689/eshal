@@ -126,6 +126,7 @@ public class OrderController {
 
                 BigDecimal totalPrice = new BigDecimal(itemMap.get("price").toString());
                 int quantity = (int) itemMap.get("quantity");
+                String source = (String) itemMap.get("source"); // Get source from cart item
                 
                 OrderItem orderItem = new OrderItem(
                     product.getId(), 
@@ -133,7 +134,8 @@ public class OrderController {
                     product.getImageUrl(), 
                     (String) itemMap.get("selectedVariant"), 
                     totalPrice,
-                    quantity
+                    quantity,
+                    source
                 );
                 orderItems.add(orderItem);
                 subtotalAmount = subtotalAmount.add(totalPrice);

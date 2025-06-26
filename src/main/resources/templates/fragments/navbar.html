@@ -201,7 +201,6 @@
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Auth status response:', data); // Debug log
             if (data.authenticated) {
                 // Update user info in mobile menu
                 document.getElementById('mobileUserName').textContent = data.user?.email || 'User';
@@ -209,22 +208,16 @@
                 
                 // Check if user is admin and show admin menu
                 if (data.user && data.user.role === 'ROLE_ADMIN') {
-                    console.log('User is admin, showing admin dropdown');
                     const adminDropdown = document.getElementById('adminDropdown');
                     const mobileAdminMenu = document.getElementById('mobileAdminMenu');
                     if (adminDropdown) {
                         adminDropdown.classList.remove('hidden');
-                        console.log('Admin dropdown shown');
                     }
                     if (mobileAdminMenu) {
                         mobileAdminMenu.classList.remove('hidden');
-                        console.log('Mobile admin menu shown');
                     }
-                } else {
-                    console.log('User is not admin, role:', data.user?.role);
                 }
             } else {
-                console.log('User not authenticated');
                 // Show login/signup links
                 const userMenu = document.getElementById('userMenu');
                 userMenu.innerHTML = `

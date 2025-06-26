@@ -131,6 +131,9 @@
                         <div class="item-details">
                             Quantity: <span th:text="${item.quantity}">1</span>
                         </div>
+                        <div class="item-details" th:if="${item.source == 'tohfa-e-khulus'}" style="color: #FFD700; font-weight: bold;">
+                            🌟 Tohfa-e-Khulus Kit
+                        </div>
                     </div>
                     <div style="text-align: right;">
                         <div style="font-weight: bold;" th:text="'₹' + ${#numbers.formatDecimal(item.price, 1, 2)}">₹100.00</div>

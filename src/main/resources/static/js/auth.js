@@ -188,19 +188,15 @@ async function checkAuthStatus() {
         }
 
         const data = await response.json();
-        console.log('Auth check data:', data); // Debug log
         
         // If we have user data, check for admin role
         if (data.user && data.user.role === 'ADMIN') {
-            console.log('User is admin, showing admin dropdown');
             const adminDropdown = document.getElementById('adminDropdown');
             const mobileAdminMenu = document.getElementById('mobileAdminMenu');
             if (adminDropdown) {
-                console.log('Found admin dropdown, showing it');
                 adminDropdown.classList.remove('hidden');
             }
             if (mobileAdminMenu) {
-                console.log('Found mobile admin menu, showing it');
                 mobileAdminMenu.classList.remove('hidden');
             }
         }

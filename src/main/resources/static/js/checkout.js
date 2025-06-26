@@ -1,23 +1,10 @@
-console.log('Checkout.js loaded successfully!');
-
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Content Loaded - Checkout.js');
-    console.log('Current pathname:', window.location.pathname);
-    
     // Only run checkout functionality if we're on the checkout page
     if (window.location.pathname === '/checkout' || window.location.pathname === '/checkout/') {
-        console.log('On checkout page, initializing checkout functionality');
-        
         // Get DOM elements
         const orderSummary = document.getElementById('orderSummary');
         const orderTotal = document.getElementById('orderTotal');
         const checkoutForm = document.getElementById('checkoutForm');
-        
-        console.log('Found elements:', {
-            orderSummary: !!orderSummary,
-            orderTotal: !!orderTotal,
-            checkoutForm: !!checkoutForm
-        });
         
         // Load cart items and update order summary
         loadOrderSummary();
@@ -32,37 +19,27 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Initialize form submission
         if (checkoutForm) {
-            console.log('Adding submit event listener to checkout form');
             checkoutForm.addEventListener('submit', function(event) {
-                console.log('Form submit event triggered!');
                 handlePlaceOrder(event);
             });
             
             // Also add click event to the submit button for debugging
             const submitButton = checkoutForm.querySelector('button[type="submit"]');
             if (submitButton) {
-                console.log('Found submit button, adding click listener');
                 submitButton.addEventListener('click', function(event) {
-                    console.log('Submit button clicked!');
+                    // Submit button clicked
                 });
-            } else {
-                console.error('Submit button not found!');
             }
-        } else {
-            console.error('Checkout form not found!');
         }
 
         // Initialize payment method toggle
         initializePaymentMethodToggle();
-    } else {
-        console.log('Not on checkout page, skipping checkout initialization');
     }
 });
 
 // Pre-populate checkout form with user data
 async function populateUserData() {
     try {
-        console.log('Fetching user data for checkout...');
         const response = await fetch('/api/auth/user', {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
@@ -70,11 +47,8 @@ async function populateUserData() {
             credentials: 'include'
         });
         
-        console.log('User data response status:', response.status);
-        
         if (response.ok) {
             const userData = await response.json();
-            console.log('User data for checkout:', userData);
             
             // Pre-populate form fields with user data
             const fields = {
@@ -92,13 +66,9 @@ async function populateUserData() {
                 'checkoutPincode': userData.pincode || ''
             };
             
-            console.log('Fields to populate:', fields);
-            
             Object.keys(fields).forEach(fieldId => {
                 const field = document.getElementById(fieldId);
-                console.log(`Looking for field with ID: ${fieldId}, found:`, !!field);
                 if (field) {
-                    console.log(`Setting ${fieldId} to:`, fields[fieldId]);
                     field.value = fields[fieldId];
                     
                     // Trigger input event to ensure CSS styling is applied
@@ -121,16 +91,12 @@ async function populateUserData() {
                         }
                     }
                     
-                    console.log(`Field ${fieldId} value after setting:`, field.value);
-                    
                     // Test if the value is actually visible
                     setTimeout(() => {
                         console.log(`Field ${fieldId} final value:`, field.value);
                         console.log(`Field ${fieldId} computed style:`, window.getComputedStyle(field));
                         console.log(`Field ${fieldId} is visible:`, field.offsetParent !== null);
                     }, 100);
-                } else {
-                    console.log(`Field with ID ${fieldId} not found in DOM`);
                 }
             });
         } else {
@@ -227,6 +193,12 @@ async function loadOrderSummary() {
                 variantText = `Variant: ${item.selectedVariant}`;
             }
 
+            // Create source indicator for tohfa-e-khulus items
+            let sourceText = '';
+            if (item.source === 'tohfa-e-khulus') {
+                sourceText = `<p class="text-sm text-[#FFD700] font-semibold">🌟 Tohfa-e-Khulus Kit</p>`;
+            }
+
             subtotal += itemTotal;
 
             return `
@@ -237,6 +209,7 @@ async function loadOrderSummary() {
                              <div>
                                 <h3 class="font-bold text-gray-800">${item.product?.name || 'Product'}</h3>
                                 ${variantText ? `<p class="text-sm text-gray-500">${variantText}</p>` : ''}
+                                ${sourceText}
                              </div>
                              <p class="font-bold text-lg text-gray-800">${totalString}</p>
                         </div>
@@ -264,14 +237,11 @@ async function loadOrderSummary() {
 // Renamed from handleCheckout
 async function handlePlaceOrder(event) {
     event.preventDefault();
-    console.log('handlePlaceOrder called - starting checkout process...');
 
     // 1. Validate form
     if (!validateForm()) {
-        console.log('Form validation failed');
         return;
     }
-    console.log('Form validation passed');
 
     // 2. Get form data and cart items
     const formData = new FormData(event.target);
@@ -293,12 +263,9 @@ async function handlePlaceOrder(event) {
     };
     const paymentMethod = formData.get('paymentMethod');
     
-    console.log('Getting cart items...');
     const cartItems = await getCheckoutCart();
-    console.log('Cart items:', cartItems);
     
     if (!cartItems || cartItems.length === 0) {
-        console.error('Cart is empty!');
         alert('Your cart is empty. Please add items before proceeding to checkout.');
         return;
     }
@@ -341,42 +308,28 @@ async function handlePlaceOrder(event) {
     const shippingAmount = subtotalAmount > 0 ? 10 : 0;
     const totalAmount = subtotalAmount + shippingAmount;
     
-    console.log('Calculated subtotal:', subtotalAmount);
-    console.log('Shipping amount:', shippingAmount);
-    console.log('Total amount with shipping:', totalAmount);
-    
     if (totalAmount <= 0) {
-        console.error('Total amount is zero or negative!');
         alert('Unable to calculate order total. Please check your cart items.');
         return;
     }
 
-    console.log('Customer details:', customerDetails);
-    console.log('Cart total:', totalAmount);
-    console.log('Payment method:', paymentMethod);
-
     // 3. Initiate payment via Razorpay
     if (paymentMethod === 'razorpay') {
-        console.log('Initiating Razorpay payment...');
         try {
             // Create Razorpay order
-            console.log('Creating Razorpay order with amount:', totalAmount);
             const razorpayOrderResponse = await fetch('/api/payments/razorpay/create-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ amount: totalAmount, currency: 'INR' })
             });
-            console.log('Razorpay order response status:', razorpayOrderResponse.status);
             
             const razorpayOrderData = await razorpayOrderResponse.json();
-            console.log('Razorpay order data:', razorpayOrderData);
             
             if (!razorpayOrderResponse.ok || !razorpayOrderData.success) {
                 throw new Error(razorpayOrderData.message || 'Failed to create Razorpay order');
             }
 
             // 4. Open Razorpay payment modal
-            console.log('Opening Razorpay payment modal...');
             const options = {
                 key: razorpayOrderData.data.keyId,
                 amount: razorpayOrderData.data.amount,
@@ -385,8 +338,6 @@ async function handlePlaceOrder(event) {
                 description: 'Complete your purchase',
                 order_id: razorpayOrderData.data.orderId,
                 handler: async function (response) {
-                    console.log('Razorpay payment successful:', response);
-                    
                     // 5. On successful payment, create the order in our database
                     await createFinalOrder({
                         customerDetails,
@@ -407,11 +358,9 @@ async function handlePlaceOrder(event) {
             rzp.open();
 
         } catch (error) {
-            console.error('Razorpay payment error:', error);
             alert('Failed to initiate payment. Please try again.');
         }
     } else {
-        console.error('Unsupported payment method:', paymentMethod);
         alert('Unsupported payment method. Please select Razorpay.');
     }
 }
@@ -419,8 +368,6 @@ async function handlePlaceOrder(event) {
 // Function to create the final order after successful payment
 async function createFinalOrder(fullOrderDetails) {
     try {
-        console.log('Creating final order with details:', fullOrderDetails);
-        
         // Calculate shipping and total amounts, and prepare cart items with correct total prices
         const cartItems = fullOrderDetails.cartItems;
         const subtotalAmount = cartItems.reduce((sum, item) => {
@@ -506,40 +453,30 @@ async function createFinalOrder(fullOrderDetails) {
             throw new Error(orderData.error || 'Failed to place final order');
         }
         
-        console.log('Order created successfully in database:', orderData);
-        
         // 6. Redirect to order confirmation page
         window.location.href = `/order-confirmation?orderId=${orderData.orderId}`;
 
     } catch (error) {
-        console.error('Error creating final order:', error);
         alert('Your payment was successful, but we failed to record your order. Please contact support.');
     }
 }
 
 // Validate form
 function validateForm() {
-    console.log('validateForm called');
     const form = document.getElementById('checkoutForm');
     if (!form) {
-        console.error('Checkout form not found');
         return false;
     }
-    console.log('Form found, checking validity...');
-    console.log('Form validity:', form.checkValidity());
     
     if (!form.checkValidity()) {
-        console.log('Form validation failed, reporting validity...');
         form.reportValidity();
         return false;
     }
-    console.log('Form validation passed');
     return true;
 }
 
 // Get cart items for checkout
 async function getCheckoutCart() {
-    console.log('getCheckoutCart called');
     try {
         const response = await fetch('/api/cart', {
             method: 'GET',
@@ -550,18 +487,13 @@ async function getCheckoutCart() {
             credentials: 'include'
         });
 
-        console.log('Cart API response status:', response.status);
-
         if (!response.ok) {
-            console.error('Cart API response not ok');
             return [];
         }
 
         const cartData = await response.json();
-        console.log('Cart data retrieved:', cartData);
         return cartData;
     } catch (error) {
-        console.error('Error fetching cart:', error);
         return [];
     }
 }

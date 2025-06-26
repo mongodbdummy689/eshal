@@ -2,10 +2,9 @@
 let cartItemsCache = [];
 
 // Make addToCart available globally
-window.addToCart = async function(productId, quantity = 1, price = null, selectedVariant = null, variantPrice = null) {
+window.addToCart = async function(productId, quantity = 1, price = null, selectedVariant = null, variantPrice = null, source = null) {
     try {
-        const requestBody = { productId, quantity, price, selectedVariant, variantPrice };
-        console.log('Sending request to /api/cart/add with body:', requestBody);
+        const requestBody = { productId, quantity, price, selectedVariant, variantPrice, source };
 
         const response = await fetch('/api/cart/add', {
             method: 'POST',
@@ -17,9 +16,7 @@ window.addToCart = async function(productId, quantity = 1, price = null, selecte
             body: JSON.stringify(requestBody)
         });
 
-        console.log('Response status:', response.status);
         const responseText = await response.text();
-        console.log('Response text:', responseText);
 
         if (!response.ok) {
             let errorMessage = 'Failed to add item to cart';
@@ -63,6 +60,7 @@ async function loadCartItems() {
         const cartItems = await response.json();
         cartItemsCache = cartItems;
         updateCartUI(cartItems);
+        await updateCartCount();
     } catch (error) {
         console.error('Error loading cart items:', error);
         showError('Failed to load cart items. Please try again.');
@@ -140,12 +138,19 @@ function updateCartUI(cartItems) {
             variantDisplay = `<p class="text-sm text-gray-500">Variant: ${item.selectedVariant}</p>`;
         }
 
+        // Create source indicator for tohfa-e-khulus items
+        let sourceDisplay = '';
+        if (item.source === 'tohfa-e-khulus') {
+            sourceDisplay = `<p class="text-sm text-[#FFD700] font-semibold">🌟 Tohfa-e-Khulus Kit</p>`;
+        }
+
         return `
         <div class="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4" data-item-id="${item.id}">
             <img src="${item.product?.imageUrl || ''}" alt="${item.product?.name || 'Product'}" class="w-24 h-24 object-cover rounded-lg">
             <div class="flex-1">
                 <h3 class="font-semibold">${item.product?.name || 'Product'}</h3>
                 ${variantDisplay}
+                ${sourceDisplay}
                 <div class="flex justify-between items-center">
                     <div class="text-gray-600">
                         ${priceDisplay ? `<p>${priceDisplay}</p>` : ''}
@@ -209,7 +214,9 @@ function updateCartUI(cartItems) {
 async function updateQuantity(itemId, newQuantity) {
     try {
         const item = cartItemsCache.find(item => item.id === itemId);
-        if (!item) return;
+        if (!item) {
+            return;
+        }
 
         // Calculate unit price (not total price) based on product type and variant
         let unitPrice;
@@ -251,6 +258,7 @@ async function updateQuantity(itemId, newQuantity) {
 
         // Reload cart items to reflect changes
         await loadCartItems();
+        await updateCartCount();
     } catch (error) {
         console.error('Error updating quantity:', error);
         showError('Failed to update quantity. Please try again.');

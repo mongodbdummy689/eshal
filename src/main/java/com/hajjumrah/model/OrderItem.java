@@ -10,6 +10,7 @@ public class OrderItem {
     private String selectedVariant;
     private BigDecimal price; // Total price for this item (not unit price)
     private int quantity;
+    private String source; // e.g., "tohfa-e-khulus" for items from that page
 
     // Constructors, Getters, and Setters
 
@@ -23,6 +24,16 @@ public class OrderItem {
         this.selectedVariant = selectedVariant;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    public OrderItem(String productId, String productName, String imageUrl, String selectedVariant, BigDecimal price, int quantity, String source) {
+        this.productId = productId;
+        this.productName = productName;
+        this.imageUrl = imageUrl;
+        this.selectedVariant = selectedVariant;
+        this.price = price;
+        this.quantity = quantity;
+        this.source = source;
     }
 
     public String getProductId() {
@@ -71,5 +82,13 @@ public class OrderItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 } 

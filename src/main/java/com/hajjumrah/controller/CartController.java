@@ -226,6 +226,7 @@ public class CartController {
                     dbCartItem.setPrice(guestItem.getPrice());
                     dbCartItem.setSelectedVariant(guestItem.getSelectedVariant());
                     dbCartItem.setVariantPrice(guestItem.getVariantPrice());
+                    dbCartItem.setSource(guestItem.getSource());
 
                     // Check if item already exists in user's cart (considering variants)
                     Optional<CartItem> existingItem = cartItemRepository.findByUserIdAndProductId(user.getId(), guestItem.getProductId());

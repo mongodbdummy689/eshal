@@ -158,12 +158,10 @@
 
                     // Prevent multiple submissions
                     if (isAddingToCart) {
-                        console.log('Already adding to cart, ignoring request');
                         return;
                     }
                     
                     try {
-                        console.log('Starting add to cart operation');
                         isAddingToCart = true;
                         
                         // Get selected variant if available
@@ -186,7 +184,6 @@
                         }
                         
                         await addToCart(productId, quantity, price, selectedVariant, variantPrice);
-                        console.log('Add to cart operation completed');
                     } catch (error) {
                         console.error('Error adding to cart:', error);
                     } finally {

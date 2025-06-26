@@ -23,6 +23,9 @@ public class CartItem implements Serializable {
     private String selectedVariant; // e.g., "Wafa", "Royal", "46\"", "50\"", etc.
     private Double variantPrice; // Price of the selected variant
 
+    // Source tracking for special handling
+    private String source; // e.g., "tohfa-e-khulus" for items from that page
+
     @Transient
     private transient Product product;
 
