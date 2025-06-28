@@ -246,6 +246,70 @@
                 height: 100%;
                 object-fit: contain;
             }
+
+            /* Card hover effects */
+            .card {
+                transition: all 0.3s ease;
+                cursor: pointer;
+                position: relative;
+            }
+
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            }
+
+            .card:hover .bg-contain {
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .card:hover .bg-black {
+                background-color: rgba(255, 255, 255, 0.95) !important;
+                transition: background-color 0.3s ease;
+            }
+
+            .card:hover h3 {
+                color: #FFD700 !important;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+                transition: all 0.3s ease;
+            }
+
+            .card:hover p {
+                color: white !important;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+                transition: all 0.3s ease;
+            }
+
+            .card:hover span {
+                color: #FFD700 !important;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+                text-decoration: underline;
+                transition: all 0.3s ease;
+            }
+
+            /* Individual items card hover effects */
+            .card:not(.relative):hover {
+                background-color: #f8f9fa;
+            }
+
+            .card:not(.relative):hover h3 {
+                color: #FFD700 !important;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+                transition: all 0.3s ease;
+            }
+
+            .card:not(.relative):hover p {
+                color: #333 !important;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s ease;
+            }
+
+            .card:not(.relative):hover a {
+                color: #FFD700 !important;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+                transition: all 0.3s ease;
+            }
             </style>
                         
             <div class="slideshow-container">
@@ -371,7 +435,7 @@
                 <div class="mt-10">
                     <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                         <!-- Men's Kit Package -->
-                        <div class="card bg-white overflow-hidden relative">
+                        <a href="/mens-kit" class="card bg-white overflow-hidden relative block">
                             <div class="absolute inset-0 bg-contain bg-center bg-no-repeat" style="background-image: url('/img/menkit.jpeg');"></div>
                             <div class="absolute inset-0 bg-black bg-opacity-50"></div>
                             <div class="px-4 py-5 sm:p-6 relative z-10">
@@ -380,15 +444,15 @@
                                     Complete package for male pilgrims including ihram, prayer mat, and essential items.
                                 </p>
                                 <div class="mt-4">
-                                    <a href="/mens-kit" class="text-white hover:text-gray-200 font-medium">
+                                    <span class="text-white hover:text-gray-200 font-medium">
                                         View Details →
-                                    </a>
+                                    </span>
                                 </div>
                             </div>
-                        </div>
+                        </a>
 
                         <!-- Women's Kit Package -->
-                        <div class="card bg-white overflow-hidden relative">
+                        <a href="/womens-kit" class="card bg-white overflow-hidden relative block">
                             <div class="absolute inset-0 bg-contain bg-center bg-no-repeat" style="background-image: url('/img/womenkit.jpeg');"></div>
                             <div class="absolute inset-0 bg-black bg-opacity-50"></div>
                             <div class="px-4 py-5 sm:p-6 relative z-10">
@@ -397,27 +461,27 @@
                                     Specialized package for female pilgrims with all necessary items for a comfortable journey.
                                 </p>
                                 <div class="mt-4">
-                                    <a href="/womens-kit" class="text-white hover:text-gray-200 font-medium">
+                                    <span class="text-white hover:text-gray-200 font-medium">
                                         View Details →
-                                    </a>
+                                    </span>
                                 </div>
                             </div>
-                        </div>
+                        </a>
 
                         <!-- Individual Items -->
-                        <div class="card bg-white overflow-hidden">
+                        <a href="/individual" class="card bg-white overflow-hidden block">
                             <div class="px-4 py-5 sm:p-6">
                                 <h3 class="text-lg font-medium text-primary-dark">Individual Items</h3>
                                 <p class="mt-1 text-sm text-text-secondary">
                                     Purchase individual items separately to customize your pilgrimage experience.
                                 </p>
                                 <div class="mt-4">
-                                    <a href="/individual" class="text-accent hover:text-accent-light font-medium">
+                                    <span class="text-accent hover:text-accent-light font-medium">
                                         View Details →
-                                    </a>
+                                    </span>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>

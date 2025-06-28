@@ -26,4 +26,10 @@ public class Product {
     private Double pricePerPiece;
     private Double pricePerDozen;
     private String size;
+
+    // Shipping and dimension fields
+    private Double weight; // in kg (optional, for actual weight if needed)
+    private Double length; // in cm
+    private Double width;  // in cm
+    private Double height; // in cm
 } 

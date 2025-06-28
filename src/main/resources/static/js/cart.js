@@ -67,8 +67,34 @@ async function loadCartItems() {
     }
 }
 
+// Helper to get user's state (from localStorage, user profile, or default)
+function getUserState() {
+    // Try to get from localStorage or elsewhere as needed
+    return localStorage.getItem('userState') || '';
+}
+
+// Helper to get shipping estimate from backend
+async function fetchShippingEstimate(cartItems, state) {
+    try {
+        const response = await fetch('/api/cart/shipping-estimate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cartItems: cartItems.map(item => ({
+                productId: item.productId,
+                quantity: item.quantity,
+                source: item.source
+            })), state })
+        });
+        if (!response.ok) return 0;
+        const data = await response.json();
+        return data.shippingAmount || 0;
+    } catch (e) {
+        return 0;
+    }
+}
+
 // Update cart UI
-function updateCartUI(cartItems) {
+async function updateCartUI(cartItems) {
     const cartItemsContainer = document.getElementById('cartItems');
     const emptyCartDiv = document.getElementById('emptyCart');
     const cartSummaryDiv = document.getElementById('cartSummary');
@@ -202,7 +228,9 @@ function updateCartUI(cartItems) {
         return sum + itemTotal;
     }, 0);
     
-    const shipping = subtotal > 0 ? 10 : 0; // Example shipping cost
+    // Fetch shipping from backend
+    const state = getUserState();
+    const shipping = await fetchShippingEstimate(cartItems, state);
     const total = subtotal + shipping;
 
     subtotalElement.textContent = `₹${subtotal.toFixed(2)}`;

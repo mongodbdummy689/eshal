@@ -30,7 +30,33 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <!-- Kit Image and Button -->
                 <div class="space-y-6">
-                    <img src="/img/womenkit.jpeg" alt="Women's Kit" class="w-full h-auto object-cover rounded-lg">
+                    <!-- Image Carousel -->
+                    <div class="relative">
+                        <div class="overflow-hidden rounded-lg">
+                            <div id="imageCarousel" class="flex transition-transform duration-300 ease-in-out">
+                                <img src="/img/womenkit.jpeg" alt="Women's Kit" class="w-full h-auto object-contain flex-shrink-0">
+                                <img src="/img/kitimage1.png" alt="Women's Kit" class="w-full h-auto object-contain flex-shrink-0">
+                                <img src="/img/womenkitimage.jpeg" alt="Women's Kit" class="w-full h-auto object-contain flex-shrink-0">
+                            </div>
+                        </div>
+                        <!-- Navigation Buttons -->
+                        <button id="prevImage" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-lg transition-all duration-200">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <button id="nextImage" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-lg transition-all duration-200">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                        <!-- Image Indicators -->
+                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                            <div id="indicator0" class="w-3 h-3 bg-white bg-opacity-80 rounded-full cursor-pointer transition-all duration-200"></div>
+                            <div id="indicator1" class="w-3 h-3 bg-white bg-opacity-50 rounded-full cursor-pointer transition-all duration-200"></div>
+                            <div id="indicator2" class="w-3 h-3 bg-white bg-opacity-50 rounded-full cursor-pointer transition-all duration-200"></div>
+                        </div>
+                    </div>
                     <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
                         <div class="flex items-center justify-between">
                             <div>
@@ -140,6 +166,67 @@
 
         <script th:inline="javascript">
             document.addEventListener('DOMContentLoaded', function() {
+                // Image Carousel Functionality
+                const imageCarousel = document.getElementById('imageCarousel');
+                const prevImageBtn = document.getElementById('prevImage');
+                const nextImageBtn = document.getElementById('nextImage');
+                const indicators = [
+                    document.getElementById('indicator0'),
+                    document.getElementById('indicator1'),
+                    document.getElementById('indicator2')
+                ];
+                
+                let currentImageIndex = 0;
+                const totalImages = 3;
+                
+                function updateCarousel() {
+                    const translateX = -currentImageIndex * 100;
+                    imageCarousel.style.transform = `translateX(${translateX}%)`;
+                    
+                    // Update indicators
+                    indicators.forEach((indicator, index) => {
+                        if (index === currentImageIndex) {
+                            indicator.classList.add('bg-opacity-80');
+                            indicator.classList.remove('bg-opacity-50');
+                        } else {
+                            indicator.classList.remove('bg-opacity-80');
+                            indicator.classList.add('bg-opacity-50');
+                        }
+                    });
+                }
+                
+                function nextImage() {
+                    currentImageIndex = (currentImageIndex + 1) % totalImages;
+                    updateCarousel();
+                }
+                
+                function prevImage() {
+                    currentImageIndex = (currentImageIndex - 1 + totalImages) % totalImages;
+                    updateCarousel();
+                }
+                
+                // Event listeners for navigation buttons
+                prevImageBtn.addEventListener('click', prevImage);
+                nextImageBtn.addEventListener('click', nextImage);
+                
+                // Event listeners for indicators
+                indicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => {
+                        currentImageIndex = index;
+                        updateCarousel();
+                    });
+                });
+                
+                // Keyboard navigation
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'ArrowLeft') {
+                        prevImage();
+                    } else if (e.key === 'ArrowRight') {
+                        nextImage();
+                    }
+                });
+
+                // Modal functionality
                 const modal = document.getElementById('itemModal');
                 const modalTitle = document.getElementById('modalTitle');
                 const modalImage = document.getElementById('modalImage');

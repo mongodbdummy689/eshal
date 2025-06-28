@@ -141,9 +141,133 @@ public class OrderController {
                 subtotalAmount = subtotalAmount.add(totalPrice);
             }
             
-            // Calculate shipping cost (same logic as frontend)
-            BigDecimal shippingAmount = subtotalAmount.compareTo(BigDecimal.ZERO) > 0 ? 
-                new BigDecimal("10.00") : BigDecimal.ZERO;
+            // Calculate shipping cost using actual weight and state
+            double totalShipping = 0.0;
+            double totalWeight = 0.0;
+            double totalLength = 0.0;
+            double totalWidth = 0.0;
+            double totalHeight = 0.0;
+            String state = customerDetails.getOrDefault("state", "");
+            double rate = (state.equalsIgnoreCase("Maharashtra")) ? 80.0 : 120.0;
+            
+            // Count Tohfa-e-Khulus items
+            int tohfaKhulusCount = 0;
+            for (Map<String, Object> itemMap : cartItems) {
+                String source = (String) itemMap.getOrDefault("source", "");
+                if ("tohfa-e-khulus".equals(source)) {
+                    tohfaKhulusCount += (int) itemMap.get("quantity");
+                }
+            }
+            
+            // First pass: calculate base shipping and collect total dimensions
+            for (Map<String, Object> itemMap : cartItems) {
+                Product product = productRepository.findById((String) itemMap.get("productId"))
+                        .orElseThrow(() -> new RuntimeException("Product not found for ID: " + itemMap.get("productId")));
+                int quantity = (int) itemMap.get("quantity");
+                String source = (String) itemMap.getOrDefault("source", "");
+                
+                // Skip base shipping calculation for Tohfa-e-Khulus items if 8+ items
+                if ("tohfa-e-khulus".equals(source) && tohfaKhulusCount >= 8) {
+                    System.out.printf("[OrderShippingCalc] Tohfa-e-Khulus item (8+ items): Skipping individual base shipping for %s (qty: %d)\n", 
+                        product.getName(), quantity);
+                    continue;
+                }
+                
+                Double length = product.getLength();
+                Double width = product.getWidth();
+                Double height = product.getHeight();
+                Double actualWeight = product.getWeight();
+                
+                // Special handling for Tohfa-e-Khulus items (less than 8 items)
+                if ("tohfa-e-khulus".equals(source) && tohfaKhulusCount < 8) {
+                    // Less than 8 items: use null weight/dimensions (will get minimum 1 kg)
+                    actualWeight = null;
+                    length = null;
+                    width = null;
+                    height = null;
+                    System.out.printf("[OrderShippingCalc] Tohfa-e-Khulus item (<8 items): Using null weight/dimensions (will get minimum 1 kg)\n");
+                }
+                
+                // Calculate volumetric weight for all items (for logging purposes)
+                double volumetricWeight = 0.0;
+                if (length != null && width != null && height != null) {
+                    volumetricWeight = (length * width * height) / 4500.0;
+                    System.out.printf("[OrderShippingCalc] Volumetric calculation for %s: (%.1f x %.1f x %.1f) / 4500 = %.3f kg\n", 
+                        product.getName(), length, width, height, volumetricWeight);
+                }
+                
+                // Use actual weight if available, otherwise use volumetric weight
+                double usedWeight;
+                if (actualWeight != null && actualWeight > 0) {
+                    usedWeight = actualWeight;
+                } else {
+                    usedWeight = volumetricWeight;
+                }
+                
+                // Calculate base shipping cost for this item
+                double baseShipping = usedWeight * rate * quantity;
+                totalShipping += baseShipping;
+                totalWeight += usedWeight * quantity;
+                
+                // Accumulate dimensions (assuming items are stacked/arranged)
+                if (length != null && width != null && height != null) {
+                    totalLength = Math.max(totalLength, length);
+                    totalWidth = Math.max(totalWidth, width);
+                    totalHeight += height * quantity;
+                    System.out.printf("[OrderShippingCalc] Item %s contributes to total dimensions: max(L:%.1f), max(W:%.1f), add(H:%.1f x %d qty = %.1f)\n", 
+                        product.getName(), length, width, height, quantity, height * quantity);
+                }
+                
+                System.out.printf("[OrderShippingCalc] Product: %s, Qty: %d, LxWxH: %.1fx%.1fx%.1f, Actual Weight: %.3f, Volumetric Weight: %.3f, Used Weight: %.3f, Rate: %.2f, Base Shipping: %.2f\n",
+                    product.getName(), quantity,
+                    length != null ? length : 0.0, width != null ? width : 0.0, height != null ? height : 0.0,
+                    actualWeight != null ? actualWeight : 0.0, volumetricWeight, usedWeight, rate, baseShipping);
+            }
+            
+            // Add Tohfa-e-Khulus package shipping if 8+ items
+            if (tohfaKhulusCount >= 8) {
+                double tohfaKhulusWeight = 0.800; // Specific Tohfa-e-Khulus package weight
+                double tohfaKhulusShipping = tohfaKhulusWeight * rate;
+                totalShipping += tohfaKhulusShipping;
+                totalWeight += tohfaKhulusWeight;
+                
+                // Add Tohfa-e-Khulus dimensions to total
+                totalLength = Math.max(totalLength, 20.0);
+                totalWidth = Math.max(totalWidth, 36.0);
+                totalHeight += 10.0;
+                
+                System.out.printf("[OrderShippingCalc] Tohfa-e-Khulus package (8+ items): Added package weight %.3f kg, shipping %.2f for %d items\n", 
+                    tohfaKhulusWeight, tohfaKhulusShipping, tohfaKhulusCount);
+            }
+            
+            // Calculate volumetric weight from total dimensions
+            double totalVolumetricWeight = 0.0;
+            if (totalLength > 0 && totalWidth > 0 && totalHeight > 0) {
+                totalVolumetricWeight = (totalLength * totalWidth * totalHeight) / 4500.0;
+                System.out.printf("[OrderShippingCalc] Final volumetric calculation: (%.1f x %.1f x %.1f) / 4500 = %.3f kg\n", 
+                    totalLength, totalWidth, totalHeight, totalVolumetricWeight);
+            }
+            
+            // Use the higher of actual weight or volumetric weight
+            double finalWeight = Math.max(totalWeight, totalVolumetricWeight);
+            System.out.printf("[OrderShippingCalc] Weight comparison: Actual Weight (%.3f kg) vs Volumetric Weight (%.3f kg) = Using %.3f kg\n", 
+                totalWeight, totalVolumetricWeight, finalWeight);
+            
+            // Ensure minimum weight of 1 kg if final weight is 0 or very small
+            if (finalWeight <= 0.001) {
+                finalWeight = 1.0;
+                System.out.printf("[OrderShippingCalc] Final weight was 0, applying minimum 1 kg\n");
+            }
+            
+            // Calculate shipping based on ceiling weight
+            int ceilingWeight = (int) Math.ceil(finalWeight);
+            System.out.printf("[OrderShippingCalc] Ceiling calculation: ceil(%.3f) = %d kg\n", finalWeight, ceilingWeight);
+            totalShipping = ceilingWeight * rate;
+            System.out.printf("[OrderShippingCalc] Final shipping calculation: %d kg x ₹%.2f = ₹%.2f\n", ceilingWeight, rate, totalShipping);
+            System.out.printf("[OrderShippingCalc] Total Weight: %.3f kg, Total Volumetric Weight: %.3f kg, Final Weight: %.3f kg, Ceiling Weight: %d kg, Shipping for %d kg: %.2f\n", 
+                totalWeight, totalVolumetricWeight, finalWeight, ceilingWeight, ceilingWeight, totalShipping);
+            
+            BigDecimal shippingAmount = BigDecimal.valueOf(totalShipping).setScale(2, BigDecimal.ROUND_HALF_UP);
             BigDecimal totalAmount = subtotalAmount.add(shippingAmount);
             
             Order order = new Order();

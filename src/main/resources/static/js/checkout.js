@@ -34,6 +34,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Initialize payment method toggle
         initializePaymentMethodToggle();
+
+        // Dynamically update shipping/total when state changes
+        const stateInput = document.getElementById('checkoutState');
+        if (stateInput) {
+            stateInput.addEventListener('change', function() {
+                // Optionally store state for later use
+                localStorage.setItem('userState', stateInput.value);
+                loadOrderSummary();
+            });
+        }
     }
 });
 
@@ -125,6 +135,26 @@ function initializePaymentMethodToggle() {
                 }
             });
         });
+    }
+}
+
+// Helper to get shipping estimate from backend
+async function fetchShippingEstimate(cartItems, state) {
+    try {
+        const response = await fetch('/api/cart/shipping-estimate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cartItems: cartItems.map(item => ({
+                productId: item.productId,
+                quantity: item.quantity,
+                source: item.source
+            })), state })
+        });
+        if (!response.ok) return 0;
+        const data = await response.json();
+        return data.shippingAmount || 0;
+    } catch (e) {
+        return 0;
     }
 }
 
@@ -222,8 +252,16 @@ async function loadOrderSummary() {
             `;
         }).join('');
 
-        // Calculate shipping and total
-        const shipping = subtotal > 0 ? 10 : 0; // Same shipping logic as cart
+        // Get state from form if available
+        let state = '';
+        const stateInput = document.getElementById('checkoutState');
+        if (stateInput && stateInput.value) {
+            state = stateInput.value;
+        } else {
+            state = localStorage.getItem('userState') || '';
+        }
+        // Fetch shipping from backend
+        const shipping = await fetchShippingEstimate(cartItems, state);
         const total = subtotal + shipping;
 
         if (orderSubtotal) orderSubtotal.textContent = `₹${subtotal.toFixed(2)}`;
