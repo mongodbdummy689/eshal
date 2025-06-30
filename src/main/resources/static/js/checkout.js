@@ -282,8 +282,8 @@ async function loadOrderSummary() {
             shipping = await fetchShippingEstimate(cartItems, state);
             shippingDisplay = `₹${shipping.toFixed(2)}`;
         } else {
-            // Show "Please enter State" when no state is provided
-            shippingDisplay = 'Please enter State';
+            // Show "Please enter shipping details" when no state is provided
+            shippingDisplay = 'Please enter shipping details';
         }
         
         const total = subtotal + shipping;
@@ -294,7 +294,7 @@ async function loadOrderSummary() {
             if (state && state.trim() !== '') {
                 orderTotal.textContent = `₹${total.toFixed(2)}`;
             } else {
-                orderTotal.textContent = 'Please enter State';
+                orderTotal.textContent = 'Please enter shipping details';
             }
         }
         
@@ -411,7 +411,7 @@ async function handlePlaceOrder(event) {
         shippingAmount = await fetchShippingEstimate(cartItems, state);
     } else {
         // No shipping calculation if state is not provided
-        alert('Please enter your state to calculate shipping charges.');
+        alert('Please enter your shipping details to calculate shipping charges.');
         return;
     }
     
