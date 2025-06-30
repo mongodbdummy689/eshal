@@ -20,12 +20,16 @@ async function clearCartAfterOrder() {
         if (successIndicator) {
             console.log('Order confirmed successfully, clearing cart...');
             
-            // Clear the cart
-            const success = await clearCart();
-            if (success) {
-                console.log('Cart cleared successfully after order placement');
+            // Clear the cart using the global function
+            if (typeof window.clearCart === 'function') {
+                const success = await window.clearCart();
+                if (success) {
+                    console.log('Cart cleared successfully after order placement');
+                } else {
+                    console.warn('Failed to clear cart after order placement');
+                }
             } else {
-                console.warn('Failed to clear cart after order placement');
+                console.warn('clearCart function not available');
             }
         } else {
             console.log('Not a successful order confirmation, skipping cart clear');

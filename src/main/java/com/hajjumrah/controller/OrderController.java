@@ -325,8 +325,20 @@ public class OrderController {
                 e.printStackTrace();
             }
             
-            // Optional: Clear the user's cart after successful order placement
-            // cartItemRepository.deleteAllByUser(....);
+            // Clear the user's cart after successful order placement
+            String userId = customerDetails.get("userId");
+            if (userId != null && !userId.trim().isEmpty()) {
+                try {
+                    cartItemRepository.deleteByUserId(userId);
+                    System.out.println("Cart cleared for user: " + userId);
+                } catch (Exception e) {
+                    // Log but don't fail the order placement if cart clearing fails
+                    System.err.println("Failed to clear cart for user " + userId + ": " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("No userId provided, skipping cart clearing");
+            }
 
             Map<String, Object> response = new HashMap<>();
             response.put("orderId", savedOrder.getOrderId()); // Return the 6-digit orderId

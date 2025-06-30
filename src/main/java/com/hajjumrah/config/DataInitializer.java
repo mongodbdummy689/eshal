@@ -41,8 +41,8 @@ public class DataInitializer implements CommandLineRunner {
             mensKit.setStockQuantity(100);
             mensKit.setWeight(1.760);
             mensKit.setLength(44.0);
-            mensKit.setWidth(38.0);
-            mensKit.setHeight(7.0);
+            mensKit.setWidth(34.0);
+            mensKit.setHeight(6.0);
             productRepository.save(mensKit);
         }
 
@@ -60,7 +60,7 @@ public class DataInitializer implements CommandLineRunner {
             womensKit.setWeight(1.160);
             womensKit.setLength(44.0);
             womensKit.setWidth(33.0);
-            womensKit.setHeight(9.0);
+            womensKit.setHeight(4.0);
             productRepository.save(womensKit);
         }
 
@@ -194,13 +194,13 @@ if (!productRepository.existsById("kids-ehram")) {
 }
 
 // Janamaz
-initializeJanamazProduct("janamaz-ibadat-15570", "Eshal Ibadat", "High-quality prayer mat.", 600, 7200, "70x110", "/img/janamaz/Eshal-Ibadat.png", 0.600, 30.0, 40.0, 5.0);
-initializeJanamazProduct("janamaz-platinum-15571", "Eshal Platinum", "High-quality prayer mat.", 455, 5400, "70x110", "/img/janamaz/Eshal-Platinum.png", 0.600, 30.0, 40.0, 5.0);
-initializeJanamazProduct("janamaz-gold-8570", "Eshal Gold", "High-quality prayer mat.", 250, 2950, "70x110", "/img/janamaz/Eshal-Gold.png", 0.600, 30.0, 40.0, 5.0);
-initializeJanamazProduct("janamaz-silver-9170", "Eshal Silver", "High-quality prayer mat.", 200, 2380, "70x110", "/img/janamaz/Eshal-Silver1.png", 0.600, 30.0, 40.0, 5.0);
-initializeJanamazProduct("janamaz-jasmin-8270", "Eshal Jasmin", "High-quality prayer mat.", 190, 2250, "70x110", "/img/janamaz/Eshal-Jasmin1.png", 0.600, 30.0, 40.0, 5.0);
-initializeJanamazProduct("janamaz-lily-7970", "Eshal Lily", "High-quality prayer mat.", 210, 2500, "70x110", "/img/janamaz/Eshal-Lily1.png", 0.600, 30.0, 40.0, 5.0);
-initializeJanamazProduct("janamaz-lotus-5870", "Eshal Lotus", "High-quality prayer mat.", 170, 2000, "70x110", "/img/janamaz/Eshal-Lotus1.png", 0.600, 30.0, 40.0, 5.0);
+initializeJanamazProduct("janamaz-ibadat-15570", "Eshal Ibadat", "High-quality prayer mat.", 600, 7200, "70x110", "/img/janamaz/Eshal-Ibadat.png", null, null, null, null);
+initializeJanamazProduct("janamaz-platinum-15571", "Eshal Platinum", "High-quality prayer mat.", 455, 5400, "70x110", "/img/janamaz/Eshal-Platinum.png", null, null, null, null);
+initializeJanamazProduct("janamaz-gold-8570", "Eshal Gold", "High-quality prayer mat.", 250, 2950, "70x110", "/img/janamaz/Eshal-Gold.png", null, null, null, null);
+initializeJanamazProduct("janamaz-silver-9170", "Eshal Silver", "High-quality prayer mat.", 200, 2380, "70x110", "/img/janamaz/Eshal-Silver1.png", null, null, null, null);
+initializeJanamazProduct("janamaz-jasmin-8270", "Eshal Jasmin", "High-quality prayer mat.", 190, 2250, "70x110", "/img/janamaz/Eshal-Jasmin1.png", null, null, null, null);
+initializeJanamazProduct("janamaz-lily-7970", "Eshal Lily", "High-quality prayer mat.", 210, 2500, "70x110", "/img/janamaz/Eshal-Lily1.png", null, null, null, null);
+initializeJanamazProduct("janamaz-lotus-5870", "Eshal Lotus", "High-quality prayer mat.", 170, 2000, "70x110", "/img/janamaz/Eshal-Lotus1.png", null, null, null, null);
 
 // Delete old lungi products if they exist
 productRepository.deleteById("lungi-ehram-46");

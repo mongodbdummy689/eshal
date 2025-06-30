@@ -67,42 +67,15 @@ async function loadCartItems() {
     }
 }
 
-// Helper to get user's state (from localStorage, user profile, or default)
-function getUserState() {
-    // Try to get from localStorage or elsewhere as needed
-    return localStorage.getItem('userState') || '';
-}
-
-// Helper to get shipping estimate from backend
-async function fetchShippingEstimate(cartItems, state) {
-    try {
-        const response = await fetch('/api/cart/shipping-estimate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cartItems: cartItems.map(item => ({
-                productId: item.productId,
-                quantity: item.quantity,
-                source: item.source
-            })), state })
-        });
-        if (!response.ok) return 0;
-        const data = await response.json();
-        return data.shippingAmount || 0;
-    } catch (e) {
-        return 0;
-    }
-}
-
 // Update cart UI
 async function updateCartUI(cartItems) {
     const cartItemsContainer = document.getElementById('cartItems');
     const emptyCartDiv = document.getElementById('emptyCart');
     const cartSummaryDiv = document.getElementById('cartSummary');
     const subtotalElement = document.getElementById('subtotal');
-    const shippingElement = document.getElementById('shipping');
     const totalElement = document.getElementById('total');
 
-    if (!cartItemsContainer || !emptyCartDiv || !cartSummaryDiv || !subtotalElement || !shippingElement || !totalElement) {
+    if (!cartItemsContainer || !emptyCartDiv || !cartSummaryDiv || !subtotalElement || !totalElement) {
         return;
     }
 
@@ -111,7 +84,6 @@ async function updateCartUI(cartItems) {
         emptyCartDiv.classList.remove('hidden');
         cartSummaryDiv.classList.add('hidden');
         subtotalElement.textContent = '₹0.00';
-        shippingElement.textContent = '₹0.00';
         totalElement.textContent = '₹0.00';
         return;
     }
@@ -199,43 +171,33 @@ async function updateCartUI(cartItems) {
         </div>
     `}).join('');
 
-    // Update totals using the same calculation logic
+    // Calculate subtotal (no shipping on cart page)
     const subtotal = cartItems.reduce((sum, item) => {
-        if (!item || !item.product) return sum;
-        
         let itemTotal = 0;
-        if (item.product.category === 'Janamaz') {
-            // Handle Janamaz products with dynamic pricing based on quantity
+        if (item.product && item.product.category === 'Janamaz') {
             if (item.quantity > 0 && item.quantity % 12 === 0) {
-                // When quantity is multiple of 12, use dozen pricing
                 const dozens = item.quantity / 12;
                 itemTotal = (item.product.pricePerDozen || 0) * dozens;
             } else {
-                // When quantity is not multiple of 12, use per-piece pricing
                 itemTotal = (item.product.pricePerPiece || 0) * item.quantity;
             }
-        } else {
-            // Handle products with variants
+        } else if (item.product) {
+            let itemPrice = 0;
             if (item.selectedVariant && item.variantPrice) {
-                itemTotal = item.variantPrice * item.quantity;
+                itemPrice = item.variantPrice;
             } else if (item.price) {
-                // Use stored price (which should be unit price)
-                itemTotal = item.price * item.quantity;
+                itemPrice = item.price;
             } else {
-                itemTotal = (item.product.price || 0) * item.quantity;
+                itemPrice = item.product.price || 0;
             }
+            itemTotal = itemPrice * item.quantity;
         }
         return sum + itemTotal;
     }, 0);
-    
-    // Fetch shipping from backend
-    const state = getUserState();
-    const shipping = await fetchShippingEstimate(cartItems, state);
-    const total = subtotal + shipping;
 
+    // On cart page, total equals subtotal (no shipping shown)
     subtotalElement.textContent = `₹${subtotal.toFixed(2)}`;
-    shippingElement.textContent = `₹${shipping.toFixed(2)}`;
-    totalElement.textContent = `₹${total.toFixed(2)}`;
+    totalElement.textContent = `₹${subtotal.toFixed(2)}`;
 }
 
 // Update item quantity

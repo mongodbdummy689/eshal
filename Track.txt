@@ -443,4 +443,13 @@ Following changes have been deployed on http://eshalhajjumrahkit.com/ -
 - Shipping charges applied as per the weight and dimensions chart.
 - Default shipping charges implemented for items without weight and dimensions.
 - Implemented special handling for tohfa-e-khulus where the weight and dimensions are considered only when items are 8 or more.
+- Added images to Women's Kit page.
 - Added hover effect for kits on homepage to be more appealing, engrossed and emboldened.
+
+mongodb+srv://eshalumrahessentials:eshal@0102@cluster0.woukx9j.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+Changes for 30/6/25
+Following changes have been deployed on http://eshalhajjumrahkit.com/ -
+Removed Umrah Guide from Men's and Women’s Mini Kits page.
+
+Will need to reedit or retake the Umrah dua card pic to align it at the center.

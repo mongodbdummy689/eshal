@@ -3,15 +3,8 @@
 <head th:replace="~{layout/main :: head}">
     <title>Order Confirmation - Eshal Hajj & Umrah Store</title>
 </head>
-<body class="bg-gray-50">
-    <!-- Include auth modals -->
-    <div th:replace="~{layout/auth-modals :: auth-modals}"></div>
-
-    <!-- Navbar -->
-    <nav th:replace="~{layout/main :: nav}"></nav>
-
-    <!-- Main Content -->
-    <div class="pt-32 md:pt-24">
+<body th:replace="~{layout/main :: body}">
+    <div th:fragment="content">
         <div class="container mx-auto px-4 py-8">
             <div class="max-w-2xl mx-auto">
                 <div class="bg-white rounded-lg shadow-md p-8">
@@ -177,9 +170,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer th:replace="~{layout/main :: footer}"></footer>
 
     <!-- Cart Script (needed for clearCart function) -->
     <script th:src="@{/js/cart.js}"></script>

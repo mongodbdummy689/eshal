@@ -92,7 +92,7 @@ public class PageController {
             "soap",              // Odourless Soap
             "digital-tasbeeh",   // Digital Tasbeeh
             "shoe-bag",          // Chappal Bag
-            "umrah-guide",       // Umrah Guide
+            //"umrah-guide"       // Umrah Guide
             "umrah-dua-card"     // Umrah Dua Card
         );
         
@@ -163,7 +163,7 @@ public class PageController {
             "soap",                 // 7) Odourless Soap
             "digital-tasbeeh",      // 8) Digital Tasbeeh
             "shoe-bag",             // 9) Shoe Bag
-            "umrah-guide",          // Umrah Guide
+            //"umrah-guide"          // Umrah Guide
             "umrah-dua-card"        // Umrah Dua Card
         );
         

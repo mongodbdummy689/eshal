@@ -35,15 +35,27 @@ document.addEventListener('DOMContentLoaded', function() {
         // Initialize payment method toggle
         initializePaymentMethodToggle();
 
-        // Dynamically update shipping/total when state changes
-        const stateInput = document.getElementById('checkoutState');
-        if (stateInput) {
-            stateInput.addEventListener('change', function() {
-                // Optionally store state for later use
-                localStorage.setItem('userState', stateInput.value);
-                loadOrderSummary();
-            });
-        }
+        // Add event listeners for address fields to recalculate shipping
+        const addressFields = [
+            'checkoutState',
+            'checkoutCity',
+            'checkoutPincode'
+        ];
+        
+        addressFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.addEventListener('change', function() {
+                    // Recalculate shipping when address changes
+                    loadOrderSummary();
+                });
+                
+                field.addEventListener('input', function() {
+                    // Also recalculate on input for real-time updates
+                    loadOrderSummary();
+                });
+            }
+        });
     }
 });
 
@@ -260,13 +272,41 @@ async function loadOrderSummary() {
         } else {
             state = localStorage.getItem('userState') || '';
         }
-        // Fetch shipping from backend
-        const shipping = await fetchShippingEstimate(cartItems, state);
+        
+        // Only calculate shipping if state is provided
+        let shipping = 0;
+        let shippingDisplay = '₹0.00';
+        
+        if (state && state.trim() !== '') {
+            // Fetch shipping from backend only if state is provided
+            shipping = await fetchShippingEstimate(cartItems, state);
+            shippingDisplay = `₹${shipping.toFixed(2)}`;
+        } else {
+            // Show "Please enter State" when no state is provided
+            shippingDisplay = 'Please enter State';
+        }
+        
         const total = subtotal + shipping;
 
         if (orderSubtotal) orderSubtotal.textContent = `₹${subtotal.toFixed(2)}`;
-        if (orderShipping) orderShipping.textContent = `₹${shipping.toFixed(2)}`;
-        if (orderTotal) orderTotal.textContent = `₹${total.toFixed(2)}`;
+        if (orderShipping) orderShipping.textContent = shippingDisplay;
+        if (orderTotal) {
+            if (state && state.trim() !== '') {
+                orderTotal.textContent = `₹${total.toFixed(2)}`;
+            } else {
+                orderTotal.textContent = 'Please enter State';
+            }
+        }
+        
+        // Show/hide shipping note
+        const shippingNote = document.getElementById('shippingNote');
+        if (shippingNote) {
+            if (state && state.trim() !== '') {
+                shippingNote.classList.add('hidden');
+            } else {
+                shippingNote.classList.remove('hidden');
+            }
+        }
     } catch (error) {
         console.error('Error loading order summary:', error);
     }
@@ -281,7 +321,26 @@ async function handlePlaceOrder(event) {
         return;
     }
 
-    // 2. Get form data and cart items
+    // 2. Get current user data to include userId
+    let userId = null;
+    try {
+        const userResponse = await fetch('/api/auth/user', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'include'
+        });
+        
+        if (userResponse.ok) {
+            const userData = await userResponse.json();
+            userId = userData.id;
+        }
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        // Continue without userId for guest users
+    }
+
+    // 3. Get form data and cart items
     const formData = new FormData(event.target);
     const customerDetails = {
         fullName: formData.get('fullName'),
@@ -296,6 +355,7 @@ async function handlePlaceOrder(event) {
         pincode: formData.get('pincode'),
         state: formData.get('state'),
         country: formData.get('country'),
+        userId: userId, // Include userId for cart clearing
         // Legacy field for backward compatibility
         shippingAddress: `${formData.get('flatNo')}, ${formData.get('apartmentName')}, Floor ${formData.get('floor')}, ${formData.get('streetName')}, Near ${formData.get('nearbyLandmark')}, ${formData.get('city')}, ${formData.get('state')}, ${formData.get('country')} - ${formData.get('pincode')}`
     };
@@ -342,8 +402,19 @@ async function handlePlaceOrder(event) {
         return sum + itemTotal;
     }, 0);
     
-    // Calculate shipping and total (same logic as cart page)
-    const shippingAmount = subtotalAmount > 0 ? 10 : 0;
+    // Calculate shipping based on state
+    const state = customerDetails.state;
+    let shippingAmount = 0;
+    
+    if (state && state.trim() !== '') {
+        // Fetch shipping estimate from backend based on state
+        shippingAmount = await fetchShippingEstimate(cartItems, state);
+    } else {
+        // No shipping calculation if state is not provided
+        alert('Please enter your state to calculate shipping charges.');
+        return;
+    }
+    
     const totalAmount = subtotalAmount + shippingAmount;
     
     if (totalAmount <= 0) {
@@ -351,7 +422,7 @@ async function handlePlaceOrder(event) {
         return;
     }
 
-    // 3. Initiate payment via Razorpay
+    // 4. Initiate payment via Razorpay
     if (paymentMethod === 'razorpay') {
         try {
             // Create Razorpay order
@@ -367,16 +438,16 @@ async function handlePlaceOrder(event) {
                 throw new Error(razorpayOrderData.message || 'Failed to create Razorpay order');
             }
 
-            // 4. Open Razorpay payment modal
+            // 5. Open Razorpay payment modal
             const options = {
                 key: razorpayOrderData.data.keyId,
                 amount: razorpayOrderData.data.amount,
                 currency: razorpayOrderData.data.currency,
-                name: 'Hajj Umrah',
+                name: 'Eshal Hajj & Umrah Store',
                 description: 'Complete your purchase',
                 order_id: razorpayOrderData.data.orderId,
                 handler: async function (response) {
-                    // 5. On successful payment, create the order in our database
+                    // 6. On successful payment, create the order in our database
                     await createFinalOrder({
                         customerDetails,
                         cartItems,
@@ -435,7 +506,19 @@ async function createFinalOrder(fullOrderDetails) {
             return sum + itemTotal;
         }, 0);
         
-        const shippingAmount = subtotalAmount > 0 ? 10 : 0;
+        // Calculate shipping based on state
+        const state = fullOrderDetails.customerDetails.state;
+        let shippingAmount = 0;
+        
+        if (state && state.trim() !== '') {
+            // Fetch shipping estimate from backend based on state
+            shippingAmount = await fetchShippingEstimate(cartItems, state);
+        } else {
+            // No shipping calculation if state is not provided
+            console.error('State is required for shipping calculation');
+            throw new Error('State is required for shipping calculation');
+        }
+        
         const totalAmount = subtotalAmount + shippingAmount;
         
         // Prepare cart items with correct total prices for each item
@@ -491,11 +574,36 @@ async function createFinalOrder(fullOrderDetails) {
             throw new Error(orderData.error || 'Failed to place final order');
         }
         
-        // 6. Redirect to order confirmation page
+        // Clear cart after successful order placement
+        await clearCart();
+        
+        // 7. Redirect to order confirmation page
         window.location.href = `/order-confirmation?orderId=${orderData.orderId}`;
 
     } catch (error) {
         alert('Your payment was successful, but we failed to record your order. Please contact support.');
+    }
+}
+
+// Clear cart after successful order placement
+async function clearCart() {
+    try {
+        const response = await fetch('/api/cart/clear', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'include'
+        });
+        
+        if (response.ok) {
+            console.log('Cart cleared successfully');
+        } else {
+            console.error('Failed to clear cart');
+        }
+    } catch (error) {
+        console.error('Error clearing cart:', error);
     }
 }
 
