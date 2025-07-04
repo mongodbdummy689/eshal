@@ -40,20 +40,20 @@
                         <img th:src="${product.imageUrl}" th:alt="${product.name}" class="w-full h-full object-cover">
                     </div>
                     <div class="p-4">
-                        <h3 class="text-lg font-semibold mb-2 text-primary" th:text="${product.name}" th:data-description="${product.description}">Product Name</h3>
+                        <h3 class="text-lg font-semibold mb-2 text-primary" th:text="${product.name}" th:data-description="${product.description}" th:data-gst-rate="${product.gstRate}">Product Name</h3>
                         
                         <!-- Variant Selection -->
                         <div th:if="${product.priceType == 'variant' and product.variants != null and not #lists.isEmpty(product.variants)}" class="mb-2">
                             <select class="variant-select w-full p-2 border rounded">
                                 <option th:each="variant : ${product.variants}"
                                         th:value="${variant.price}"
-                                        th:text="${variant.size + ' - ₹' + #numbers.formatDecimal(variant.price, 1, 2)}"></option>
+                                        th:text="${variant.size + ' - ₹' + #numbers.formatDecimal(variant.price + (variant.price * product.gstRate / 100), 1, 2) + ' (incl. ' + #numbers.formatDecimal(product.gstRate, 1, 1) + '% GST)'}"></option>
                             </select>
                         </div>
 
                         <p class="text-text-secondary mb-2" 
                            th:classappend="${product.priceType == 'variant'} ? 'price-display'"
-                           th:text="'₹' + ${#numbers.formatDecimal(product.price, 1, 2)}">₹0.00</p>
+                           th:text="'₹' + ${#numbers.formatDecimal(product.price + (product.price * product.gstRate / 100), 1, 2)} + ' (incl. ' + ${#numbers.formatDecimal(product.gstRate, 1, 1)} + '% GST)'">₹0.00 (incl. 5% GST)</p>
                         
                         <div class="flex items-center space-x-2 mb-4">
                             <button class="quantity-decrease bg-gray-100 text-primary px-2 py-1 rounded hover:bg-gray-200 transition duration-300">-</button>
@@ -142,8 +142,14 @@
                         const card = this.closest('.card');
                         const priceDisplay = card.querySelector('.price-display');
                         const newPrice = parseFloat(this.value);
-                        priceDisplay.textContent = '₹' + newPrice.toFixed(2);
-                        card.dataset.price = newPrice;
+                        // Get GST rate from the product data (default to 5% if not available)
+                        const productId = card.dataset.productId;
+                        const productElement = card.querySelector('h3');
+                        // Try to get GST rate from a data attribute or default to 5%
+                        const gstRate = productElement.dataset.gstRate ? parseFloat(productElement.dataset.gstRate) : 5.0;
+                        const gstInclusivePrice = newPrice + (newPrice * gstRate / 100);
+                        priceDisplay.textContent = '₹' + gstInclusivePrice.toFixed(2) + ' (incl. ' + gstRate.toFixed(1) + '% GST)';
+                        card.dataset.price = newPrice; // Store GST-exclusive price for cart
                     });
                 });
 

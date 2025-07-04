@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const orderTotal = document.getElementById('orderTotal');
         const checkoutForm = document.getElementById('checkoutForm');
         
-        // Load cart items and update order summary
+        // Load cart items and update order summary immediately
         loadOrderSummary();
         
         // Initialize input formatting first
@@ -35,27 +35,17 @@ document.addEventListener('DOMContentLoaded', function() {
         // Initialize payment method toggle
         initializePaymentMethodToggle();
 
-        // Add event listeners for address fields to recalculate shipping
-        const addressFields = [
-            'checkoutState',
-            'checkoutCity',
-            'checkoutPincode'
-        ];
+        // Initialize shipping calculation on state field blur
+        initializeShippingCalculation();
         
-        addressFields.forEach(fieldId => {
-            const field = document.getElementById(fieldId);
-            if (field) {
-                field.addEventListener('change', function() {
-                    // Recalculate shipping when address changes
-                    loadOrderSummary();
-                });
-                
-                field.addEventListener('input', function() {
-                    // Also recalculate on input for real-time updates
-                    loadOrderSummary();
-                });
-            }
-        });
+        // Pincode doesn't affect shipping rates - only state matters
+        // const pincodeField = document.getElementById('checkoutPincode');
+        // if (pincodeField) {
+        //     pincodeField.addEventListener('change', function() {
+        //         // Recalculate shipping when pincode changes
+        //         loadOrderSummary();
+        //     });
+        // }
     }
 });
 
@@ -150,8 +140,19 @@ function initializePaymentMethodToggle() {
     }
 }
 
+// Flag to prevent multiple simultaneous shipping estimate requests
+let shippingEstimateInProgress = false;
+
 // Helper to get shipping estimate from backend
 async function fetchShippingEstimate(cartItems, state) {
+    // Prevent multiple simultaneous requests
+    if (shippingEstimateInProgress) {
+        console.log('Shipping estimate already in progress, skipping...');
+        return 0;
+    }
+    
+    shippingEstimateInProgress = true;
+    
     try {
         const response = await fetch('/api/cart/shipping-estimate', {
             method: 'POST',
@@ -159,14 +160,18 @@ async function fetchShippingEstimate(cartItems, state) {
             body: JSON.stringify({ cartItems: cartItems.map(item => ({
                 productId: item.productId,
                 quantity: item.quantity,
-                source: item.source
+                source: item.source,
+                selectedVariant: item.selectedVariant
             })), state })
         });
         if (!response.ok) return 0;
         const data = await response.json();
         return data.shippingAmount || 0;
     } catch (e) {
+        console.error('Error fetching shipping estimate:', e);
         return 0;
+    } finally {
+        shippingEstimateInProgress = false;
     }
 }
 
@@ -195,7 +200,8 @@ async function loadOrderSummary() {
 
         orderSummary.innerHTML = cartItems.map(item => {
             // Calculate unit price and total price based on product type
-            let unitPrice = 0, itemTotal = 0, priceUnit = '';
+            let unitPrice = 0, itemTotal = 0, priceUnit = '', gstAmount = 0, itemTotalWithGst = 0;
+            let gstRate = 5.0; // Default GST rate
             
             if (item.product) {
                 if (item.product.category === 'Janamaz') {
@@ -225,10 +231,17 @@ async function loadOrderSummary() {
                         itemTotal = unitPrice * item.quantity;
                     }
                 }
+                
+                // Calculate GST using product's GST rate
+                gstRate = item.product.gstRate || 5.0; // Default to 5% if not set
+                gstAmount = (itemTotal * gstRate) / 100;
+                itemTotalWithGst = itemTotal + gstAmount;
             }
 
             const priceString = unitPrice > 0 ? `₹${unitPrice.toFixed(2)} ${priceUnit}`.trim() : 'N/A';
             const totalString = itemTotal > 0 ? `₹${itemTotal.toFixed(2)}` : 'N/A';
+            const gstString = gstAmount > 0 ? `₹${gstAmount.toFixed(2)}` : 'N/A';
+            const totalWithGstString = itemTotalWithGst > 0 ? `₹${itemTotalWithGst.toFixed(2)}` : 'N/A';
             
             let variantText = '';
             if (item.selectedVariant) {
@@ -253,7 +266,11 @@ async function loadOrderSummary() {
                                 ${variantText ? `<p class="text-sm text-gray-500">${variantText}</p>` : ''}
                                 ${sourceText}
                              </div>
-                             <p class="font-bold text-lg text-gray-800">${totalString}</p>
+                             <div class="text-right">
+                                <p class="font-bold text-lg text-gray-800">${totalWithGstString}</p>
+                                <p class="text-sm text-gray-500">Subtotal: ${totalString}</p>
+                                <p class="text-sm text-green-600">GST: ${gstString}</p>
+                             </div>
                         </div>
                         <div class="text-sm text-gray-600 mt-2">
                            <p><span>Quantity:</span> <span class="font-semibold">${item.quantity || 1}</span></p>
@@ -264,30 +281,55 @@ async function loadOrderSummary() {
             `;
         }).join('');
 
-        // Get state from form if available
+        // Calculate total GST
+        let totalGst = 0;
+        cartItems.forEach(item => {
+            let itemTotal = 0;
+            if (item.product && item.product.category === 'Janamaz') {
+                if (item.quantity > 0 && item.quantity % 12 === 0) {
+                    const dozens = item.quantity / 12;
+                    itemTotal = (item.product.pricePerDozen || 0) * dozens;
+                } else {
+                    itemTotal = (item.product.pricePerPiece || 0) * (item.quantity || 1);
+                }
+            } else if (item.product) {
+                let itemPrice = 0;
+                if (item.selectedVariant && item.variantPrice) {
+                    itemPrice = item.variantPrice;
+                } else if (item.price) {
+                    itemPrice = item.price;
+                } else {
+                    itemPrice = item.product.price || 0;
+                }
+                itemTotal = itemPrice * item.quantity;
+            }
+            // Calculate GST using product's GST rate
+            const gstRate = item.product.gstRate || 5.0; // Default to 5% if not set
+            totalGst += (itemTotal * gstRate) / 100;
+        });
+
+        // Get state from form only - don't use localStorage for shipping calculation
         let state = '';
         const stateInput = document.getElementById('checkoutState');
-        if (stateInput && stateInput.value) {
-            state = stateInput.value;
-        } else {
-            state = localStorage.getItem('userState') || '';
+        if (stateInput && stateInput.value && stateInput.value.trim() !== '') {
+            state = stateInput.value.trim();
         }
         
         // Only calculate shipping if state is provided
         let shipping = 0;
         let shippingDisplay = '₹0.00';
+        let total = subtotal + totalGst;
         
         if (state && state.trim() !== '') {
             // Fetch shipping from backend only if state is provided
             shipping = await fetchShippingEstimate(cartItems, state);
             shippingDisplay = `₹${shipping.toFixed(2)}`;
+            total = subtotal + totalGst + shipping;
         } else {
             // Show "Please enter shipping details" when no state is provided
             shippingDisplay = 'Please enter shipping details';
         }
         
-        const total = subtotal + shipping;
-
         if (orderSubtotal) orderSubtotal.textContent = `₹${subtotal.toFixed(2)}`;
         if (orderShipping) orderShipping.textContent = shippingDisplay;
         if (orderTotal) {
@@ -298,7 +340,24 @@ async function loadOrderSummary() {
             }
         }
         
-        // Show/hide shipping note
+        // Add GST row to the summary if not already present
+        const summaryContainer = document.querySelector('.border-t-2.border-gray-200');
+        if (summaryContainer) {
+            let gstRow = summaryContainer.querySelector('.gst-row');
+            if (!gstRow) {
+                const gstHtml = `
+                    <div class="flex justify-between items-center text-gray-600 gst-row">
+                        <span>GST:</span>
+                        <span id="orderGst">₹${totalGst.toFixed(2)}</span>
+                    </div>
+                `;
+                summaryContainer.insertAdjacentHTML('beforeend', gstHtml);
+            } else {
+                gstRow.querySelector('#orderGst').textContent = `₹${totalGst.toFixed(2)}`;
+            }
+        }
+        
+        // Show/hide shipping note - always show when no state is provided
         const shippingNote = document.getElementById('shippingNote');
         if (shippingNote) {
             if (state && state.trim() !== '') {
@@ -415,7 +474,44 @@ async function handlePlaceOrder(event) {
         return;
     }
     
-    const totalAmount = subtotalAmount + shippingAmount;
+    // Calculate GST using product-specific rates
+    const gstAmount = cartItems.reduce((totalGst, item) => {
+        let itemTotal = 0;
+        if (item.product && item.product.category === 'Janamaz') {
+            // Handle Janamaz products with dynamic pricing based on quantity
+            if (item.quantity > 0 && item.quantity % 12 === 0) {
+                // When quantity is multiple of 12, use dozen pricing
+                const dozens = item.quantity / 12;
+                itemTotal = (item.product.pricePerDozen || 0) * dozens;
+            } else {
+                // When quantity is not multiple of 12, use per-piece pricing
+                itemTotal = (item.product.pricePerPiece || 0) * (item.quantity || 1);
+            }
+        } else if (item.product) {
+            let itemPrice = 0;
+            
+            // Try to get price from different sources
+            if (item.price) {
+                itemPrice = item.price;
+            } else if (item.variantPrice) {
+                itemPrice = item.variantPrice;
+            } else if (item.product.price) {
+                itemPrice = item.product.price;
+            } else {
+                console.warn('No price found for item:', item);
+                itemPrice = 0;
+            }
+            
+            const quantity = item.quantity || 1;
+            itemTotal = itemPrice * quantity;
+        }
+        
+        // Calculate GST using product's specific rate
+        const gstRate = item.product.gstRate || 5.0; // Default to 5% if not set
+        return totalGst + (itemTotal * gstRate / 100);
+    }, 0);
+    
+    const totalAmount = subtotalAmount + gstAmount + shippingAmount;
     
     if (totalAmount <= 0) {
         alert('Unable to calculate order total. Please check your cart items.');
@@ -519,7 +615,38 @@ async function createFinalOrder(fullOrderDetails) {
             throw new Error('State is required for shipping calculation');
         }
         
-        const totalAmount = subtotalAmount + shippingAmount;
+        // Calculate GST using product-specific rates
+        const gstAmount = cartItems.reduce((totalGst, item) => {
+            let itemTotal = 0;
+            if (item.product && item.product.category === 'Janamaz') {
+                // Handle Janamaz products with dynamic pricing based on quantity
+                if (item.quantity > 0 && item.quantity % 12 === 0) {
+                    // When quantity is multiple of 12, use dozen pricing
+                    const dozens = item.quantity / 12;
+                    itemTotal = (item.product.pricePerDozen || 0) * dozens;
+                } else {
+                    // When quantity is not multiple of 12, use per-piece pricing
+                    itemTotal = (item.product.pricePerPiece || 0) * (item.quantity || 1);
+                }
+            } else if (item.product) {
+                let itemPrice = 0;
+                if (item.price) {
+                    itemPrice = item.price;
+                } else if (item.variantPrice) {
+                    itemPrice = item.variantPrice;
+                } else if (item.product.price) {
+                    itemPrice = item.product.price;
+                }
+                const quantity = item.quantity || 1;
+                itemTotal = itemPrice * quantity;
+            }
+            
+            // Calculate GST using product's specific rate
+            const gstRate = item.product.gstRate || 5.0; // Default to 5% if not set
+            return totalGst + (itemTotal * gstRate / 100);
+        }, 0);
+        
+        const totalAmount = subtotalAmount + gstAmount + shippingAmount;
         
         // Prepare cart items with correct total prices for each item
         const preparedCartItems = cartItems.map(item => {
@@ -559,6 +686,7 @@ async function createFinalOrder(fullOrderDetails) {
             ...fullOrderDetails,
             cartItems: preparedCartItems, // Use the prepared cart items with correct total prices
             subtotalAmount: subtotalAmount,
+            gstAmount: gstAmount,
             shippingAmount: shippingAmount,
             totalAmount: totalAmount
         };
@@ -723,4 +851,19 @@ function validateCVV(cvv) {
 
 function validateUPIId(upiId) {
     return /^[a-zA-Z0-9._-]+@[a-zA-Z]{3,}$/.test(upiId);
+}
+
+// --- Shipping Calculation on State Field Blur ---
+function initializeShippingCalculation() {
+    const stateField = document.getElementById('checkoutState');
+    
+    if (stateField) {
+        // Only recalculate shipping when state field loses focus (blur event)
+        stateField.addEventListener('blur', function() {
+            // Only trigger shipping calculation if the field has a value
+            if (this.value.trim()) {
+                loadOrderSummary();
+            }
+        });
+    }
 } 

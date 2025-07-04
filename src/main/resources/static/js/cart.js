@@ -92,7 +92,7 @@ async function updateCartUI(cartItems) {
     cartSummaryDiv.classList.remove('hidden');
     cartItemsContainer.innerHTML = cartItems.map(item => {
         // Calculate unit price and total price based on product type
-        let unitPrice = 0, itemTotal = 0, priceUnit = '';
+        let unitPrice = 0, itemTotal = 0, priceUnit = '', gstAmount = 0, itemTotalWithGst = 0;
         
         if (item.product) {
             if (item.product.category === 'Janamaz') {
@@ -125,10 +125,18 @@ async function updateCartUI(cartItems) {
                     itemTotal = unitPrice * item.quantity;
                 }
             }
+            
+            // Calculate GST using product's GST rate
+            const gstRate = item.product.gstRate || 5.0; // Default to 5% if not set
+            gstAmount = (itemTotal * gstRate) / 100;
+            itemTotalWithGst = itemTotal + gstAmount;
         }
 
         const priceDisplay = unitPrice > 0 ? `₹${unitPrice.toFixed(2)} ${priceUnit}`.trim() : '';
         const totalDisplay = itemTotal > 0 ? `₹${itemTotal.toFixed(2)}` : '';
+        const gstRate = item.product.gstRate || 5.0; // Default to 5% if not set
+        const gstDisplay = gstAmount > 0 ? `₹${gstAmount.toFixed(2)}` : '';
+        const totalWithGstDisplay = itemTotalWithGst > 0 ? `₹${itemTotalWithGst.toFixed(2)}` : '';
         
         // Create variant display text
         let variantDisplay = '';
@@ -152,7 +160,9 @@ async function updateCartUI(cartItems) {
                 <div class="flex justify-between items-center">
                     <div class="text-gray-600">
                         ${priceDisplay ? `<p>${priceDisplay}</p>` : ''}
-                        ${totalDisplay ? `<p class="font-semibold">Total: ${totalDisplay}</p>` : ''}
+                        ${totalDisplay ? `<p>Subtotal: ${totalDisplay}</p>` : ''}
+                        ${gstDisplay ? `<p class="text-sm text-green-600">GST: ${gstDisplay}</p>` : ''}
+                        ${totalWithGstDisplay ? `<p class="font-semibold text-primary">Total: ${totalWithGstDisplay}</p>` : ''}
                     </div>
                     <div class="flex items-center space-x-4">
                         <div class="flex items-center space-x-2">
@@ -171,8 +181,11 @@ async function updateCartUI(cartItems) {
         </div>
     `}).join('');
 
-    // Calculate subtotal (no shipping on cart page)
-    const subtotal = cartItems.reduce((sum, item) => {
+    // Calculate subtotal and GST
+    let subtotal = 0;
+    let totalGst = 0;
+    
+    cartItems.forEach(item => {
         let itemTotal = 0;
         if (item.product && item.product.category === 'Janamaz') {
             if (item.quantity > 0 && item.quantity % 12 === 0) {
@@ -192,12 +205,38 @@ async function updateCartUI(cartItems) {
             }
             itemTotal = itemPrice * item.quantity;
         }
-        return sum + itemTotal;
-    }, 0);
+        subtotal += itemTotal;
+        // Calculate GST using product's GST rate
+        const gstRate = item.product.gstRate || 5.0; // Default to 5% if not set
+        totalGst += (itemTotal * gstRate) / 100;
+    });
 
-    // On cart page, total equals subtotal (no shipping shown)
+    const totalWithGst = subtotal + totalGst;
+
+    // Update summary display
     subtotalElement.textContent = `₹${subtotal.toFixed(2)}`;
-    totalElement.textContent = `₹${subtotal.toFixed(2)}`;
+    totalElement.textContent = `₹${totalWithGst.toFixed(2)}`;
+    
+    // Add GST breakdown to summary if not already present
+    const cartSummary = document.querySelector('#cartSummary .bg-white');
+    if (cartSummary) {
+        let gstRow = cartSummary.querySelector('.gst-row');
+        if (!gstRow) {
+            const subtotalRow = cartSummary.querySelector('.space-y-4');
+            if (subtotalRow) {
+                const gstHtml = `
+                    <div class="flex justify-between gst-row">
+                        <span>GST</span>
+                        <span id="gstAmount">₹${totalGst.toFixed(2)}</span>
+                    </div>
+                `;
+                subtotalRow.insertAdjacentHTML('beforeend', gstHtml);
+            }
+        } else {
+            // Update existing GST row with correct amount
+            gstRow.querySelector('#gstAmount').textContent = `₹${totalGst.toFixed(2)}`;
+        }
+    }
 }
 
 // Update item quantity

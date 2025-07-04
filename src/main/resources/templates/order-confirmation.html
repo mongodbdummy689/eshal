@@ -98,6 +98,10 @@
                                     <span class="text-gray-600">Subtotal:</span>
                                     <span class="font-medium" th:text="'₹' + ${#numbers.formatDecimal(order?.subtotalAmount != null ? order.subtotalAmount : order.totalAmount, 1, 2)}"></span>
                                 </div>
+                                <div class="flex justify-between" th:if="${order?.gstAmount != null and order.gstAmount > 0}">
+                                    <span class="text-gray-600">GST:</span>
+                                    <span class="font-medium text-green-600" th:text="'₹' + ${#numbers.formatDecimal(order.gstAmount, 1, 2)}"></span>
+                                </div>
                                 <div class="flex justify-between" th:if="${order?.shippingAmount != null}">
                                     <span class="text-gray-600">Shipping:</span>
                                     <span class="font-medium" th:text="'₹' + ${#numbers.formatDecimal(order.shippingAmount, 1, 2)}"></span>

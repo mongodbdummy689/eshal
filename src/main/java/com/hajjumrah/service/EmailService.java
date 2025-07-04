@@ -100,6 +100,7 @@ public class EmailService {
         // Add shipping cost information with null checks
         Double subtotalAmount = order.getSubtotalAmount();
         Double shippingAmount = order.getShippingAmount();
+        Double gstAmount = order.getGstAmount();
         
         // If subtotalAmount is null (old orders), use totalAmount as fallback
         if (subtotalAmount == null) {
@@ -111,8 +112,14 @@ public class EmailService {
             shippingAmount = 0.0;
         }
         
+        // If gstAmount is null (old orders), set to 0
+        if (gstAmount == null) {
+            gstAmount = 0.0;
+        }
+        
         context.setVariable("subtotalAmount", subtotalAmount);
         context.setVariable("shippingAmount", shippingAmount);
+        context.setVariable("gstAmount", gstAmount);
         
         // Add transaction information
         context.setVariable("transactionId", order.getTransactionId());

@@ -449,7 +449,25 @@ Following changes have been deployed on http://eshalhajjumrahkit.com/ -
 mongodb+srv://eshalumrahessentials:eshal@0102@cluster0.woukx9j.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
 Changes for 30/6/25
-Following changes have been deployed on http://eshalhajjumrahkit.com/ -
-Removed Umrah Guide from Men's and Women’s Mini Kits page.
+Please verify the following changes that have been deployed on http://eshalhajjumrahkit.com/ -
+- Removed Umrah Guide from Men's and Women’s Mini Kit pages.
+- Updated Cart page to not display shipping calculation.
+- Updated Checkout page to display shipping calculation after shipping details have been entered.
+- Updated Razorpay page to display Eshal Hajj & Umrah Store instead of Hajj Umrah.
+- Updated Men's and Women’s Kit dimensions which now calculates shipping charges as ₹ 160/240 (in-state/out-state respectively) per kit.
+- Umrah Dua Card updated
 
-Will need to reedit or retake the Umrah dua card pic to align it at the center.
+Discussed with Farooque sir - Side view kit images have already been added on Men’s and Women’s kit pages as scrollable images.
+
+Changes for 2/7/25
+Updates for today:
+Reviewed and added weight for all the items under Individual page.
+Updated prices for 3 items.
+Added 3 new items under Individual page.
+Fixing bugs identified during testing.
+More testing will be done tomorrow before deployment.
+
+Updates for today:
+Added 5% GST changes to the code.
+Changed checkout form to include Country, State and City as a dropdown.
+Testing changes in progress.

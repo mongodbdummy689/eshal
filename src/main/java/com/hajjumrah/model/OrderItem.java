@@ -9,6 +9,7 @@ public class OrderItem {
     private String imageUrl;
     private String selectedVariant;
     private BigDecimal price; // Total price for this item (not unit price)
+    private BigDecimal gstAmount; // GST amount for this item
     private int quantity;
     private String source; // e.g., "tohfa-e-khulus" for items from that page
 
@@ -24,6 +25,7 @@ public class OrderItem {
         this.selectedVariant = selectedVariant;
         this.price = price;
         this.quantity = quantity;
+        this.gstAmount = BigDecimal.ZERO; // Initialize GST amount
     }
 
     public OrderItem(String productId, String productName, String imageUrl, String selectedVariant, BigDecimal price, int quantity, String source) {
@@ -34,6 +36,7 @@ public class OrderItem {
         this.price = price;
         this.quantity = quantity;
         this.source = source;
+        this.gstAmount = BigDecimal.ZERO; // Initialize GST amount
     }
 
     public String getProductId() {
@@ -74,6 +77,14 @@ public class OrderItem {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public BigDecimal getGstAmount() {
+        return gstAmount;
+    }
+
+    public void setGstAmount(BigDecimal gstAmount) {
+        this.gstAmount = gstAmount;
     }
 
     public int getQuantity() {

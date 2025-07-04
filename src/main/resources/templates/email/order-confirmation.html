@@ -145,6 +145,10 @@
                     <span>Subtotal:</span>
                     <span th:text="'₹' + ${#numbers.formatDecimal(subtotalAmount != null ? subtotalAmount : totalAmount, 1, 2)}">₹0.00</span>
                 </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;" th:if="${gstAmount != null and gstAmount > 0}">
+                    <span>GST:</span>
+                    <span style="color: #059669;" th:text="'₹' + ${#numbers.formatDecimal(gstAmount, 1, 2)}">₹0.00</span>
+                </div>
                 <div style="display: flex; justify-content: space-between; margin-bottom: 10px;" th:if="${shippingAmount != null and shippingAmount > 0}">
                     <span>Shipping:</span>
                     <span th:text="'₹' + ${#numbers.formatDecimal(shippingAmount, 1, 2)}">₹0.00</span>

@@ -16,9 +16,10 @@ public class Order {
     
     private String userId;
     private List<OrderItem> items;
-    private double subtotalAmount; // Amount before shipping
+    private double subtotalAmount; // Amount before shipping and GST
+    private double gstAmount; // Total GST amount
     private double shippingAmount; // Shipping cost
-    private double totalAmount; // Total amount including shipping
+    private double totalAmount; // Total amount including shipping and GST
     private String status; // PENDING, PROCESSING, SHIPPED, DELIVERED, CANCELLED
     private LocalDateTime orderDate;
     

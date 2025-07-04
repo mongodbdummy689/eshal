@@ -37,6 +37,10 @@
                                 <span>Subtotal:</span>
                                 <span id="orderSubtotal">₹0.00</span>
                             </div>
+                            <div class="flex justify-between items-center text-gray-600 gst-row">
+                                <span>GST:</span>
+                                <span id="orderGst">₹0.00</span>
+                            </div>
                             <div class="flex justify-between items-center text-gray-600">
                                 <span>Shipping:</span>
                                 <span id="orderShipping">₹0.00</span>
@@ -45,7 +49,7 @@
                                 <span class="text-gray-800">Total:</span>
                                 <span id="orderTotal" class="text-primary-dark">₹0.00</span>
                             </div>
-                            <div id="shippingNote" class="text-sm text-gray-500 mt-2 hidden">
+                            <div id="shippingNote" class="text-sm text-gray-500 mt-2">
                                 <p>💡 Please enter shipping details to see shipping charges</p>
                             </div>
                         </div>
@@ -141,12 +145,12 @@
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="relative">
-                                    <input type="text" id="checkoutCity" name="city" required
+                                    <input type="text" id="checkoutCountry" name="country" required
                                         class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-primary"
-                                        placeholder="City">
-                                    <label for="checkoutCity"
+                                        placeholder="Country">
+                                    <label for="checkoutCountry"
                                         class="absolute left-0 -top-3.5 text-gray-600 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
-                                        City <span class="text-red-500">*</span>
+                                        Country <span class="text-red-500">*</span>
                                     </label>
                                 </div>
                                 <div class="relative">
@@ -161,12 +165,12 @@
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="relative">
-                                    <input type="text" id="checkoutCountry" name="country" required
+                                    <input type="text" id="checkoutCity" name="city" required
                                         class="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-primary"
-                                        placeholder="Country">
-                                    <label for="checkoutCountry"
+                                        placeholder="City">
+                                    <label for="checkoutCity"
                                         class="absolute left-0 -top-3.5 text-gray-600 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
-                                        Country <span class="text-red-500">*</span>
+                                        City <span class="text-red-500">*</span>
                                     </label>
                                 </div>
                                 <div class="relative">
