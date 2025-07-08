@@ -491,3 +491,7 @@ As discussed over the call, I'll add standard content for the following pages:
 - Cancellation and Refunds
 Will update the group once above changes are deployed for validation.
 
+Razorpay Live:
+Key Id: rzp_live_iwtOZiBiln73Rk
+Key Secret: jX4WgdYiIqn3Tlz5j5jf9iz2
+
