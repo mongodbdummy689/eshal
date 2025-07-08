@@ -306,9 +306,14 @@ public class CartController {
     public ResponseEntity<?> getShippingEstimate(@RequestBody Map<String, Object> requestBody) {
         try {
             System.out.println("[ShippingCalc] ===== SHIPPING CALCULATION START =====");
+            System.out.println("[ShippingCalc] Request body: " + requestBody);
+            
             List<Map<String, Object>> cartItems = (List<Map<String, Object>>) requestBody.get("cartItems");
             String state = (String) requestBody.getOrDefault("state", "");
+            System.out.printf("[ShippingCalc] Received state: '%s'\n", state);
             double rate = "Maharashtra".equalsIgnoreCase(state) ? 80.0 : 120.0;
+            System.out.printf("[ShippingCalc] Using rate: ₹%.2f\n", rate);
+            System.out.printf("[ShippingCalc] Cart items count: %d\n", cartItems.size());
             double totalFinalWeight = 0.0;
 
             // Count Tohfa-e-Khulus items
@@ -428,6 +433,7 @@ public class CartController {
             System.out.printf("[ShippingCalc] Final shipping calculation: %d kg x ₹%.2f = ₹%.2f\n", ceilingWeight, rate, totalShipping);
             
             double shippingAmount = Math.round(totalShipping * 100.0) / 100.0;
+            System.out.printf("[ShippingCalc] Final shipping amount returned: ₹%.2f\n", shippingAmount);
             System.out.println("[ShippingCalc] ===== SHIPPING CALCULATION END =====");
             Map<String, Object> result = new HashMap<>();
             result.put("shippingAmount", shippingAmount);

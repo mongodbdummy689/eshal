@@ -157,12 +157,15 @@ async function fetchShippingEstimate(cartItems, state) {
         const response = await fetch('/api/cart/shipping-estimate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cartItems: cartItems.map(item => ({
-                productId: item.productId,
-                quantity: item.quantity,
-                source: item.source,
-                selectedVariant: item.selectedVariant
-            })), state })
+            body: JSON.stringify({ 
+                cartItems: cartItems.map(item => ({
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    source: item.source,
+                    selectedVariant: item.selectedVariant
+                })), 
+                state 
+            })
         });
         if (!response.ok) return 0;
         const data = await response.json();
@@ -525,7 +528,17 @@ async function handlePlaceOrder(event) {
             const razorpayOrderResponse = await fetch('/api/payments/razorpay/create-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount: totalAmount, currency: 'INR' })
+                body: JSON.stringify({ 
+                    amount: totalAmount, 
+                    currency: 'INR',
+                    debugInfo: {
+                        subtotalAmount: subtotalAmount,
+                        gstAmount: gstAmount,
+                        shippingAmount: shippingAmount,
+                        totalAmount: totalAmount,
+                        customerState: customerDetails.state
+                    }
+                })
             });
             
             const razorpayOrderData = await razorpayOrderResponse.json();

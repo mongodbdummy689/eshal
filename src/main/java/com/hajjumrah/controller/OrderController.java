@@ -113,9 +113,16 @@ public class OrderController {
     @PostMapping("/place")
     public ResponseEntity<?> placeOrder(@RequestBody Map<String, Object> requestBody) {
         try {
+            System.out.println("[OrderDebug] ===== ORDER PLACEMENT START =====");
+            System.out.println("[OrderDebug] Request body: " + requestBody);
+            
             Map<String, String> customerDetails = (Map<String, String>) requestBody.get("customerDetails");
             List<Map<String, Object>> cartItems = (List<Map<String, Object>>) requestBody.get("cartItems");
             String paymentMethod = (String) requestBody.get("paymentMethod");
+            
+            System.out.printf("[OrderDebug] Customer State: %s\n", customerDetails.getOrDefault("state", "NOT_PROVIDED"));
+            System.out.printf("[OrderDebug] Payment Method: %s\n", paymentMethod);
+            System.out.printf("[OrderDebug] Cart Items Count: %d\n", cartItems.size());
 
             List<OrderItem> orderItems = new ArrayList<>();
             BigDecimal subtotalAmount = BigDecimal.ZERO;
@@ -152,7 +159,9 @@ public class OrderController {
             System.out.println("[OrderShippingCalc] ===== SHIPPING CALCULATION START =====");
             double totalFinalWeight = 0.0;
             String state = customerDetails.getOrDefault("state", "");
+            System.out.printf("[OrderShippingCalc] Received state: '%s'\n", state);
             double rate = (state.equalsIgnoreCase("Maharashtra")) ? 80.0 : 120.0;
+            System.out.printf("[OrderShippingCalc] Using rate: ₹%.2f\n", rate);
             
             // Count Tohfa-e-Khulus items
             int tohfaKhulusCount = 0;
@@ -274,6 +283,15 @@ public class OrderController {
             System.out.println("[OrderShippingCalc] ===== SHIPPING CALCULATION END =====");
             BigDecimal totalAmount = subtotalAmount.add(totalGstAmount).add(shippingAmount);
             
+            // Debug logging
+            System.out.println("[OrderDebug] ===== ORDER CREATION DEBUG =====");
+            System.out.printf("[OrderDebug] Subtotal: ₹%.2f\n", subtotalAmount.doubleValue());
+            System.out.printf("[OrderDebug] GST: ₹%.2f\n", totalGstAmount.doubleValue());
+            System.out.printf("[OrderDebug] Shipping: ₹%.2f\n", shippingAmount.doubleValue());
+            System.out.printf("[OrderDebug] Total Amount: ₹%.2f\n", totalAmount.doubleValue());
+            System.out.printf("[OrderDebug] Customer State: %s\n", customerDetails.getOrDefault("state", "NOT_PROVIDED"));
+            System.out.println("[OrderDebug] ===== END DEBUG =====");
+            
             Order order = new Order();
             
             // Generate unique 6-digit order ID
@@ -317,6 +335,10 @@ public class OrderController {
             }
             
             Order savedOrder = orderRepository.save(order);
+            
+            System.out.println("[OrderDebug] ===== ORDER PLACEMENT END =====");
+            System.out.printf("[OrderDebug] Order saved with ID: %s\n", savedOrder.getOrderId());
+            System.out.printf("[OrderDebug] Final order total: ₹%.2f\n", savedOrder.getTotalAmount());
             
             // Send email notification
             try {

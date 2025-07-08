@@ -37,6 +37,14 @@ public class RazorpayService {
 
     public Map<String, Object> createOrder(double amount, String currency, String receipt) {
         try {
+            // Debug logging
+            System.out.println("[RazorpayDebug] ===== RAZORPAY ORDER CREATION =====");
+            System.out.printf("[RazorpayDebug] Amount in Rupees: ₹%.2f\n", amount);
+            System.out.printf("[RazorpayDebug] Amount in Paise: %d\n", (long)(amount * 100));
+            System.out.printf("[RazorpayDebug] Currency: %s\n", currency);
+            System.out.printf("[RazorpayDebug] Receipt: %s\n", receipt);
+            System.out.println("[RazorpayDebug] ===== END DEBUG =====");
+            
             JSONObject options = new JSONObject();
             options.put("amount", (long)(amount * 100)); // Convert to paise
             options.put("currency", currency);

@@ -30,6 +30,24 @@ public class PaymentController {
             Double amount = Double.parseDouble(data.get("amount").toString());
             String currency = (String) data.getOrDefault("currency", "INR");
             String receipt = "receipt_" + System.currentTimeMillis();
+            
+            // Debug logging
+            System.out.println("[PaymentDebug] ===== PAYMENT CONTROLLER DEBUG =====");
+            System.out.printf("[PaymentDebug] Received amount: ₹%.2f\n", amount);
+            System.out.printf("[PaymentDebug] Currency: %s\n", currency);
+            System.out.printf("[PaymentDebug] Receipt: %s\n", receipt);
+            
+            // Log debug info from frontend if available
+            if (data.containsKey("debugInfo")) {
+                Map<String, Object> debugInfo = (Map<String, Object>) data.get("debugInfo");
+                System.out.println("[PaymentDebug] Frontend calculation breakdown:");
+                System.out.printf("[PaymentDebug] - Subtotal: ₹%.2f\n", ((Number) debugInfo.get("subtotalAmount")).doubleValue());
+                System.out.printf("[PaymentDebug] - GST: ₹%.2f\n", ((Number) debugInfo.get("gstAmount")).doubleValue());
+                System.out.printf("[PaymentDebug] - Shipping: ₹%.2f\n", ((Number) debugInfo.get("shippingAmount")).doubleValue());
+                System.out.printf("[PaymentDebug] - Total Amount: ₹%.2f\n", ((Number) debugInfo.get("totalAmount")).doubleValue());
+                System.out.printf("[PaymentDebug] - Customer State: %s\n", debugInfo.get("customerState"));
+            }
+            System.out.println("[PaymentDebug] ===== END DEBUG =====");
 
             if (amount <= 0) {
                 return ResponseEntity.badRequest().body(Map.of(

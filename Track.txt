@@ -495,3 +495,18 @@ Razorpay Live:
 Key Id: rzp_live_iwtOZiBiln73Rk
 Key Secret: jX4WgdYiIqn3Tlz5j5jf9iz2
 
+# 1. Find your container name
+docker ps
+# 2. Get today's logs with our debug tags
+docker logs --since $(date -d 'today 00:00:00' +%s) <your_container_name> | grep -E "\[ShippingCalc\]|\[OrderDebug\]|\[PaymentDebug\]|\[RazorpayDebug\]" > /tmp/shipping_debug_logs.txt
+# 3. Also get the complete logs for context
+docker logs --since $(date -d 'today 00:00:00' +%s) <your_container_name> > /tmp/complete_logs_today.txt
+# 4. Download to your local machine
+scp root@168.231.103.72:/tmp/shipping_debug_logs.txt ./
+scp root@168.231.103.72:/tmp/complete_logs_today.txt ./
+
+# Get complete logs from today
+docker logs --since $(date -d 'today 00:00:00' +%s) eshal-app-1 > /tmp/complete_logs_today.txt
+# View the complete logs
+cat /tmp/complete_logs_today.txt | grep -E "\[ShippingCalc\]|\[OrderDebug\]|\[PaymentDebug\]|\[RazorpayDebug\]|shipping|amount|total"
+
