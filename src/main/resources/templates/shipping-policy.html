@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Shipping Policy - Eshal Hajj & Umrah Store</title>
+</head>
+<body class="bg-gray-50">
+    <!-- Include auth modals -->
+    <div th:replace="~{layout/auth-modals :: auth-modals}"></div>
+
+    <!-- Navbar -->
+    <nav th:replace="~{layout/main :: nav}"></nav>
+
+    <!-- Main Content -->
+    <div class="pt-32 md:pt-24">
+        <div class="container mx-auto px-4 py-8">
+            <div class="max-w-4xl mx-auto">
+                <h1 class="text-3xl font-bold mb-8 text-primary-dark mt-8">Shipping Policy</h1>
+                
+                <div class="bg-white rounded-lg shadow-md p-8">
+                    <div class="prose prose-lg max-w-none">
+
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">1. Shipping Areas</h2>
+                        <p class="mb-6">Eshal Hajj & Umrah Store currently ships to all states and union territories within India. We do not ship internationally at this time.</p>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">2. Shipping Rates</h2>
+                        <p class="mb-4">Our shipping rates are calculated based on your delivery location:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li><strong>Maharashtra:</strong> ₹80 per kg (minimum 1 kg)</li>
+                            <li><strong>Other States:</strong> ₹120 per kg (minimum 1 kg)</li>
+                        </ul>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">3. Shipping Methods</h2>
+                        <p class="mb-4">We offer the following shipping option:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li><strong>Standard Delivery:</strong> 5-7 business days</li>
+                        </ul>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">4. Order Processing Time</h2>
+                        <p class="mb-4">Orders are typically processed within 24-48 hours of payment confirmation. Processing times may be longer during peak seasons or holidays.</p>
+                        <p class="mb-6">Once your order is shipped, you will receive a confirmation email with tracking information.</p>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">5. Delivery Timeframes</h2>
+                        <p class="mb-4">Estimated delivery times by location:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li><strong>Metro Cities:</strong> 2-4 business days</li>
+                            <li><strong>Tier 2 Cities:</strong> 3-6 business days</li>
+                            <li><strong>Rural Areas:</strong> 5-8 business days</li>
+                            <li><strong>Remote Locations:</strong> 7-10 business days</li>
+                        </ul>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">6. Package Tracking</h2>
+                        <p class="mb-4">All shipments include tracking information. You can track your order through:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            
+                            <li>Direct tracking on courier websites</li>
+                            <li>Customer support assistance</li>
+                        </ul>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">7. Delivery Attempts</h2>
+                        <p class="mb-4">Our delivery partners will make up to 3 delivery attempts:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li>First attempt: At the provided address during business hours</li>
+                            <li>Second attempt: Next business day</li>
+                            <li>Third attempt: Following business day</li>
+                        </ul>
+                        <p class="mb-6">If all attempts fail, the package will be returned to our facility, and you will be contacted for alternative arrangements.</p>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">8. Delivery Requirements</h2>
+                        <p class="mb-4">To ensure successful delivery:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li>Provide a complete and accurate delivery address</li>
+                            <li>Include a valid phone number for delivery coordination</li>
+                            <li>Ensure someone is available to receive the package</li>
+                            <li>Provide any specific delivery instructions if needed</li>
+                        </ul>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">9. Package Insurance</h2>
+                        <p class="mb-6">All packages are insured for their declared value. In case of damage or loss during transit, we will assist you in filing a claim with the courier company.</p>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">10. Delivery Exceptions</h2>
+                        <p class="mb-4">Delivery may be delayed or affected by:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li>Natural disasters or extreme weather conditions</li>
+                            <li>Public holidays or strikes</li>
+                            <li>Remote or inaccessible locations</li>
+                            <li>Customs clearance (if applicable)</li>
+                            <li>Incomplete or incorrect address information</li>
+                        </ul>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">11. Failed Deliveries</h2>
+                        <p class="mb-4">If delivery fails due to:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li><strong>Incorrect Address:</strong> Additional shipping charges will apply for re-delivery</li>
+                            <li><strong>Recipient Unavailable:</strong> Package will be held for pickup or re-delivery</li>
+                            <li><strong>Refused Delivery:</strong> Return shipping charges will be deducted from refund</li>
+                        </ul>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">12. Package Pickup</h2>
+                        <p class="mb-6">If you prefer to pick up your order, please contact us before placing the order. Pickup is available from our warehouse during business hours (Monday to Saturday, 9:00 AM to 6:00 PM).</p>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">13. Shipping Partners</h2>
+                        <p class="mb-4">We partner with reliable courier services including:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li>Mark Express</li>
+                            <li>Shree Maruti Courier Services</li>
+                            <li>Quick Ship Enterprises</li>
+                            <li>Bigship</li>
+                        </ul>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">14. Special Handling</h2>
+                        <p class="mb-4">Some products may require special handling:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li><strong>Fragile Items:</strong> Extra packaging and careful handling</li>
+                            <li><strong>Heavy Items:</strong> Additional charges may apply</li>
+                            <li><strong>Temperature-Sensitive Items:</strong> Special packaging and expedited shipping</li>
+                        </ul>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">15. Contact Information</h2>
+                        <p class="mb-6">For shipping-related inquiries, please contact us at:</p>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="mb-2"><strong>Email:</strong> eshalumrahessentials@gmail.com</p>
+                            <p class="mb-2"><strong>Phone:</strong> (+91) 9923067286 / 9764417286 / 7030890979</p>
+                            <p class="mb-2"><strong>Business Hours:</strong> Monday to Saturday, 9:00 AM to 6:00 PM</p>
+                            <p class="mb-2"><strong>Address:</strong> Shop No. 5, Building No. 5, HM Royal Society, Near Talab Masjid, Kondhwa, Pune - 411 048</p>
+                        </div>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">16. Policy Updates</h2>
+                        <p class="mb-6">This shipping policy may be updated from time to time. Any changes will be posted on this page with an updated revision date. Continued use of our services after such changes constitutes acceptance of the updated policy.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{layout/main :: footer}"></footer>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/checkout.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="/js/countries2.js"></script>
+    <script>
+        // Global auth state
+        let isAuthenticated = false;
+
+        // Check auth status and update UI when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const response = await fetch('/api/auth/check', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to check auth status');
+                }
+
+                const data = await response.json();
+                isAuthenticated = data.authenticated;
+
+                const cartLink = document.getElementById('cartLink');
+                const mobileCartLink = document.getElementById('mobileCartLink');
+                const loginRegisterLink = document.getElementById('loginRegisterLink');
+                const logoutLink = document.getElementById('logoutLink');
+
+                // Always show cart links
+                if (cartLink) cartLink.classList.remove('hidden');
+                if (mobileCartLink) mobileCartLink.classList.remove('hidden');
+
+                if (isAuthenticated) {
+                    loginRegisterLink.classList.add('hidden');
+                    logoutLink.classList.remove('hidden');
+                    
+                    // Check if user is admin and show admin menu
+                    if (data.user && data.user.role === 'ROLE_ADMIN') {
+                        console.log('User is admin, showing admin dropdown');
+                        const adminDropdown = document.getElementById('adminDropdown');
+                        const mobileAdminMenu = document.getElementById('mobileAdminMenu');
+                        if (adminDropdown) {
+                            adminDropdown.classList.remove('hidden');
+                            console.log('Admin dropdown shown');
+                        }
+                        if (mobileAdminMenu) {
+                            mobileAdminMenu.classList.remove('hidden');
+                            console.log('Mobile admin menu shown');
+                        }
+                    } else {
+                        console.log('User is not admin, role:', data.user?.role);
+                    }
+                } else {
+                    loginRegisterLink.classList.remove('hidden');
+                    logoutLink.classList.add('hidden');
+                }
+
+                // Always update cart count
+                if (typeof updateCartCount === 'function') {
+                    await updateCartCount();
+                }
+            } catch (error) {
+                console.error('Error checking auth status:', error);
+            }
+        });
+
+        // Add logout handler
+        document.getElementById('logoutLink').addEventListener('click', async function(e) {
+            e.preventDefault();
+            try {
+                const response = await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    isAuthenticated = false;
+                    
+                    // Try to parse JSON response first
+                    try {
+                        const data = await response.json();
+                        if (data.success && data.redirect) {
+                            window.location.href = data.redirect;
+                        } else {
+                            window.location.href = '/';
+                        }
+                    } catch (e) {
+                        // If not JSON, just redirect to home
+                        window.location.href = '/';
+                    }
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                // Even if there's an error, redirect to home to clear the session
+                window.location.href = '/';
+            }
+        });
+
+        // Add login/register modal handler
+        document.getElementById('loginRegisterLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal) {
+                showModal(loginModal);
+            } else {
+                console.error('Login modal not found');
+            }
+        });
+
+        // Export auth state for other scripts
+        window.getAuthState = function() {
+            return isAuthenticated;
+        };
+
+        // Add this to your existing script section
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+                    mobileMenuButton.setAttribute('aria-expanded', !expanded);
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenuButton.querySelector('svg.block').classList.toggle('hidden');
+                    mobileMenuButton.querySelector('svg.hidden').classList.toggle('hidden');
+                });
+            }
+
+            // Mobile Products dropdown toggle
+            const mobileProductsButton = document.getElementById('mobileProductsButton');
+            const mobileProductsMenu = document.getElementById('mobileProductsMenu');
+            
+            if (mobileProductsButton && mobileProductsMenu) {
+                mobileProductsButton.addEventListener('click', () => {
+                    mobileProductsMenu.classList.toggle('hidden');
+                });
+            }
+
+            // Desktop Products dropdown behavior
+            const productsDropdown = document.getElementById('productsDropdown');
+            const productsMenu = document.getElementById('productsMenu');
+            let dropdownTimeout;
+
+            if (productsDropdown && productsMenu) {
+                productsDropdown.addEventListener('mouseenter', () => {
+                    clearTimeout(dropdownTimeout);
+                    productsMenu.classList.remove('opacity-0', 'invisible');
+                    productsMenu.classList.add('opacity-100', 'visible');
+                });
+
+                productsDropdown.addEventListener('mouseleave', () => {
+                    dropdownTimeout = setTimeout(() => {
+                        productsMenu.classList.remove('opacity-100', 'visible');
+                        productsMenu.classList.add('opacity-0', 'invisible');
+                    }, 300); // 300ms delay before hiding
+                });
+            }
+
+            // Admin dropdown toggle
+            const adminMenuButton = document.getElementById('adminMenuButton');
+            const adminMenu = document.getElementById('adminMenu');
+            
+            if (adminMenuButton && adminMenu) {
+                adminMenuButton.addEventListener('click', () => {
+                    adminMenu.classList.toggle('hidden');
+                });
+                
+                // Close admin menu when clicking outside
+                document.addEventListener('click', (event) => {
+                    if (!adminMenuButton.contains(event.target) && !adminMenu.contains(event.target)) {
+                        adminMenu.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Update mobile menu items when auth state changes
+            const updateMobileMenu = (isAuthenticated) => {
+                const mobileLoginRegisterLink = document.getElementById('mobileLoginRegisterLink');
+                const mobileLogoutLink = document.getElementById('mobileLogoutLink');
+
+                if (isAuthenticated) {
+                    if (mobileLoginRegisterLink) mobileLoginRegisterLink.classList.add('hidden');
+                    if (mobileLogoutLink) mobileLogoutLink.classList.remove('hidden');
+                } else {
+                    if (mobileLoginRegisterLink) mobileLoginRegisterLink.classList.remove('hidden');
+                    if (mobileLogoutLink) mobileLogoutLink.classList.add('hidden');
+                }
+            };
+
+            // Add mobile logout handler
+            const mobileLogoutLink = document.getElementById('mobileLogoutLink');
+            if (mobileLogoutLink) {
+                mobileLogoutLink.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    try {
+                        const response = await fetch('/api/auth/logout', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            credentials: 'include'
+                        });
+                        if (response.ok) {
+                            isAuthenticated = false;
+                            // Update both desktop and mobile UI
+                            updateMobileMenu(false);
+                            if (window.updateUI) {
+                                window.updateUI(false);
+                            }
+                            
+                            // Try to parse JSON response first
+                            try {
+                                const data = await response.json();
+                                if (data.success && data.redirect) {
+                                    window.location.href = data.redirect;
+                                } else {
+                                    window.location.href = '/';
+                                }
+                            } catch (e) {
+                                // If not JSON, just redirect to home
+                                window.location.href = '/';
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Logout error:', error);
+                        // Even if there's an error, redirect to home to clear the session
+                        window.location.href = '/';
+                    }
+                });
+            }
+
+            // Add mobile login/register handler
+            const mobileLoginRegisterLink = document.getElementById('mobileLoginRegisterLink');
+            if (mobileLoginRegisterLink) {
+                mobileLoginRegisterLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const loginModal = document.getElementById('loginModal');
+                    if (loginModal) {
+                        showModal(loginModal);
+                    }
+                });
+            }
+
+            // Override the global updateUI function to handle both desktop and mobile
+            const originalUpdateUI = window.updateUI;
+            window.updateUI = function(isAuthenticated) {
+                // Call original updateUI for desktop
+                if (originalUpdateUI) {
+                    originalUpdateUI(isAuthenticated);
+                }
+                // Update mobile menu
+                updateMobileMenu(isAuthenticated);
+                // Update cart count if authenticated
+                if (isAuthenticated && typeof window.updateCartCount === 'function') {
+                    window.updateCartCount();
+                }
+            };
+
+            // Initial state setup
+            const checkInitialAuthState = async () => {
+                try {
+                    const response = await fetch('/api/auth/check', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        credentials: 'include'
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        isAuthenticated = data.authenticated;
+                        // Update both desktop and mobile UI
+                        updateMobileMenu(isAuthenticated);
+                        if (window.updateUI) {
+                            window.updateUI(isAuthenticated);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error checking auth status:', error);
+                }
+            };
+
+            // Check initial auth state
+            checkInitialAuthState();
+
+            // Add event listener for cart updates
+            document.addEventListener('cartUpdated', function() {
+                if (isAuthenticated && typeof window.updateCartCount === 'function') {
+                    window.updateCartCount();
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

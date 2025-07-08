@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Cancellation and Refunds - Eshal Hajj & Umrah Store</title>
+</head>
+<body class="bg-gray-50">
+    <!-- Include auth modals -->
+    <div th:replace="~{layout/auth-modals :: auth-modals}"></div>
+
+    <!-- Navbar -->
+    <nav th:replace="~{layout/main :: nav}"></nav>
+
+    <!-- Main Content -->
+    <div class="pt-32 md:pt-24">
+        <div class="container mx-auto px-4 py-8">
+            <div class="max-w-4xl mx-auto">
+                <h1 class="text-3xl font-bold mb-8 text-primary-dark mt-8">Cancellation and Refunds Policy</h1>
+                
+                <div class="bg-white rounded-lg shadow-md p-8">
+                    <div class="prose prose-lg max-w-none">
+
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">1. Order Cancellation</h2>
+                        
+                        <h3 class="text-xl font-semibold text-primary-dark mb-3">1.1 Before Shipment</h3>
+                        <p class="mb-4">You may cancel your order before it is shipped by:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li>Contacting our customer support team on these numbers - (+91) 9923067286 / 9764417286 / 7030890979</li>
+                        </ul>
+                        
+                        <h3 class="text-xl font-semibold text-primary-dark mb-3">1.2 After Shipment</h3>
+                        <p class="mb-6">Once your order has been shipped, you cannot cancel it. However, you may return the product after delivery as per our return policy.</p>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">2. Return Policy</h2>
+                        
+                        <h3 class="text-xl font-semibold text-primary-dark mb-3">2.1 Return Window</h3>
+                        <p class="mb-4">We accept returns within 7 days of delivery for the following reasons:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li>Product received is damaged or defective</li>
+                            <li>Wrong product received</li>
+                            <li>Product does not match the description</li>
+                            <li>Size or fit issues (for clothing items)</li>
+                        </ul>
+                        
+                        <h3 class="text-xl font-semibold text-primary-dark mb-3">2.2 Non-Returnable Items</h3>
+                        <p class="mb-4">The following items cannot be returned:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li>Personal care items (for hygiene reasons)</li>
+                            <li>Customized or personalized products</li>
+                            <li>Products marked as "Non-Returnable"</li>
+                            <li>Items purchased during clearance sales</li>
+                            <li>Gift cards and vouchers</li>
+                        </ul>
+                        
+                        <h3 class="text-xl font-semibold text-primary-dark mb-3">2.3 Return Conditions</h3>
+                        <p class="mb-4">To be eligible for return, products must:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li>Be in original packaging</li>
+                            <li>Show no signs of use or wear</li>
+                            <li>Include all original tags and accessories</li>
+                            <li>Not be damaged due to customer handling</li>
+                        </ul>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">3. Return Process</h2>
+                        
+                        <h3 class="text-xl font-semibold text-primary-dark mb-3">3.1 Initiating a Return</h3>
+                        <p class="mb-4">To initiate a return:</p>
+                        <p class="mb-6">Contacting our customer support team on these numbers - (+91) 9923067286 / 9764417286 / 7030890979</p>
+                        
+                        <h3 class="text-xl font-semibold text-primary-dark mb-3">3.2 Return Shipping</h3>
+                        <p class="mb-4">Return shipping costs:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li><strong>Free Returns:</strong> For damaged, defective, or wrong items</li>
+                            <li><strong>Customer Pays:</strong> For size/fit issues or change of mind</li>
+                            <li><strong>Pickup Service:</strong> Available in select cities at no extra cost</li>
+                        </ul>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">4. Refund Policy</h2>
+                        
+                        <h3 class="text-xl font-semibold text-primary-dark mb-3">4.1 Refund Processing Time</h3>
+                        <p class="mb-4">Refunds are processed within 7-14 business days after we receive and inspect the returned item:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li><strong>Credit/Debit Cards:</strong> 5-10 business days</li>
+                            <li><strong>UPI Payments:</strong> 2-3 business days</li>
+                            <li><strong>Net Banking:</strong> 3-5 business days</li>
+                            <li><strong>Digital Wallets:</strong> 1-2 business days</li>
+                        </ul>
+                        
+                        <h3 class="text-xl font-semibold text-primary-dark mb-3">4.2 Refund Amount</h3>
+                        <p class="mb-4">The refund amount will include:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li>Full product price</li>
+                            <li>Original shipping charges (if applicable)</li>
+                            <li>Taxes paid on the product</li>
+                        </ul>
+                        <p class="mb-6"><strong>Note:</strong> Return shipping charges (if paid by customer) will not be refunded.</p>
+                        
+                        <h3 class="text-xl font-semibold text-primary-dark mb-3">4.3 Partial Refunds</h3>
+                        <p class="mb-6">Partial refunds may be issued if the returned item shows signs of use, damage, or missing accessories. The deduction amount will be communicated to you before processing the refund.</p>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">5. Exchange Policy</h2>
+                        
+                        <h3 class="text-xl font-semibold text-primary-dark mb-3">5.1 Size Exchanges</h3>
+                        <p class="mb-4">For size-related issues:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li>Exchanges are free of charge</li>
+                            <li>Available within 7 days of delivery</li>
+                            <li>Subject to stock availability</li>
+                            <li>Original shipping charges apply for the new item</li>
+                        </ul>
+                        
+                        <h3 class="text-xl font-semibold text-primary-dark mb-3">5.2 Product Exchanges</h3>
+                        <p class="mb-6">Product exchanges are available for items of equal or lesser value. If the new item costs more, you will need to pay the difference.</p>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">6. Damaged or Defective Items</h2>
+                        
+                        <h3 class="text-xl font-semibold text-primary-dark mb-3">6.1 Immediate Reporting</h3>
+                        <p class="mb-4">If you receive a damaged or defective item:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li>Do not accept the delivery if damage is visible</li>
+                            <li>Take photos of the damage immediately</li>
+                            <li>Contact us within 24 hours of delivery</li>
+                            <li>Provide order number and photos</li>
+                        </ul>
+                        
+                        <h3 class="text-xl font-semibold text-primary-dark mb-3">6.2 Replacement or Refund</h3>
+                        <p class="mb-6">For damaged or defective items, we offer:</p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li>Free replacement (subject to availability)</li>
+                            <li>Full refund including shipping charges</li>
+                            <li>Free pickup of the damaged item</li>
+                        </ul>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">7. Cancellation and Refund Timeline</h2>
+                        
+                        <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                            <h3 class="font-semibold text-gray-900 mb-4">Processing Timeline:</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span>Order Cancellation (before shipment)</span>
+                                    <span class="font-semibold">Immediate</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Return Request Processing</span>
+                                    <span class="font-semibold">1-2 business days</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Return Shipping</span>
+                                    <span class="font-semibold">3-7 business days</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Quality Inspection</span>
+                                    <span class="font-semibold">1-2 business days</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Refund Processing</span>
+                                    <span class="font-semibold">7-14 business days</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">8. Contact Information</h2>
+                        <p class="mb-6">For cancellation, return, or refund inquiries, please contact us:</p>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="mb-2"><strong>Email:</strong> eshalumrahessentials@gmail.com</p>
+                            <p class="mb-2"><strong>Phone:</strong> (+91) 9923067286 / 9764417286 / 7030890979</p>
+                            <p class="mb-2"><strong>Business Hours:</strong> Monday to Saturday, 9:00 AM to 6:00 PM</p>
+                            <p class="mb-2"><strong>Response Time:</strong> Within 24 hours</p>
+                        </div>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">9. Policy Updates</h2>
+                        <p class="mb-6">This cancellation and refunds policy may be updated from time to time. Any changes will be posted on this page with an updated revision date. Continued use of our services after such changes constitutes acceptance of the updated policy.</p>
+                        
+                        <h2 class="text-2xl font-semibold text-primary-dark mb-4">10. Legal Rights</h2>
+                        <p class="mb-6">This policy does not affect your statutory rights under the Consumer Protection Act, 2019, and other applicable Indian laws. You have the right to approach consumer forums if you are not satisfied with our resolution.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{layout/main :: footer}"></footer>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/checkout.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="/js/countries2.js"></script>
+    <script>
+        // Global auth state
+        let isAuthenticated = false;
+
+        // Check auth status and update UI when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const response = await fetch('/api/auth/check', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to check auth status');
+                }
+
+                const data = await response.json();
+                isAuthenticated = data.authenticated;
+
+                const cartLink = document.getElementById('cartLink');
+                const mobileCartLink = document.getElementById('mobileCartLink');
+                const loginRegisterLink = document.getElementById('loginRegisterLink');
+                const logoutLink = document.getElementById('logoutLink');
+
+                // Always show cart links
+                if (cartLink) cartLink.classList.remove('hidden');
+                if (mobileCartLink) mobileCartLink.classList.remove('hidden');
+
+                if (isAuthenticated) {
+                    loginRegisterLink.classList.add('hidden');
+                    logoutLink.classList.remove('hidden');
+                    
+                    // Check if user is admin and show admin menu
+                    if (data.user && data.user.role === 'ROLE_ADMIN') {
+                        console.log('User is admin, showing admin dropdown');
+                        const adminDropdown = document.getElementById('adminDropdown');
+                        const mobileAdminMenu = document.getElementById('mobileAdminMenu');
+                        if (adminDropdown) {
+                            adminDropdown.classList.remove('hidden');
+                            console.log('Admin dropdown shown');
+                        }
+                        if (mobileAdminMenu) {
+                            mobileAdminMenu.classList.remove('hidden');
+                            console.log('Mobile admin menu shown');
+                        }
+                    } else {
+                        console.log('User is not admin, role:', data.user?.role);
+                    }
+                } else {
+                    loginRegisterLink.classList.remove('hidden');
+                    logoutLink.classList.add('hidden');
+                }
+
+                // Always update cart count
+                if (typeof updateCartCount === 'function') {
+                    await updateCartCount();
+                }
+            } catch (error) {
+                console.error('Error checking auth status:', error);
+            }
+        });
+
+        // Add logout handler
+        document.getElementById('logoutLink').addEventListener('click', async function(e) {
+            e.preventDefault();
+            try {
+                const response = await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    isAuthenticated = false;
+                    
+                    // Try to parse JSON response first
+                    try {
+                        const data = await response.json();
+                        if (data.success && data.redirect) {
+                            window.location.href = data.redirect;
+                        } else {
+                            window.location.href = '/';
+                        }
+                    } catch (e) {
+                        // If not JSON, just redirect to home
+                        window.location.href = '/';
+                    }
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                // Even if there's an error, redirect to home to clear the session
+                window.location.href = '/';
+            }
+        });
+
+        // Add login/register modal handler
+        document.getElementById('loginRegisterLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal) {
+                showModal(loginModal);
+            } else {
+                console.error('Login modal not found');
+            }
+        });
+
+        // Export auth state for other scripts
+        window.getAuthState = function() {
+            return isAuthenticated;
+        };
+
+        // Add this to your existing script section
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+                    mobileMenuButton.setAttribute('aria-expanded', !expanded);
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenuButton.querySelector('svg.block').classList.toggle('hidden');
+                    mobileMenuButton.querySelector('svg.hidden').classList.toggle('hidden');
+                });
+            }
+
+            // Mobile Products dropdown toggle
+            const mobileProductsButton = document.getElementById('mobileProductsButton');
+            const mobileProductsMenu = document.getElementById('mobileProductsMenu');
+            
+            if (mobileProductsButton && mobileProductsMenu) {
+                mobileProductsButton.addEventListener('click', () => {
+                    mobileProductsMenu.classList.toggle('hidden');
+                });
+            }
+
+            // Desktop Products dropdown behavior
+            const productsDropdown = document.getElementById('productsDropdown');
+            const productsMenu = document.getElementById('productsMenu');
+            let dropdownTimeout;
+
+            if (productsDropdown && productsMenu) {
+                productsDropdown.addEventListener('mouseenter', () => {
+                    clearTimeout(dropdownTimeout);
+                    productsMenu.classList.remove('opacity-0', 'invisible');
+                    productsMenu.classList.add('opacity-100', 'visible');
+                });
+
+                productsDropdown.addEventListener('mouseleave', () => {
+                    dropdownTimeout = setTimeout(() => {
+                        productsMenu.classList.remove('opacity-100', 'visible');
+                        productsMenu.classList.add('opacity-0', 'invisible');
+                    }, 300); // 300ms delay before hiding
+                });
+            }
+
+            // Admin dropdown toggle
+            const adminMenuButton = document.getElementById('adminMenuButton');
+            const adminMenu = document.getElementById('adminMenu');
+            
+            if (adminMenuButton && adminMenu) {
+                adminMenuButton.addEventListener('click', () => {
+                    adminMenu.classList.toggle('hidden');
+                });
+                
+                // Close admin menu when clicking outside
+                document.addEventListener('click', (event) => {
+                    if (!adminMenuButton.contains(event.target) && !adminMenu.contains(event.target)) {
+                        adminMenu.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Update mobile menu items when auth state changes
+            const updateMobileMenu = (isAuthenticated) => {
+                const mobileLoginRegisterLink = document.getElementById('mobileLoginRegisterLink');
+                const mobileLogoutLink = document.getElementById('mobileLogoutLink');
+
+                if (isAuthenticated) {
+                    if (mobileLoginRegisterLink) mobileLoginRegisterLink.classList.add('hidden');
+                    if (mobileLogoutLink) mobileLogoutLink.classList.remove('hidden');
+                } else {
+                    if (mobileLoginRegisterLink) mobileLoginRegisterLink.classList.remove('hidden');
+                    if (mobileLogoutLink) mobileLogoutLink.classList.add('hidden');
+                }
+            };
+
+            // Add mobile logout handler
+            const mobileLogoutLink = document.getElementById('mobileLogoutLink');
+            if (mobileLogoutLink) {
+                mobileLogoutLink.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    try {
+                        const response = await fetch('/api/auth/logout', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            credentials: 'include'
+                        });
+                        if (response.ok) {
+                            isAuthenticated = false;
+                            // Update both desktop and mobile UI
+                            updateMobileMenu(false);
+                            if (window.updateUI) {
+                                window.updateUI(false);
+                            }
+                            
+                            // Try to parse JSON response first
+                            try {
+                                const data = await response.json();
+                                if (data.success && data.redirect) {
+                                    window.location.href = data.redirect;
+                                } else {
+                                    window.location.href = '/';
+                                }
+                            } catch (e) {
+                                // If not JSON, just redirect to home
+                                window.location.href = '/';
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Logout error:', error);
+                        // Even if there's an error, redirect to home to clear the session
+                        window.location.href = '/';
+                    }
+                });
+            }
+
+            // Add mobile login/register handler
+            const mobileLoginRegisterLink = document.getElementById('mobileLoginRegisterLink');
+            if (mobileLoginRegisterLink) {
+                mobileLoginRegisterLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const loginModal = document.getElementById('loginModal');
+                    if (loginModal) {
+                        showModal(loginModal);
+                    }
+                });
+            }
+
+            // Override the global updateUI function to handle both desktop and mobile
+            const originalUpdateUI = window.updateUI;
+            window.updateUI = function(isAuthenticated) {
+                // Call original updateUI for desktop
+                if (originalUpdateUI) {
+                    originalUpdateUI(isAuthenticated);
+                }
+                // Update mobile menu
+                updateMobileMenu(isAuthenticated);
+                // Update cart count if authenticated
+                if (isAuthenticated && typeof window.updateCartCount === 'function') {
+                    window.updateCartCount();
+                }
+            };
+
+            // Initial state setup
+            const checkInitialAuthState = async () => {
+                try {
+                    const response = await fetch('/api/auth/check', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        credentials: 'include'
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        isAuthenticated = data.authenticated;
+                        // Update both desktop and mobile UI
+                        updateMobileMenu(isAuthenticated);
+                        if (window.updateUI) {
+                            window.updateUI(isAuthenticated);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error checking auth status:', error);
+                }
+            };
+
+            // Check initial auth state
+            checkInitialAuthState();
+
+            // Add event listener for cart updates
+            document.addEventListener('cartUpdated', function() {
+                if (isAuthenticated && typeof window.updateCartCount === 'function') {
+                    window.updateCartCount();
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

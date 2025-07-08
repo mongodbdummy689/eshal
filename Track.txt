@@ -471,3 +471,23 @@ Updates for today:
 Added 5% GST changes to the code.
 Changed checkout form to include Country, State and City as a dropdown.
 Testing changes in progress.
+
+Following changes have been deployed to http://eshalhajjumrahkit.com/ -
+- Added weight for all the items under Individual page.
+- Updated prices for 3 items.
+- Updated Umrah Dua Card image.
+- Added 3 new items under Individual page.
+- Added 5% GST for all products.
+- Added 18% GST for Universal Adaptor.
+
+Please find attached the excel sheet for each item that has dimensions, the system will apply shipping charges based on the ceiling weight for their respective volumetric weight.
+
+
+As discussed over the call, I'll add standard content for the following pages:
+- Terms and Conditions
+- Privacy Policy
+- Shipping Policy
+- Contact Us
+- Cancellation and Refunds
+Will update the group once above changes are deployed for validation.
+

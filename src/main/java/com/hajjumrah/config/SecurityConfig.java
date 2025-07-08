@@ -71,6 +71,11 @@ public class SecurityConfig {
                     "/janamaz",
                     "/about",
                     "/trolley-bag-on-rent",
+                    "/terms-and-conditions",
+                    "/privacy-policy",
+                    "/shipping-policy",
+                    "/contact-us",
+                    "/cancellation-refunds",
                     "/favicon.ico"
                 ).permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")

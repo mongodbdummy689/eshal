@@ -17,4 +17,29 @@ public class HomeController {
         model.addAttribute("images", imageRepository.findAll());
         return "home";
     }
+    
+    @GetMapping("/terms-and-conditions")
+    public String termsAndConditions() {
+        return "terms-and-conditions";
+    }
+    
+    @GetMapping("/privacy-policy")
+    public String privacyPolicy() {
+        return "privacy-policy";
+    }
+    
+    @GetMapping("/shipping-policy")
+    public String shippingPolicy() {
+        return "shipping-policy";
+    }
+    
+    @GetMapping("/contact-us")
+    public String contactUs() {
+        return "contact-us";
+    }
+    
+    @GetMapping("/cancellation-refunds")
+    public String cancellationRefunds() {
+        return "cancellation-refunds";
+    }
 } 
