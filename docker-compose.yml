@@ -4,7 +4,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb+srv://mongodbdummy689:5dODsTJQrjnejaQm@cluster0.oaz4i2d.mongodb.net/hajjUmrah?retryWrites=true&w=majority&appName=Cluster0&connectTimeoutMS=30000&socketTimeoutMS=30000
+      - SPRING_DATA_MONGODB_URI=mongodb+srv://eshalumrahessentials:eshal%400102@cluster0.woukx9j.mongodb.net/hajjUmrah?retryWrites=true&w=majority&appName=Cluster0&connectTimeoutMS=30000&socketTimeoutMS=30000
       - SPRING_PROFILES_ACTIVE=prod
 
 volumes:
