@@ -498,7 +498,7 @@ Key Secret: jX4WgdYiIqn3Tlz5j5jf9iz2
 # 1. Find your container name
 docker ps
 # 2. Get today's logs with our debug tags
-docker logs --since $(date -d 'today 00:00:00' +%s) <your_container_name> | grep -E "\[ShippingCalc\]|\[OrderDebug\]|\[PaymentDebug\]|\[RazorpayDebug\]" > /tmp/shipping_debug_logs.txt
+docker logs --since $(date -d 'today 00:00:00' +%s) eshal-app-1 | grep -E "\[ShippingCalc\]|\[OrderDebug\]|\[PaymentDebug\]|\[RazorpayDebug\]" > /tmp/shipping_debug_logs.txt
 # 3. Also get the complete logs for context
 docker logs --since $(date -d 'today 00:00:00' +%s) <your_container_name> > /tmp/complete_logs_today.txt
 # 4. Download to your local machine
@@ -510,3 +510,14 @@ docker logs --since $(date -d 'today 00:00:00' +%s) eshal-app-1 > /tmp/complete_
 # View the complete logs
 cat /tmp/complete_logs_today.txt | grep -E "\[ShippingCalc\]|\[OrderDebug\]|\[PaymentDebug\]|\[RazorpayDebug\]|shipping|amount|total"
 
+Changes on 9/7/25
+Edit / Delete Products - Admin
+Out of stock while editing
+Done. Testing pending.
+Completed:
+Add sliders - Tohfa-E-khulus, Janamaz, Trolley Bag
+Tohfa-E-khulus, Janamaz, Trolley Bag - Hero image change similar to men's kit page
+Trolley bag hero image to be provided.
+
+
+Add pagination & search - track order .

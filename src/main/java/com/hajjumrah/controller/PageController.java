@@ -68,7 +68,7 @@ public class PageController {
         
         List<Product> products = productIds.stream()
             .map(id -> productService.getProductById(id))
-            .filter(product -> product != null)
+            .filter(product -> product != null && product.isInStock())
             .collect(Collectors.toList());
             
         model.addAttribute("products", products);
@@ -98,7 +98,7 @@ public class PageController {
         
         List<Product> products = productIds.stream()
             .map(id -> productService.getProductById(id))
-            .filter(product -> product != null)
+            .filter(product -> product != null && product.isInStock())
             .collect(Collectors.toList());
             
         model.addAttribute("products", products);
@@ -137,7 +137,7 @@ public class PageController {
         
         List<Product> products = productIds.stream()
             .map(id -> productService.getProductById(id))
-            .filter(product -> product != null)
+            .filter(product -> product != null && product.isInStock())
             .collect(Collectors.toList());
             
         model.addAttribute("products", products);
@@ -169,7 +169,7 @@ public class PageController {
         
         List<Product> products = productIds.stream()
             .map(id -> productService.getProductById(id))
-            .filter(product -> product != null)
+            .filter(product -> product != null && product.isInStock())
             .collect(Collectors.toList());
             
         model.addAttribute("products", products);
@@ -180,7 +180,11 @@ public class PageController {
     public String individual(Model model) {
         List<Product> allProducts = productRepository.findAll();
         List<Product> filteredProducts = filterIndividualProducts(allProducts);
-        model.addAttribute("products", filteredProducts);
+        // Filter out out-of-stock products for customer-facing page
+        List<Product> inStockProducts = filteredProducts.stream()
+            .filter(product -> product.isInStock())
+            .collect(Collectors.toList());
+        model.addAttribute("products", inStockProducts);
         return "individual";
     }
 
@@ -222,7 +226,7 @@ public class PageController {
             
             List<Product> products = specificIds.stream()
                 .map(id -> productService.getProductById(id))
-                .filter(product -> product != null)
+                .filter(product -> product != null && product.isInStock())
                 .collect(Collectors.toList());
             
             model.addAttribute("products", products);
@@ -239,7 +243,11 @@ public class PageController {
         try {
             // Get all products from Janamaz category
             List<Product> products = productService.getProductsByCategory("Janamaz");
-            model.addAttribute("products", products);
+            // Filter out out-of-stock products for customer-facing page
+            List<Product> inStockProducts = products.stream()
+                .filter(product -> product.isInStock())
+                .collect(Collectors.toList());
+            model.addAttribute("products", inStockProducts);
         } catch (Exception e) {
             System.err.println("Error fetching Janamaz products: " + e.getMessage());
             e.printStackTrace();

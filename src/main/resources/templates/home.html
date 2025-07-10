@@ -26,19 +26,23 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                z-index: 1;
             }
             
             .mySlides.active {
                 opacity: 1;
                 transform: translateX(0);
+                z-index: 10;
             }
             
             .mySlides.next {
                 transform: translateX(100%);
+                z-index: 1;
             }
             
             .mySlides.prev {
                 transform: translateX(-100%);
+                z-index: 1;
             }
             
             img {
@@ -314,7 +318,7 @@
                         
             <div class="slideshow-container">
                 <div class="mySlides active">
-                    <div class="numbertext">1 / 3</div>
+                    <div class="numbertext">1 / 6</div>
                     <img src="/img/home.jpg" alt="Home">
                     <div class="text">
                         <div class="text-content">
@@ -326,7 +330,7 @@
                 </div>
                 
                 <div class="mySlides next side-by-side">
-                    <div class="numbertext">2 / 3</div>
+                    <div class="numbertext">2 / 6</div>
                     <div class="image-container">
                         <img src="/img/menkit.jpeg" alt="Men's Kit">
                     </div>
@@ -341,7 +345,7 @@
                 </div>
                 
                 <div class="mySlides next side-by-side">
-                    <div class="numbertext">3 / 3</div>
+                    <div class="numbertext">3 / 6</div>
                     <div class="image-container">
                         <img src="/img/womenkit.jpeg" alt="Women's Kit">
                     </div>
@@ -354,6 +358,51 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="mySlides next side-by-side">
+                    <div class="numbertext">4 / 6</div>
+                    <div class="image-container">
+                        <img src="/img/tohfaekhulus/heropage.jpeg" alt="Tohfa-e-Khulus">
+                    </div>
+                    <div class="text">
+                        <div class="text-content">
+                            <h1>Tohfa-e-Khulus</h1>
+                            <p>Hajj aur Umrah ke saath bhi - Hajj aur Umrah ke baadh bhi</p>
+                            <p class="subtitle">Tohfa-e-Khulus... Nek duwaon ke saath</p>
+                            <a href="/tohfa-e-khulus" class="nav-button">View Tohfa-e-Khulus</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mySlides next side-by-side">
+                    <div class="numbertext">5 / 6</div>
+                    <div class="image-container">
+                        <img src="/img/janamaz/janamazhero.png" alt="Janamaz Collection">
+                    </div>
+                    <div class="text">
+                        <div class="text-content">
+                            <h1>Janamaz Collection</h1>
+                            <p>Premium Quality Prayer Mats</p>
+                            <p class="subtitle">Choose from our exclusive collection of beautifully designed prayer mats</p>
+                            <a href="/janamaz" class="nav-button">View Janamaz</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mySlides next side-by-side">
+                    <div class="numbertext">6 / 6</div>
+                    <div class="image-container">
+                        <img src="/img/bags/bag-hero.jpeg" alt="Trolley Bag On Rent">
+                    </div>
+                    <div class="text">
+                        <div class="text-content">
+                            <h1>Trolley Bag On Rent</h1>
+                            <p>Convenient Travel Solutions for Your Journey</p>
+                            <p class="subtitle">Quality trolley bags available for rent at affordable rates</p>
+                            <a href="/trolley-bag-on-rent" class="nav-button">View Rental Service</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <br>
             
@@ -361,6 +410,9 @@
                 <span class="dot active" onclick="currentSlide(1)"></span> 
                 <span class="dot" onclick="currentSlide(2)"></span> 
                 <span class="dot" onclick="currentSlide(3)"></span> 
+                <span class="dot" onclick="currentSlide(4)"></span> 
+                <span class="dot" onclick="currentSlide(5)"></span> 
+                <span class="dot" onclick="currentSlide(6)"></span> 
             </div>
             
             <script>
@@ -369,10 +421,20 @@
             let dots = document.getElementsByClassName("dot");
             let slideInterval;
             
+            // Define the navigation URLs for each slide
+            const slideUrls = [
+                null, // Slide 1 (home) - no navigation button
+                "/mens-kit", // Slide 2
+                "/womens-kit", // Slide 3
+                "/tohfa-e-khulus", // Slide 4
+                "/janamaz", // Slide 5
+                "/trolley-bag-on-rent" // Slide 6
+            ];
+            
             function showSlides(n) {
                 // Remove all classes first
                 for (let i = 0; i < slides.length; i++) {
-                    // Keep side-by-side class for slides 2 and 3
+                    // Keep side-by-side class for slides 2-6 (all except the first slide)
                     slides[i].className = "mySlides" + (i > 0 ? " side-by-side" : "");
                     dots[i].className = "dot";
                 }
@@ -394,6 +456,43 @@
                 let prevIndex = slideIndex - 2;
                 if (prevIndex < 0) prevIndex = slides.length - 1;
                 slides[prevIndex].className = "mySlides prev" + (prevIndex > 0 ? " side-by-side" : "");
+                
+                // Update all navigation buttons to ensure correct hrefs
+                updateAllNavigationButtons();
+            }
+            
+            function updateAllNavigationButtons() {
+                // Update all navigation buttons to their correct URLs
+                for (let i = 0; i < slides.length; i++) {
+                    const slide = slides[i];
+                    const navButton = slide.querySelector('.nav-button');
+                    if (navButton && slideUrls[i]) {
+                        navButton.href = slideUrls[i];
+                        
+                        // Add click event listener for navigation
+                        navButton.addEventListener('click', function(e) {
+                            // Prevent default and manually navigate
+                            e.preventDefault();
+                            e.stopPropagation();
+                            
+                            const targetUrl = this.getAttribute('href');
+                            window.location.href = targetUrl;
+                        });
+                    }
+                }
+            }
+            
+
+            
+            function updateNavigationButton() {
+                // Get the current slide element by index
+                const currentSlide = slides[slideIndex - 1];
+                if (currentSlide) {
+                    const navButton = currentSlide.querySelector('.nav-button');
+                    if (navButton && slideUrls[slideIndex - 1]) {
+                        navButton.href = slideUrls[slideIndex - 1];
+                    }
+                }
             }
             
             function currentSlide(n) {
@@ -417,6 +516,11 @@
             document.addEventListener('DOMContentLoaded', function() {
                 // Ensure proper initial state
                 showSlides(slideIndex);
+                
+                // Force update all navigation buttons after DOM is loaded
+                setTimeout(() => {
+                    updateAllNavigationButtons();
+                }, 100);
             });
             </script>
 

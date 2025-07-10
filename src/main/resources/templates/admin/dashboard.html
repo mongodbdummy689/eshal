@@ -2,108 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/main :: head}">
     <title>Admin Dashboard - Eshal Hajj & Umrah</title>
-    <style>
-        .user-card {
-            background: white;
-            border-radius: 1rem;
-            overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-            border: 1px solid #e5e7eb;
-        }
-        .user-header {
-            background: var(--primary-color);
-            color: white;
-            padding: 1rem;
-            cursor: hand;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-        .user-header:hover {
-            background: var(--primary-color-dark);
-            cursor: grab;
-        }
-        .user-header * {
-            pointer-events: none;
-        }
-        .cart-items {
-            padding: 1rem;
-            display: none !important;
-            transition: all 0.3s ease;
-        }
-        .cart-items.show {
-            display: block !important;
-        }
-        .cart-item {
-            background: #f9fafb;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border: 1px solid #e5e7eb;
-        }
-        .cart-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        .stats-card {
-            background: white;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e5e7eb;
-        }
-        .stats-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-        .stats-label {
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-        .text-center {
-            padding-top: 5rem;
-        }
-        .toggle-icon {
-            transition: transform 0.3s ease;
-        }
-        .toggle-icon.expanded {
-            transform: rotate(180deg);
-        }
-        .cart-item-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-        }
-        .cart-item-details {
-            flex: 1;
-        }
-        .cart-item-total {
-            min-width: 120px;
-            text-align: right;
-        }
-        .cart-summary {
-            background: #f3f4f6;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-top: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #e5e7eb;
-        }
-        .cart-summary-total {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-    </style>
 </head>
 <body th:replace="~{layout/main :: body}">
     <div th:fragment="content">
@@ -115,24 +13,66 @@
 
             <!-- Stats Overview -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <div class="stats-card">
-                    <div class="stats-number" th:text="${regularUsers.size()}">0</div>
-                    <div class="stats-label">Total Users</div>
+                <div class="form-card">
+                    <div class="form-content text-center">
+                        <div class="text-3xl font-bold text-primary mb-2" th:text="${totalUsers}">0</div>
+                        <div class="text-sm text-gray-600">Total Users</div>
+                    </div>
                 </div>
-                <div class="stats-card">
-                    <div class="stats-number" th:text="${regularUserCartItems.size()}">0</div>
-                    <div class="stats-label">Users with Cart Items</div>
+                <div class="form-card">
+                    <div class="form-content text-center">
+                        <div class="text-3xl font-bold text-primary mb-2" th:text="${usersWithCartItems}">0</div>
+                        <div class="text-sm text-gray-600">Users with Cart Items</div>
+                    </div>
                 </div>
-                <div class="stats-card">
-                    <div class="stats-number" th:text="${#aggregates.sum(regularUserCartItems.values().![size()])}">0</div>
-                    <div class="stats-label">Total Cart Items</div>
+                <div class="form-card">
+                    <div class="form-content text-center">
+                        <div class="text-3xl font-bold text-primary mb-2" th:text="${totalCartItems}">0</div>
+                        <div class="text-sm text-gray-600">Total Cart Items</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="form-card">
+                <div class="form-header">
+                    <h2 class="text-2xl font-semibold">Search Users</h2>
+                </div>
+                <div class="form-content">
+                    <form method="get" action="/admin" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Search Users</label>
+                                <input type="text" 
+                                       id="search" 
+                                       name="search" 
+                                       th:value="${search}"
+                                       placeholder="Search by Name or Email"
+                                       class="form-input">
+                            </div>
+                            <div class="flex items-end gap-2">
+                                <button type="submit" class="btn btn-primary flex-1">
+                                    Search
+                                </button>
+                                <a href="/admin" class="btn btn-secondary">
+                                    Clear
+                                </a>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm text-gray-600">
+                                Showing <span th:text="${regularUsers.size()}">0</span> of <span th:text="${totalElements}">0</span> users
+                                <span th:if="${search != null && !search.isEmpty()}">for "<span th:text="${search}"></span>"</span>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
 
             <!-- User Cart Items -->
-            <div class="space-y-8">
-                <div th:each="user : ${regularUsers}" class="user-card">
-                    <div class="user-header" th:data-user-id="${user.id}">
+            <div class="space-y-6 mt-8">
+                <div th:each="user : ${regularUsers}" class="form-card">
+                    <div class="form-header cursor-pointer" th:data-user-id="${user.id}">
                         <div class="flex items-center justify-between w-full">
                             <div>
                                 <h2 class="text-xl font-semibold" th:text="${user.fullName}">User Name</h2>
@@ -141,16 +81,16 @@
                             <div class="flex items-center gap-4">
                                 <div class="text-right">
                                     <p class="text-sm opacity-75">Total Cart Value:</p>
-                                    <p class="font-semibold" th:if="${regularUserCartItems.containsKey(user.id)}">$<span th:text="${#numbers.formatDecimal(#aggregates.sum(regularUserCartItems.get(user.id).![price * quantity]), 1, 2)}">0.00</span></p>
-                                    <p class="font-semibold" th:unless="${regularUserCartItems.containsKey(user.id)}">$0.00</p>
+                                    <p class="font-semibold" th:if="${regularUserCartItems.containsKey(user.id)}">₹<span th:text="${#numbers.formatDecimal(#aggregates.sum(regularUserCartItems.get(user.id).![price * quantity]), 1, 2)}">0.00</span></p>
+                                    <p class="font-semibold" th:unless="${regularUserCartItems.containsKey(user.id)}">₹0.00</p>
                                 </div>
-                                <svg class="toggle-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="toggle-icon w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </div>
                         </div>
                     </div>
-                    <div class="cart-items" th:id="'cart-items-' + ${user.id}" style="display: none;">
+                    <div class="form-content hidden" th:id="'cart-items-' + ${user.id}">
                         <div th:if="${regularUserCartItems.containsKey(user.id)}">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
@@ -164,9 +104,9 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     <tr th:each="cartItem : ${regularUserCartItems.get(user.id)}">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" th:text="${productNames.get(cartItem.productId)}">Product Name</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$<span th:text="${#numbers.formatDecimal(cartItem.price, 1, 2)}">0.00</span></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹<span th:text="${#numbers.formatDecimal(cartItem.price, 1, 2)}">0.00</span></td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${cartItem.quantity}">1</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$<span th:text="${#numbers.formatDecimal(cartItem.price * cartItem.quantity, 1, 2)}">0.00</span></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹<span th:text="${#numbers.formatDecimal(cartItem.price * cartItem.quantity, 1, 2)}">0.00</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -177,18 +117,56 @@
                     </div>
                 </div>
             </div>
+
+            <!-- No Users Message -->
+            <div th:if="${regularUsers.isEmpty()}" class="text-center py-12">
+                <p class="text-gray-500 text-lg">No users found.</p>
+            </div>
+
+            <!-- Pagination -->
+            <div th:if="${totalPages > 1}" class="form-card mt-8">
+                <div class="form-content">
+                    <div class="flex justify-between items-center">
+                        <div class="text-sm text-gray-600">
+                            Page <span th:text="${currentPage + 1}">1</span> of <span th:text="${totalPages}">1</span>
+                        </div>
+                        <div class="flex space-x-2">
+                            <!-- Previous Page -->
+                            <a th:if="${hasPrevious}" 
+                               th:href="@{/admin(page=${currentPage - 1}, size=${pageSize}, search=${search})}"
+                               class="btn btn-secondary btn-sm">
+                                Previous
+                            </a>
+                            <span th:unless="${hasPrevious}" class="btn btn-secondary btn-sm opacity-50 cursor-not-allowed">Previous</span>
+                            
+                            <!-- Page Numbers -->
+                            <div class="flex space-x-1">
+                                <a th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                                   th:if="${pageNum >= currentPage - 2 && pageNum <= currentPage + 2}"
+                                   th:href="@{/admin(page=${pageNum}, size=${pageSize}, search=${search})}"
+                                   th:class="${pageNum == currentPage ? 'btn btn-primary btn-sm' : 'btn btn-secondary btn-sm'}">
+                                    <span th:text="${pageNum + 1}">1</span>
+                                </a>
+                            </div>
+                            
+                            <!-- Next Page -->
+                            <a th:if="${hasNext}" 
+                               th:href="@{/admin(page=${currentPage + 1}, size=${pageSize}, search=${search})}"
+                               class="btn btn-secondary btn-sm">
+                                Next
+                            </a>
+                            <span th:unless="${hasNext}" class="btn btn-secondary btn-sm opacity-50 cursor-not-allowed">Next</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script th:inline="javascript">
             window.onload = function() {
                 console.log('Page loaded, initializing toggle functionality');
                 
-                // First, ensure all cart items are hidden
-                document.querySelectorAll('.cart-items').forEach(cart => {
-                    cart.style.display = 'none';
-                });
-                
-                const headers = document.getElementsByClassName('user-header');
+                const headers = document.getElementsByClassName('form-header');
                 console.log('Found headers:', headers.length);
                 
                 Array.from(headers).forEach(header => {
@@ -204,13 +182,13 @@
                         console.log('Toggle icon element:', toggleIcon);
                         
                         if (cartItems && toggleIcon) {
-                            // Toggle display directly
-                            if (cartItems.style.display === 'none') {
-                                cartItems.style.display = 'block';
-                                toggleIcon.classList.add('expanded');
+                            // Toggle display
+                            if (cartItems.classList.contains('hidden')) {
+                                cartItems.classList.remove('hidden');
+                                toggleIcon.style.transform = 'rotate(180deg)';
                             } else {
-                                cartItems.style.display = 'none';
-                                toggleIcon.classList.remove('expanded');
+                                cartItems.classList.add('hidden');
+                                toggleIcon.style.transform = 'rotate(0deg)';
                             }
                             console.log('Display toggled');
                         }

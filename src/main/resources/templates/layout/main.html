@@ -134,6 +134,359 @@
         .footer a:hover {
             color: var(--accent-light);
         }
+
+        /* Admin Form Styles */
+        .form-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+        .form-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+        }
+        .form-content {
+            padding: 2rem;
+        }
+        .form-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #e5e7eb;
+        }
+        .form-row {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .form-row:last-child {
+            border-bottom: none;
+        }
+        .form-label {
+            width: 220px;
+            padding: 1.5rem 2rem 1.5rem 1.5rem;
+            font-weight: 600;
+            color: #374151;
+            vertical-align: top;
+            text-align: right;
+            background-color: #f9fafb;
+            border-right: 2px solid #e5e7eb;
+        }
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            width: 100%;
+            min-width: 400px;
+        }
+        .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            max-width: 300px;
+        }
+        .form-field {
+            padding: 1.5rem 2rem;
+            background-color: white;
+        }
+        
+        /* Standard Button Design System */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-decoration: none;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            min-height: 44px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        /* Primary Button */
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        .btn-primary:hover:not(:disabled) {
+            color: #10b981 !important;
+            background-color: white !important;
+            border-color: #10b981 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Secondary Button */
+        .btn-secondary {
+            background-color: #6b7280;
+            color: white;
+            border-color: #6b7280;
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #4b5563;
+            border-color: #4b5563;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Success/Preview Button */
+        .btn-success {
+            background-color: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+        .btn-success:hover:not(:disabled) {
+            color: #10b981 !important;
+            background-color: white !important;
+            border-color: #10b981 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Small Button Variant */
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            min-height: 36px;
+        }
+        
+        /* Large Button Variant */
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            min-height: 52px;
+        }
+        
+        .file-input {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .file-input input[type=file] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .file-input-label {
+            display: block;
+            padding: 0.75rem;
+            border: 2px dashed #d1d5db;
+            border-radius: 0.5rem;
+            text-align: center;
+            color: #6b7280;
+            transition: border-color 0.2s;
+            cursor: pointer;
+            background-color: #f9fafb;
+        }
+        .file-input-label:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background-color: #f0f9ff;
+        }
+        .file-input input[type=file]:focus + .file-input-label {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .current-image {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            border: 2px solid #e5e7eb;
+        }
+        .image-preview {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 0.5rem;
+            border: 2px solid #e5e7eb;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .checkbox-input {
+            width: 1.25rem;
+            height: 1.25rem;
+            accent-color: var(--primary-color);
+        }
+        .section-header {
+            background-color: #1f2937;
+            color: white;
+            padding: 1.25rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .dimensions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        .dimension-field {
+            display: flex;
+            flex-direction: column;
+        }
+        .dimension-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+        .image-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .image-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .modal-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 0.5rem;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: -1rem;
+        }
+        .close:hover {
+            color: #000;
+        }
+
+        /* Product Card Styles */
+        .product-card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s;
+        }
+        .product-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .product-content {
+            padding: 1rem;
+        }
+        .product-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        .product-category {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #059669;
+            margin-bottom: 0.5rem;
+        }
+        .product-stock {
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+        .stock-in {
+            color: #059669;
+        }
+        .stock-out {
+            color: #dc2626;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .category-filter {
+            margin-top: 1rem;
+        }
+        .filter-btn {
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        .filter-btn.active:hover {
+            color: #10b981 !important;
+            background-color: white !important;
+            border-color: #10b981 !important;
+        }
+
+
     </style>
 </head>
 <body class="bg-gray-50">
@@ -208,6 +561,7 @@
                         <div id="adminMenu" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-primary-dark ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="adminMenuButton" tabindex="-1">
                             <a href="/admin" class="block px-4 py-2 text-sm text-white hover:bg-primary-light hover:text-accent" role="menuitem">Admin Dashboard</a>
                             <a href="/admin/orders" class="block px-4 py-2 text-sm text-white hover:bg-primary-light hover:text-accent" role="menuitem">Track Orders</a>
+                            <a href="/admin/products" class="block px-4 py-2 text-sm text-white hover:bg-primary-light hover:text-accent" role="menuitem">Manage Products</a>
                             <a href="/admin/products/add" class="block px-4 py-2 text-sm text-white hover:bg-primary-light hover:text-accent" role="menuitem">Add Product</a>
                         </div>
                     </div>
@@ -278,6 +632,7 @@
                         <div class="pl-4 space-y-2">
                             <a href="/admin" class="block text-white hover:text-accent">Admin Dashboard</a>
                             <a href="/admin/orders" class="block text-white hover:text-accent">Track Orders</a>
+                            <a href="/admin/products" class="block text-white hover:text-accent">Manage Products</a>
                             <a href="/admin/products/add" class="block text-white hover:text-accent">Add Product</a>
                         </div>
                     </div>

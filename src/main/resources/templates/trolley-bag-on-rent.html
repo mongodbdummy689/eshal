@@ -7,13 +7,17 @@
     <div th:fragment="content">
         <!-- Hero Section -->
         <div class="relative w-full">
-            <div class="w-full h-[calc(100vh-6rem)]">
-                <img src="/img/bags/bag-hero.jpeg" alt="Trolley Bag On Rent" class="w-full h-full object-contain">
-                <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <div class="text-center text-white px-4 max-w-4xl mx-auto py-8">
+            <div class="w-full h-[calc(100vh-6rem)] flex">
+                <!-- Left side - Image -->
+                <div class="w-1/2 h-full relative">
+                    <img src="/img/bags/bag-hero.jpeg" alt="Trolley Bag On Rent" class="w-full h-full object-contain">
+                </div>
+                <!-- Right side - Text -->
+                <div class="w-1/2 h-full bg-black flex items-center justify-center">
+                    <div class="text-white px-8 max-w-2xl">
                         <h1 class="text-3xl md:text-5xl font-bold mb-2 md:mb-4 tracking-tight">Trolley Bag On Rent</h1>
                         <p class="text-lg md:text-2xl font-light mb-4 md:mb-6">Convenient Travel Solutions for Your Journey</p>
-                        <p class="text-base md:text-lg max-w-2xl mx-auto">Quality trolley bags available for rent at affordable rates</p>
+                        <p class="text-base md:text-lg">Quality trolley bags available for rent at affordable rates</p>
                     </div>
                 </div>
             </div>

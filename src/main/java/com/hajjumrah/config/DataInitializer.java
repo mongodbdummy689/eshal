@@ -25,10 +25,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // Delete all existing products
-        productRepository.deleteAll();
-        
-        // Initialize products if they don't exist
+        // Initialize products if they don't exist (no deletion of existing products)
         if (!productRepository.existsById("mens-kit-001")) {
             Product mensKit = new Product();
             mensKit.setId("mens-kit-001");
@@ -247,12 +244,6 @@ initializeJanamazProduct("janamaz-silver-9170", "Eshal Silver", "High-quality pr
 initializeJanamazProduct("janamaz-jasmin-8270", "Eshal Jasmin", "High-quality prayer mat.", 190, 2250, "30x40x5", "/img/janamaz/Eshal-Jasmin1.png", 0.600, 40.0, 30.0, 5.0);
 initializeJanamazProduct("janamaz-lily-7970", "Eshal Lily", "High-quality prayer mat.", 210, 2500, "30x40x5", "/img/janamaz/Eshal-Lily1.png", 0.600, 40.0, 30.0, 5.0);
 initializeJanamazProduct("janamaz-lotus-5870", "Eshal Lotus", "High-quality prayer mat.", 170, 2000, "30x40x5", "/img/janamaz/Eshal-Lotus1.png", 0.600, 40.0, 30.0, 5.0);
-
-// Delete old lungi products if they exist
-productRepository.deleteById("lungi-ehram-46");
-productRepository.deleteById("ehram-belt-wafa");
-productRepository.deleteById("ehram-belt-royal");
-productRepository.deleteById("ehram-belt");
 
         // Create admin user if it doesn't exist
         if (!userRepository.existsByEmail("admin@eshal.com")) {

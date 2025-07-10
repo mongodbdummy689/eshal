@@ -136,19 +136,31 @@
                                 <label for="category" class="form-label">Category *</label>
                                 <select id="category" name="category" class="form-input form-select" required>
                                     <option value="">Select Category</option>
-                                    <option value="Men's Kit">Men's Kit</option>
-                                    <option value="Women's Kit">Women's Kit</option>
+                                    <option value="Hajj & Umrah Kits">Hajj & Umrah Kits</option>
+                                    <option value="Men's Items">Men's Items</option>
+                                    <option value="Women's Items">Women's Items</option>
+                                    <option value="Common Items">Common Items</option>
+                                    <option value="Tohfa-E-Khulus">Tohfa-E-Khulus</option>
                                     <option value="Men's Mini Kit">Men's Mini Kit</option>
                                     <option value="Women's Mini Kit">Women's Mini Kit</option>
-                                    <option value="Individual">Individual</option>
-                                    <option value="Tohfa-e-Khulus">Tohfa-e-Khulus</option>
+                                    <option value="Individual Items">Individual Items</option>
                                     <option value="Janamaz">Janamaz</option>
-                                    <option value="Trolley-Bag-On-Rent">Trolley-Bag-On-Rent</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="price" class="form-label">Base Price (₹) *</label>
                                 <input type="number" id="price" name="price" class="form-input" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="stockQuantity" class="form-label">Stock Quantity *</label>
+                                <input type="number" id="stockQuantity" name="stockQuantity" class="form-input" min="0" value="100" required>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="form-group">
+                                <label for="gstRate" class="form-label">GST Rate (%) *</label>
+                                <input type="number" id="gstRate" name="gstRate" class="form-input" step="0.1" min="0" max="100" value="5.0" required>
                             </div>
                             <div class="form-group">
                                 <label for="image" class="form-label">Product Image</label>

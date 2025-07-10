@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Manage Products - Admin Dashboard</title>
+</head>
+<body th:replace="~{layout/main :: body}">
+    <div th:fragment="content">
+        <div class="max-w-7xl mx-auto px-4 py-12">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-extrabold text-primary sm:text-5xl mb-4 mt-16">Manage Products</h1>
+                <p class="text-lg text-text-secondary">View, edit, and manage your product inventory</p>
+            </div>
+
+            <!-- Search and Filter Bar -->
+            <div class="form-card">
+                <div class="form-header">
+                    <h2 class="text-2xl font-semibold">Search & Filter Products</h2>
+                </div>
+                <div class="form-content">
+                    <div class="flex flex-col md:flex-row gap-4 mb-6">
+                        <div class="flex-1">
+                            <input type="text" id="searchInput" class="form-input" placeholder="Search products by name or ID...">
+                        </div>
+                        <div class="flex gap-2">
+                            <a href="/admin/products/add" class="btn btn-primary">Add New Product</a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-filter">
+                        <button class="btn btn-secondary btn-sm filter-btn active" data-category="all">All Categories</button>
+                        <button class="btn btn-secondary btn-sm filter-btn" data-category="Hajj & Umrah Kits">Hajj & Umrah Kits</button>
+                        <button class="btn btn-secondary btn-sm filter-btn" data-category="Men's Items">Men's Items</button>
+                        <button class="btn btn-secondary btn-sm filter-btn" data-category="Women's Items">Women's Items</button>
+                        <button class="btn btn-secondary btn-sm filter-btn" data-category="Common Items">Common Items</button>
+                        <button class="btn btn-secondary btn-sm filter-btn" data-category="Tohfa-E-Khulus">Tohfa-E-Khulus</button>
+                        <button class="btn btn-secondary btn-sm filter-btn" data-category="Men's Mini Kit">Men's Mini Kit</button>
+                        <button class="btn btn-secondary btn-sm filter-btn" data-category="Women's Mini Kit">Women's Mini Kit</button>
+                        <button class="btn btn-secondary btn-sm filter-btn" data-category="Individual Items">Individual Items</button>
+                        <button class="btn btn-secondary btn-sm filter-btn" data-category="Janamaz">Janamaz</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8" id="productsGrid">
+                <div th:each="product : ${products}" class="product-card" th:data-category="${product.category}" th:data-name="${product.name}" th:data-id="${product.id}">
+                    <img th:src="${product.imageUrl}" th:alt="${product.name}" class="product-image">
+                    <div class="product-content">
+                        <h3 class="product-name" th:text="${product.name}">Product Name</h3>
+                        <p class="product-category" th:text="${product.category}">Category</p>
+                        <p class="product-price" th:with="priceWithGst=${product.price + (product.price * product.gstRate / 100)}" th:text="'₹' + ${#numbers.formatDecimal(priceWithGst, 1, 2)} + ' (incl. ' + ${#numbers.formatDecimal(product.gstRate, 1, 1)} + '% GST)'">₹0.00</p>
+                        <p class="product-stock" th:classappend="${product.inStock} ? 'stock-in' : 'stock-out'" th:with="stockText=${product.inStock ? 'In Stock (' + product.stockQuantity + ')' : 'Out of Stock'}" th:text="${stockText}">Stock Status</p>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm" th:data-product-id="${product.id}" onclick="editProduct(this.dataset.productId)">Edit</button>
+                            <button class="btn btn-success btn-sm" th:data-product-id="${product.id}" th:data-in-stock="${product.inStock}" th:with="buttonText=${product.inStock ? 'Mark Out of Stock' : 'Mark In Stock'}" th:text="${buttonText}" onclick="toggleStock(this.dataset.productId, this.dataset.inStock === 'true')">Toggle Stock</button>
+                            <button class="btn btn-danger btn-sm" th:data-product-id="${product.id}" th:data-product-name="${product.name}" onclick="deleteProduct(this.dataset.productId, this.dataset.productName)">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- No Products Message -->
+            <div id="noProductsMessage" class="text-center py-12 hidden">
+                <p class="text-lg text-gray-500">No products found matching your search criteria.</p>
+            </div>
+        </div>
+
+        <script>
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', function() {
+                filterProducts();
+            });
+
+            // Category filter functionality
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    filterProducts();
+                });
+            });
+
+            function filterProducts() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const selectedCategory = document.querySelector('.filter-btn.active').dataset.category;
+                const products = document.querySelectorAll('.product-card');
+                let visibleCount = 0;
+
+                products.forEach(product => {
+                    const name = product.dataset.name.toLowerCase();
+                    const id = product.dataset.id.toLowerCase();
+                    const category = product.dataset.category;
+                    
+                    const matchesSearch = name.includes(searchTerm) || id.includes(searchTerm);
+                    const matchesCategory = selectedCategory === 'all' || category === selectedCategory;
+                    
+                    if (matchesSearch && matchesCategory) {
+                        product.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+
+                // Show/hide no products message
+                const noProductsMessage = document.getElementById('noProductsMessage');
+                if (visibleCount === 0) {
+                    noProductsMessage.classList.remove('hidden');
+                } else {
+                    noProductsMessage.classList.add('hidden');
+                }
+            }
+
+            // Edit product function
+            function editProduct(productId) {
+                window.location.href = `/admin/products/edit/${productId}`;
+            }
+
+            // Toggle stock function
+            async function toggleStock(productId, currentStockStatus) {
+                const newStatus = !currentStockStatus;
+                const action = newStatus ? 'mark in stock' : 'mark out of stock';
+                
+                if (!confirm(`Are you sure you want to ${action} this product?`)) {
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/admin/products/${productId}/toggle-stock`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ inStock: newStatus })
+                    });
+
+                    if (response.ok) {
+                        // Reload the page to show updated status
+                        window.location.reload();
+                    } else {
+                        const error = await response.json();
+                        alert('Error updating stock status: ' + error.message);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error updating stock status. Please try again.');
+                }
+            }
+
+            // Delete product function
+            async function deleteProduct(productId, productName) {
+                if (!confirm(`Are you sure you want to delete "${productName}"? This action cannot be undone.`)) {
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/admin/products/${productId}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (response.ok) {
+                        // Remove the product card from the DOM
+                        const productCard = document.querySelector(`[data-id="${productId}"]`);
+                        if (productCard) {
+                            productCard.remove();
+                        }
+                        alert('Product deleted successfully!');
+                    } else {
+                        const error = await response.json();
+                        alert('Error deleting product: ' + error.message);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error deleting product. Please try again.');
+                }
+            }
+        </script>
+    </div>
+</body>
+</html> 
