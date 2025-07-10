@@ -521,3 +521,23 @@ Trolley bag hero image to be provided.
 
 
 Add pagination & search - track order .
+
+Please find below the changes as discussed:
+Admin changes:
+Admin will be able to Edit / Delete Products from Manage Products page.
+Admin will be able to mark products out of stock from Manage Products page.
+Updated existing admin page to be more user friendly.
+Additional changes requested:
+Added addtitional sliders Tohfa-E-khulus, Janamaz, Trolley Bag in addition to existing sliders.
+Updated main headers of Tohfa-E-khulus, Janamaz, Trolley Bag to match Men's Kit page.
+
+These are the credentials to access admin pages: email: admin@eshal.com / password: admin123
+
+Updated individual page to show product prices exclusive of GST.
+Updated Ehram Belt image to show it's variants on individual page.
+Ordered all the products in descending order of their prices.
+Update weighing scale price from 550 to 350.
+
+Db updates: 
+ehram-lock-button - Individual Items
+ehram-belt-variant - img/men/ihram-belt-variant.jpeg

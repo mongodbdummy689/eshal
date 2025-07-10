@@ -184,7 +184,11 @@ public class PageController {
         List<Product> inStockProducts = filteredProducts.stream()
             .filter(product -> product.isInStock())
             .collect(Collectors.toList());
-        model.addAttribute("products", inStockProducts);
+        
+        // Order products to show kits first: mens kit, women's kit, mens mini kit, womens mini kit
+        List<Product> orderedProducts = orderProductsWithKitsFirst(inStockProducts);
+        
+        model.addAttribute("products", orderedProducts);
         return "individual";
     }
 
@@ -194,7 +198,8 @@ public class PageController {
             "ittar",
             "makhani",
             "namaz-dupatta",
-            "hijabcap"
+            "hijabcap",
+            "ehram-belt"
         );
 
         return allProducts.stream()
@@ -203,6 +208,65 @@ public class PageController {
             .filter(product -> !"Zam Zam Water (60 ml)".equals(product.getName()))
             .filter(product -> !excludedProductIds.contains(product.getId()))
             .collect(Collectors.toList());
+    }
+
+    private List<Product> orderProductsWithKitsFirst(List<Product> products) {
+        // Define the order of kit categories and specific kit IDs
+        List<String> kitOrder = Arrays.asList(
+            "Hajj & Umrah Kits",      // mens kit and women's kit
+            "Men's Mini Kit",          // mens mini kit
+            "Women's Mini Kit"         // womens mini kit
+        );
+        
+        // Define specific kit IDs in the desired order
+        List<String> kitIdOrder = Arrays.asList(
+            "mens-kit-001",           // mens kit first
+            "womens-kit-001",         // women's kit second
+            "mens-mini-kit-001",      // mens mini kit third
+            "womens-mini-kit-001"     // womens mini kit fourth
+        );
+        
+        // Separate kits from other products
+        List<Product> kitProducts = new ArrayList<>();
+        List<Product> otherProducts = new ArrayList<>();
+        
+        for (Product product : products) {
+            if (kitOrder.contains(product.getCategory())) {
+                kitProducts.add(product);
+            } else {
+                otherProducts.add(product);
+            }
+        }
+        
+        // Sort kit products according to the specified order
+        kitProducts.sort((p1, p2) -> {
+            int index1 = kitIdOrder.indexOf(p1.getId());
+            int index2 = kitIdOrder.indexOf(p2.getId());
+            
+            // If both are in the kitIdOrder, sort by their position
+            if (index1 != -1 && index2 != -1) {
+                return Integer.compare(index1, index2);
+            }
+            
+            // If only one is in kitIdOrder, prioritize it
+            if (index1 != -1) return -1;
+            if (index2 != -1) return 1;
+            
+            // If neither is in kitIdOrder, sort by category order
+            int catIndex1 = kitOrder.indexOf(p1.getCategory());
+            int catIndex2 = kitOrder.indexOf(p2.getCategory());
+            return Integer.compare(catIndex1, catIndex2);
+        });
+        
+        // Sort other products in descending order of price
+        otherProducts.sort((p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
+        
+        // Combine kits first, then other products in descending price order
+        List<Product> orderedProducts = new ArrayList<>();
+        orderedProducts.addAll(kitProducts);
+        orderedProducts.addAll(otherProducts);
+        
+        return orderedProducts;
     }
 
     @GetMapping("/tohfa-e-khulus")

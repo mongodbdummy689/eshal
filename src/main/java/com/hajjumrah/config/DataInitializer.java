@@ -116,7 +116,7 @@ initializeProduct("safa", "Big Rumal(Safa)", "Traditional prayer scarf made from
 
 //Men's Mini Kit
 initializeProduct("mens-mini-kit-001", "Men's Umrah Mini Kit", "Essential collection of items for men performing Umrah, including Ihram, prayer cap, miswak, and other necessary items for a complete spiritual journey.", 1000, "/img/umrahminikit/men-kit.jpeg", "Men's Mini Kit", 1.090, 46.0, 31.0, 8.0);
-initializeProduct("ehram-lock-button", "Ehram Lock Button", "Secure and durable lock button designed specifically for Ehram, ensuring your Ihram cloth stays properly fastened during your spiritual journey.", 25, "/img/men/ihram-lock-button.jpeg", "Men's Mini Kit", 0.004, null, null, null);
+initializeProduct("ehram-lock-button", "Ehram Lock Button", "Secure and durable lock button designed specifically for Ehram, ensuring your Ihram cloth stays properly fastened during your spiritual journey.", 25, "/img/men/ihram-lock-button.jpeg", "Individual Items", 0.004, null, null, null);
 
 //Women's Mini Kit
 initializeProduct("womens-mini-kit-001", "Women's Umrah Mini Kit", "Essential collection of items for women performing Umrah, including prayer cap (Makhani), prayer scarf, hand gloves, and other necessary items for a complete spiritual journey.", 900, "/img/umrahminikit/women-kit.jpeg", "Women's Mini Kit", 0.690, 42.0, 32.0, 6.0);
@@ -145,7 +145,7 @@ if (!productRepository.existsById("ehram-belt-variant")) {
     ehramBelt.setId("ehram-belt-variant");
     ehramBelt.setName("Ehram Belt");
     ehramBelt.setDescription("Adjustable belt to secure Ihram cloth in place, made from durable material with secure fastening.");
-    ehramBelt.setImageUrl("/img/men/ihram-belt.jpg");
+    ehramBelt.setImageUrl("/img/men/ihram-belt-variant.jpeg");
     ehramBelt.setCategory("Individual Items");
     ehramBelt.setPriceType("variant");
     ehramBelt.setVariants(Arrays.asList(
@@ -194,7 +194,7 @@ if (!productRepository.existsById("lungi-ehram")) {
     productRepository.save(lungiEhram);
 }
 
-initializeProduct("weighing-scale", "Weighing Scale", "A portable weighing scale to keep track of your luggage allowance.", 550, "/img/individual/weighing-portable-machine.jpeg", "Individual Items", 0.110, null, null, null);
+initializeProduct("weighing-scale", "Weighing Scale", "A portable weighing scale to keep track of your luggage allowance.", 350, "/img/individual/weighing-portable-machine.jpeg", "Individual Items", 0.110, null, null, null);
 initializeProduct("patti-cap-bw", "Patti Cap Black & White (Ladies)", "A stylish black and white patti cap for ladies.", 50, "/img/individual/Ladies-patti-cap-black-n-white.jpeg", "Individual Items", 0.031, null, null, null);
 initializeProduct("kankar-bag", "Kankar ki bag", "A small bag for carrying stones (kankar) for the Jamarat ritual.", 45, "/img/individual/Kankar-ki-bag.jpeg", "Individual Items", 0.010, null, null, null);
 initializeProduct("hajj-mat-with-pillow", "Hajj Matt with pillow (Chatai)", "A comfortable prayer mat with an attached pillow, designed for Hajj.", 250, "/img/individual/Chatai-with-pillow.jpeg", "Individual Items", 0.500, null, null, null);
